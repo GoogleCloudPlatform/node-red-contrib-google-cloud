@@ -3,23 +3,23 @@ node-red-node-google-cloud-pubsub **(ALPHA)**
 
 **_This is not an official Google product._**
 
-<a href="http://nodered.org" target="_new">Node-RED</a> nodes for <a href="https://cloud.google.com/pubsub/docs/" target="_new">Google Cloud Pub/Sub</a>.
+[Node-RED](http://nodered.org) nodes for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/).
 
 ### Before You Begin
 
-1. <a href="https://console.cloud.google.com/project" target="_new">Select or create a Google Cloud project.</a>
-2. <a href="https://support.google.com/cloud/answer/6293499#enable-billing" target="_new">Enable billing for your project.</a>
-3. <a href="https://console.cloud.google.com/flows/enableapi?apiid=pubsub" target="_new">Enable the Pub/Sub API.</a>
+1. [Select or create a Google Cloud project.](https://console.cloud.google.com/project)
+2. [Enable billing for your project.](https://support.google.com/cloud/answer/6293499#enable-billing)
+3. [Enable the Pub/Sub API.](https://console.cloud.google.com/flows/enableapi?apiid=pubsub)
 
 ### Getting Started
 
 The first thing you need to do, if you haven't already, is download a service account key.
 
-<img src="docs/1.png" width="50%">
+![Credentials](docs/1.png)
 
-<img src="docs/2.png" width="50%">
+![Create Credentials](docs/2.png)
 
-<img src="docs/3.png" width="50%">
+![Create JSON Credentials](docs/3.png)
 
 ### Input
 
