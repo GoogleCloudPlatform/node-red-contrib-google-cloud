@@ -1,0 +1,10 @@
+npm-debug.log*
+
+build/Release
+
+node_modules/
+jspm_packages/
+
+typings/
+
+.npm
