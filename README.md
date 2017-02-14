@@ -3,7 +3,9 @@ node-red-contrib-google-cloud **(ALPHA)**
 
 **_This is not an official Google product._**
 
-[Node-RED](http://nodered.org) nodes for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/).
+[Node-RED](http://nodered.org) nodes for [Google Cloud Platform](https://cloud.google.com/).
+
+## Google Cloud Pub/Sub
 
 ### Before You Begin
 
