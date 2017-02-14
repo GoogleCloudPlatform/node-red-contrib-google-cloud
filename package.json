@@ -1,12 +1,11 @@
 {
-    "name": "node-red-node-google-cloud-pubsub",
+    "name": "node-red-contrib-google-cloud",
     "version": "0.0.1",
     "description": "A Node-RED node for Google Cloud Pub/Sub",
     "dependencies": {
         "@google-cloud/pubsub": "latest"
     },
     "keywords": [
-        "node-red",
         "google",
         "cloud",
         "pubsub",

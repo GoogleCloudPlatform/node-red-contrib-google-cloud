@@ -1,4 +1,4 @@
-node-red-node-google-cloud-pubsub **(ALPHA)**
+node-red-contrib-google-cloud **(ALPHA)**
 =====================================
 
 **_This is not an official Google product._**
