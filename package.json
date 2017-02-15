@@ -1,7 +1,7 @@
 {
     "name": "node-red-contrib-google-cloud",
     "version": "0.0.1",
-    "description": "A Node-RED node for Google Cloud Pub/Sub",
+    "description": "A Node-RED node for Google Cloud Platform",
     "dependencies": {
         "@google-cloud/pubsub": "latest"
     },
@@ -14,7 +14,8 @@
     ],
     "node-red": {
         "nodes": {
-            "google-cloud-pubsub": "google-cloud-pubsub.js"
+            "google-cloud-credentials": "credentials.js",
+            "google-cloud-pubsub": "pubsub.js"
         }
     },
     "license": "Apache-2.0"
