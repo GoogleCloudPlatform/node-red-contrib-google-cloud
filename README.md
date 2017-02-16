@@ -48,7 +48,7 @@ The credentials for a service account can be acquired from the [API Manager](htt
 | Property                    | Type          | Description                                                                              |
 | --------------------------- | ------------- | ---------------------------------------------------------------------------------------- |
 | **payload**                 | `string`      | The payload passed as-is from the PubSub message.                                        |
-| **time**                    | `Date|number` | The timestamp converted to the number of milliseconds since 1 January 1970 UTC.          |
+| **time**                    | `date`        | The timestamp converted to the number of milliseconds since 1 January 1970 UTC.          |
 | **project**                 | `string`      | The name of Google Cloud Platform project.                                               |
 | **topic**                   | `string`      | The name of the topic in Google Cloud Platform.                                          |
 | **subscription**            | `string`      | The name of the subscription in Google Cloud Platform.                                   |
@@ -69,4 +69,4 @@ The credentials for a service account can be acquired from the [API Manager](htt
 | Property    | Type          | Description                                                                       |
 | ----------- | ------------- | --------------------------------------------------------------------------------- |
 | **payload** | `string`      | The payload passed as-is to the PubSub message.                                   |
-| **time**    | `Date|number` | The timestamp converted from the number of milliseconds since 1 January 1970 UTC. |
+| **time**    | `date`        | The timestamp converted from the number of milliseconds since 1 January 1970 UTC. |
