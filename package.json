@@ -18,5 +18,14 @@
             "google-cloud-pubsub": "pubsub.js"
         }
     },
-    "license": "Apache-2.0"
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/GoogleCloudPlatform/node-red-contrib-google-cloud.git"
+    },
+    "author": {
+        "name": "Cloud Partner Engineering",
+        "email": "cloud-partner-eng@google.com",
+        "url": "https://cloud.google.com/partners/"
+    }
 }
