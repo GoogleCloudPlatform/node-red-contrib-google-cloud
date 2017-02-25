@@ -19,11 +19,11 @@ There are multiple ways to install `node-red-contrib-google-cloud`. The official
 The credentials for a service account can be acquired from the [API Manager](https://console.cloud.google.com/apis/credentials). After you finish creating a service account key it will be downloaded in a JSON format.
 Copy and paste the contents of the file directly into the **Key** field in the node editor.
 
-![Credentials](docs/1.png)
+![Step 1](docs/credentials/1.png)
 
-![Create Credentials](docs/2.png)
+![Step 2](docs/credentials/2.png)
 
-![Create JSON Credentials](docs/3.png)
+![Step 3](docs/credentials/3.png)
 
 ## Google Cloud Pub/Sub
 
@@ -32,6 +32,40 @@ Copy and paste the contents of the file directly into the **Key** field in the n
 1. [Select or create a Google Cloud project.](https://console.cloud.google.com/project)
 2. [Enable billing for your project.](https://support.google.com/cloud/answer/6293499#enable-billing)
 3. [Enable the Pub/Sub API.](https://console.cloud.google.com/flows/enableapi?apiid=pubsub)
+
+
+### Example
+
+Create a new flow or if this is your first flow use the default one. Next drag and drop the pubsub input node onto the workspace. Then double-click the node you just placed.
+Click the button with the pencil icon next to input field that says `Add new google-cloud-credentials...`. A new pane should appear with a `Name` and `Key` input field. The name can
+be anything you like. The key must be the service account key. Refer to [Google Cloud Credentials](#google-cloud-credentials) on how to obtain the key. After clicking done you will
+be returned to the previous pane. Fill in the `Topic` input field with an existing or new topic name and click done.
+
+![Step 1](docs/pubsub/1.png)
+
+Next drag and drop the pubsub output node onto the workspace. Then double-click the node you just placed. The `Credentials` input field will be automatically filled with the credentials
+you created previously. Fill in the `Topic` input field with the same name you used previously and click done.
+
+![Step 2](docs/pubsub/2.png)
+
+We now have our input and output nodes, but we need some data. The easiest way to do this is using the inject input node with static data. Drag and drop the inject input node onto the workspace.
+Then double-click the node you just placed. Change the `Payload` type to `string` and fill in the `Payload` input field with some text, like `Hello World!`. Lastly change the `Repeat` type to `interval`
+and click done.
+
+![Step 3](docs/pubsub/3.png)
+
+At this point we need some way to view the data from the pubsub input node to make sure things are working. The easiest way to accomplish this is to use the debug output node. Drag and drop the
+debug output node onto the workspace. The default configuration will do with this node, but feel free to modify it.
+
+![Step 4](docs/pubsub/4.png)
+
+Lastly we need to wire everything up. Connect the inject input node to the pubsub output node and the pubsub input node to the debug output node as shown below.
+
+![Step 5](docs/pubsub/5.png)
+
+Click deploy. If everything goes well the pubsub nodes should change their status to `connected` and/or `publishing`. Switch to the `debug` pane on the right side to view the payload.
+
+![Step 6](docs/pubsub/6.png)
 
 ### Input
 
