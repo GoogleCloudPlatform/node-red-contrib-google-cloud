@@ -1,0 +1,153 @@
+<!--
+Copyright 2019 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="google-cloud-vision">
+    <style>
+        .vision_row {
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">        
+    </div>
+    <div style="display: flex; flex-direction: row; width: 100%;">
+        <div style="display: flex; flex-direction: column; flex-basis: 100%;">
+            <div class="vision_row"> 
+                <label for="node-input-faceDetection"><i class="fa fa-list"></i> Face Detection</label>&nbsp;
+                <input type="checkbox" id="node-input-faceDetection" >
+            </div>
+            <div class="vision_row">
+                <label for="node-input-logoDetection"><i class="fa fa-list"></i> Logo Detection</label>&nbsp;
+                <input type="checkbox" id="node-input-logoDetection" >   
+            </div>
+            <div class="vision_row">
+                <label for="node-input-textDetection"><i class="fa fa-list"></i> Text Detection</label>&nbsp;
+                <input type="checkbox" id="node-input-textDetection">
+            </div>
+            <div class="vision_row">
+                <label for="node-input-safeSearchDetection"><i class="fa fa-list"></i> Safe Search Detection</label>&nbsp;
+                <input type="checkbox" id="node-input-safeSearchDetection">
+            </div>
+            <div class="vision_row">
+                <label for="node-input-webDetection"><i class="fa fa-list"></i> Web Detection</label>&nbsp;
+                <input type="checkbox" id="node-input-webDetection">
+            </div>
+            <div class="vision_row">
+                <label for="node-input-objectLocalization"><i class="fa fa-list"></i> Object Localization</label>&nbsp;
+                <input type="checkbox" id="node-input-objectLocalization">
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column; flex-basis: 100%;">
+            <div class="vision_row"> 
+                <label for="node-input-landmarkDetection"><i class="fa fa-list"></i> Landmark Detection</label>&nbsp;
+                <input type="checkbox" id="node-input-landmarkDetection">
+            </div>
+            <div class="vision_row">
+                <label for="node-input-labelDetection"><i class="fa fa-list"></i> Label Detection</label>&nbsp;
+                <input type="checkbox" id="node-input-labelDetection">
+            </div>
+            <div class="vision_row">
+                <label for="node-input-documentTextDetection"><i class="fa fa-list"></i> Document Text Detection</label>&nbsp;
+                <input type="checkbox" id="node-input-documentTextDetection">
+            </div>
+            <div class="vision_row">
+                <label for="node-input-imageProperties"><i class="fa fa-list"></i> Image Properties</label>&nbsp;
+                <input type="checkbox" id="node-input-imageProperties">
+            </div>
+            <div class="vision_row">
+                <label for="node-input-productSearch"><i class="fa fa-list"></i> Product Search</label>&nbsp;
+                <input type="checkbox" id="node-input-productSearch">
+            </div>
+        </div>        
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>       
+</script>
+
+<script type="text/x-red" data-help-name="google-cloud-vision">
+    <p>Process an image using Google Cloud Vision.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.filename
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The name of the file or web URL in URL form.</dd>
+        <dt>msg.payload
+            <span class="property-type">Buffer</span>
+        </dt>
+        <dd>The image data</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">Object</span>
+        </dt>
+        <dd>The result of performing Cloud Vision processing.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>This node is given an image as input and performs analysis on its content.  The node encapsulates the function of Cloud Vision API.
+        On invocation, it is given an image to process.  This can be either a GCS file, a web URL or the binary of an image.  
+        When an image is examined, it is processed for distinct properties.  
+        There is an execution cost associated with the examination of each property and if we simply don't need a property, it is wasteful
+        to ask GCP to examine the image for it.  When configuring the node, we get to specify which of the properties of an image we care about.
+        These are configured as check boxes in the node's configuration settings.  Only the properties which are checked are processed.
+    </p>
+    <p>The runtime input to the node is a Node-RED message from which we care about:
+        <ul>
+            <li>msg.filename - The URL or GCS file name of the image to be processed.  If we have data for an image, 
+                specify msg.payload as the data and do not set msg.filename.</li>
+            <li>msg.payload - A buffer of data containing the image we wish to process.
+                This is ignored if msg.filename is present.</li>
+        </ul>
+    </p>
+    <p>Note: if msg.filename is present, that will be used in precedence to the msg.payload.</p>
+    <p>The node passed onwards a new message where msg.payload is an object conforming to the results of the Cloud Vision API results.</p>
+</script>
+
+<script type="text/javascript">
+RED.nodes.registerType("google-cloud-vision", {
+    category: "GCP",
+    defaults: {
+        account: { type: "google-cloud-credentials", required: true },
+        faceDetection: { value: false, required: false },
+        landmarkDetection: { value: false, required: false },
+        logoDetection: { value: false, required: false },
+        labelDetection: { value: false, required: false },        
+        textDetection: { value: false, required: false },        
+        documentTextDetection: { value: false, required: false },
+        safeSearchDetection: { value: false, required: false },
+        imageProperties: { value: false, required: false },
+        cropHints: { value: false, required: false },
+        webDetection: { value: false, required: false },        
+        productSearch: { value: false, required: false },        
+        objectLocalization: { value: false, required: false },        
+        name: { value: "", required: false }        
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "vision.png",
+    align: "left",
+    color: "#3FADB5",
+    label: function () {
+        return this.name || "vision";
+    },
+    paletteLabel: "vision"
+});
+</script>

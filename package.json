@@ -1,22 +1,41 @@
 {
     "name": "node-red-contrib-google-cloud",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Node-RED nodes for Google Cloud Platform",
     "dependencies": {
-        "@google-cloud/pubsub": "latest"
+        "@google-cloud/language": "latest",
+        "@google-cloud/logging": "latest",
+        "@google-cloud/pubsub": "latest",
+        "@google-cloud/storage": "latest",
+        "@google-cloud/tasks": "latest",
+        "@google-cloud/vision": "latest",
+        "request": "^2.88.0"
     },
     "keywords": [
         "google",
         "cloud",
         "pubsub",
         "publish",
-        "subscribe"
+        "subscribe",
+        "gcs",
+        "stackdriver"
     ],
     "node-red": {
         "nodes": {
             "google-cloud-credentials": "credentials.js",
-            "google-cloud-pubsub": "pubsub.js"
+            "google-cloud-pubsub in": "pubsub-in.js",
+            "google-cloud-pubsub out": "pubsub-out.js",
+            "google-cloud-log": "stackdriver-log.js",
+            "google-cloud-gcs-write": "gcs-write.js",
+            "google-cloud-gcs-read": "gcs-read.js",
+            "google-cloud-language-sentiment": "language-sentiment.js",
+            "google-cloud-tasks": "tasks.js",
+            "google-cloud-vision": "vision.js",
+            "google-cloud-ce-metadata": "metadata.js"
         }
+    },
+    "scripts": {
+        "test": "mocha \"tests/**/*_spec.js\""
     },
     "license": "Apache-2.0",
     "repository": {
@@ -27,5 +46,9 @@
         "name": "Cloud Partner Engineering",
         "email": "cloud-partner-eng@google.com",
         "url": "https://cloud.google.com/partners/"
+    },
+    "devDependencies": {
+        "node-red": "^0.20.7",
+        "node-red-node-test-helper": "^0.2.3"
     }
 }

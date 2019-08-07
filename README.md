@@ -1,125 +1,60 @@
-node-red-contrib-google-cloud **(ALPHA)**
+node-red-contrib-google-cloud **(BETA)**
 =====================================
 
 **_This is not an official Google product._**
 
 [Node-RED](http://nodered.org) nodes for [Google Cloud Platform](https://cloud.google.com/).
 
+Node-RED is an open source project which provides a visual programming environment and runtime for execution of event based applications.  Written in Node.js
+JavaScript, it executes on a wide variety of platforms including workstations, IoT devices and, most importantly for our discussion, on Google Cloud Platform
+environments which includes Compute Engines and Kubernetes.
+
+The Node-RED story is based on discrete *nodes* of function which are dragged and dropped from a palette to a canvas and then wired together.  This
+resulting flow of execution is then triggered by the arrival of external events including REST requests, Pub/Sub messages, timers and more.
+
+One of the key reasons that Node-RED has become as popular as it has is the ease with which developers can build additional nodes that encapsulate rich
+sets functions.  Once written, these add-on nodes can be used by flow writers without having to know the complexities of their underlying operation.  One just drags 
+a new node onto the canvas and uses it.
+
+This project provides a set of core Google Cloud Platform oriented Node-RED nodes.  Once installed, the capabilitiy to use a broad set of GCP services are immediately unlocked.
+
 ## Installation
 
-There are multiple ways to install `node-red-contrib-google-cloud`. The official ways are described in the Node-RED [documentation](https://nodered.org/docs/getting-started/adding-nodes).
+There are multiple ways to install `node-red-contrib-google-cloud`. The official ways are described in the Node-RED [documentation](https://nodered.org/docs/getting-started/adding-nodes).  The name of the package for installation is `node-red-contrib-google-cloud'.
 
 ## Google Cloud Credentials
+
+Each of the nodes made available through this package will communicate with GCP.  These interactions must be performed securely and require
+credentials to be passed.  This package allows us to define one or more sets of credentials as named entities that can then be referenced
+within each of the nodes that request service.
 
 | Property    | Type     | Description                                          |
 | ----------- | -------- | ---------------------------------------------------- |
 | **name**    | `string` | Label for easy idetification, essentially a comment. |
 | **account** | `string` | Credentials in the form of a JSON key.               |
 
-The credentials for a service account can be acquired from the [API Manager](https://console.cloud.google.com/apis/credentials). After you finish creating a service account key it will be downloaded in a JSON format.
+The credentials for a service account can be acquired from the [APIs & Services](https://console.cloud.google.com/apis/credentials) menu. After you finish creating a service account key, it will be downloaded in JSON format and saved to a local file.
 Copy and paste the contents of the file directly into the **Key** field in the node editor.
 
-![Step 1](docs/credentials/1.png)
+![Step 1](docs/images/credentials1.png)
 
-![Step 2](docs/credentials/2.png)
+![Step 2](docs/images/credentials2.png)
 
-![Step 3](docs/credentials/3.png)
+![Step 3](docs/images/credentials3.png)
 
-## Google Cloud Pub/Sub
+## The Google Cloud Platform Node-RED nodes
 
-### Before You Begin
+The set of Node-RED nodes are found in the GCP section of the palette.  These nodes are:
 
-1. [Select or create a Google Cloud project.](https://console.cloud.google.com/project)
-2. [Enable billing for your project.](https://support.google.com/cloud/answer/6293499#enable-billing)
-3. [Enable the Pub/Sub API.](https://console.cloud.google.com/flows/enableapi?apiid=pubsub)
+* [PubSub In](docs/pubsub_in.md) - Receive a published message.
+* [PubSub Out](docs/pubsub_out.md) - Publish a new message.
+* [Google Cloud Store Read](docs/gcs_read.md) - Read from the object store.
+* [Google Cloud Store Write](docs/gcs_write.md) - Write to the object store.
+* [Log](docs/log.md) - Write an entry to Stackdriver logging.
+* [Tasks](docs/tasks.md) - Create a new Cloud Task instance.
+* [Sentiment](docs/sentiment.md) - Perform Natural Language Analytics on a piece of text.
+* [Vision](docs/vision.md) - Analyse an image.
+* [Metadata](docs/metadata.md) - Retrieve the compute engine metadata.
 
-
-### Example
-
-Create a new flow or if this is your first flow use the default one. Next drag and drop the pubsub input node onto the workspace. Then double-click the node you just placed.
-Click the button with the pencil icon next to input field that says `Add new google-cloud-credentials...`. A new pane should appear with a `Name` and `Key` input field. The name can
-be anything you like. The key must be the service account key. Refer to [Google Cloud Credentials](#google-cloud-credentials) on how to obtain the key. After clicking done you will
-be returned to the previous pane. Fill in the `Topic` input field with an existing or new topic name and click done.
-
-![Step 1](docs/pubsub/1.png)
-
-Next drag and drop the pubsub output node onto the workspace. Then double-click the node you just placed. The `Credentials` input field will be automatically filled with the credentials
-you created previously. Fill in the `Topic` input field with the same name you used previously and click done.
-
-![Step 2](docs/pubsub/2.png)
-
-We now have our input and output nodes, but we need some data. The easiest way to do this is using the inject input node with static data. Drag and drop the inject input node onto the workspace.
-Then double-click the node you just placed. Change the `Payload` type to `string` and fill in the `Payload` input field with some text, like `Hello World!`. Lastly change the `Repeat` type to `interval`
-and click done.
-
-![Step 3](docs/pubsub/3.png)
-
-At this point we need some way to view the data from the pubsub input node to make sure things are working. The easiest way to accomplish this is to use the debug output node. Drag and drop the
-debug output node onto the workspace. The default configuration will do with this node, but feel free to modify it.
-
-![Step 4](docs/pubsub/4.png)
-
-Lastly we need to wire everything up. Connect the inject input node to the pubsub output node and the pubsub input node to the debug output node as shown below.
-
-![Step 5](docs/pubsub/5.png)
-
-Click deploy. If everything goes well the pubsub nodes should change their status to `connected` and/or `publishing`. Switch to the `debug` pane on the right side to view the payload.
-
-![Step 6](docs/pubsub/6.png)
-
-### Input
-
-#### Node Properties
-
-| Property                   | Type                       | Description                                                            |
-| -------------------------- | -------------------------- | ---------------------------------------------------------------------- |
-| **account**                | `google-cloud-credentials` | See [Google Cloud Credentials](#google-cloud-credentials)              |
-| **topic**                  | `string`                   | Name of the topic to subscribe to.                                     |
-| **subscription**           | `string`                   | Name of the subscription to create. If null one will be autogenerated. |
-| **ackDeadlineSeconds**     | `integer`                  | Number of seconds to wait before attempting to redeliver a message.    |
-| **encoding**               | `string`                   | Underlying encoding of the payload. Defaults to 'utf-8'.               |
-| **interval**               | `integer`                  | Number of milliseconds between polling for messages.                   |
-| **timeout**                | `integer`                  | Number of milliseconds before giving up on an HTTP request.            |
-| **name**                   | `string`                   | Label for easy identification, essentially a comment.                  |
-
-#### Message Properties
-
-| Property                    | Type          | Description                                                                              |
-| --------------------------- | ------------- | ---------------------------------------------------------------------------------------- |
-| **payload**                 | `string`      | The payload passed as-is from the PubSub message.                                        |
-| **time**                    | `date`        | The timestamp converted to the number of milliseconds since 1 January 1970 UTC.          |
-| **project**                 | `string`      | The name of Google Cloud Platform project.                                               |
-| **topic**                   | `string`      | The name of the topic in Google Cloud Platform.                                          |
-| **subscription**            | `string`      | The name of the subscription in Google Cloud Platform.                                   |
-| **resource**                | `string`      | The URI of the resource in the form of /projects/*project*/subscriptions/*subscription*. |
-
-### Output
-
-#### Node Properties
-
-| Property    | Type                       | Description                                               |
-| ------------| -------------------------- | --------------------------------------------------------- |
-| **account** | `google-cloud-credentials` | See [Google Cloud Credentials](#google-cloud-credentials) |
-| **topic**   | `string`                   | Name of the topic to publish to.                          |
-| **name**    | `string`                   | Label for easy identification, essentially a comment.     |
-
-#### Message Properties
-
-| Property    | Type          | Description                                                                       |
-| ----------- | ------------- | --------------------------------------------------------------------------------- |
-| **payload** | `string`      | The payload passed as-is to the PubSub message.                                   |
-| **time**    | `date`        | The timestamp converted from the number of milliseconds since 1 January 1970 UTC. |
-
-## Troubleshooting
-
-### After installing `node-red-contrib-google-cloud` the nodes are missing from the interface, where are they?
-
-Refer to the Node-RED [documentation](https://nodered.org/docs/getting-started/adding-nodes) for adding nodes. If you used one of the methods described there and are still have trouble try
-modifying the Node-RED [configuration](https://nodered.org/docs/configuration) with a more verbose logging level and run Node-RED from the terminal, if you are not already.
-See the [running](https://nodered.org/docs/getting-started/running) Node-RED article for different ways of starting Node-RED.
-
-### After installing `node-red-contrib-google-cloud` the logs contain errors about not finding the *grpc_node.node* module, what gives?
-
-This issue usually comes up after installing `node-red-contrib-google-cloud` globally i.e. `sudo npm install -g node-red-contrib-google-cloud`. Some versions dislike running install scripts
-as the root user and will silently fail to run the script, making the installation appear successful when in reality it failed. See [this issue](https://github.com/grpc/grpc/issues/6435) for more details.
-The solution is to run the installation again, but append `--unsafe-perm` to the command i.e. `sudo npm install -g node-red-contrib-google-cloud --unsafe-perm`.
+We are very open to receiving feedback on additional GCP nodes that be of value.  Don't hesitate to open an issue should you have a notion
+for incorporating additional GCP functions.

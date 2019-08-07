@@ -1,0 +1,72 @@
+<!--
+Copyright 2019 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="google-cloud-pubsub in">
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">
+    </div>
+    <div class="form-row">
+        <label for="node-input-subscription"><i class="fa fa-bars"></i> Subscription</label>
+        <input type="text" id="node-input-subscription">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="google-cloud-pubsub in">
+    <p>Connects to <a href="https://cloud.google.com/pubsub/docs/" target="_blank">Google Cloud Pub/Sub</a> and subscribes to a specific topic.</p>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">PubSub Message</span>
+        </dt>
+        <dd>The data from the Pub/Sub message.</dd>     
+    </dl>
+    <h3>Details</h3>
+    <p>
+        This node receives a message that has been published to a topic.  During configuration, the property called Subscription
+        is used to name the GCP Subscription that we are watching.
+    </p>
+    <p>
+        This is an event generating node and as such has no inputs.  When a message is received, the flowing msg will contain a
+        payload property corresponding to a GCP PubSub message.  This is described 
+        <a href="https://cloud.google.com/nodejs/docs/reference/pubsub/0.28.x/Message">here</a>.  The message is auto acknowledged.    
+    </p>
+</script>
+
+<script type="text/javascript">
+RED.nodes.registerType("google-cloud-pubsub in", {
+    category: "GCP",
+    defaults: {
+        account: { type: "google-cloud-credentials", required: true },
+        subscription: { required: true },
+        name: { value: "", required: false }
+    },
+    inputs: 0,
+    outputs: 1,
+    icon: "cloudpubsub.png",
+    align: "left",
+    color: "#3FADB5",
+    label: function () {
+        return this.name || this.topic || "pubsub";
+    },
+    paletteLabel: "pubsub"
+});
+</script>
