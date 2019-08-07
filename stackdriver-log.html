@@ -1,0 +1,73 @@
+<!--
+Copyright 2019 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="google-cloud-log">
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">
+    </div>
+    <div class="form-row">
+        <label for="node-input-logName"><i class="fa fa-user"></i> Log Name</label>
+        <input type="text" id="node-input-logName">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>       
+</script>
+
+<script type="text/x-red" data-help-name="google-cloud-log">
+    <p>Write a log entry to Stackdriver logging.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The text payload to write to Stackdriver</dd>
+        <dt>msg.logName
+            <span class="property-type">string</span>
+        </dt>
+        <dd>[Optional] The log name to which this message will be written.  If not
+            supplied, the configured log name will be used.</dd>        
+    </dl>
+
+    <h3>Details</h3>
+    <p><code>msg.payload</code> is used as the content of the text payload written
+        to a Stackdriver log entry.</p>
+    <p>The entry is written into the log specified by the log name configuration property which
+        can be overridden on a specific invocation.</p>
+</script>
+
+<script type="text/javascript">
+RED.nodes.registerType("google-cloud-log", {
+    category: "GCP", // Paltette category where the node will be found.
+    defaults: {
+        account: { type: "google-cloud-credentials", required: true },
+        logName: { value: "", required: true },  
+        name: { value: "", required: false }           
+    },
+    inputs: 1,
+    outputs: 0,
+    icon: "stackdriver-log.png",
+    align: "right",
+    color: "#3FADB5",
+    label: function () {
+        return this.name || "log";
+    },
+    paletteLabel: "log"
+});
+</script>
