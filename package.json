@@ -43,9 +43,8 @@
         "url": "https://github.com/GoogleCloudPlatform/node-red-contrib-google-cloud.git"
     },
     "author": {
-        "name": "Cloud Partner Engineering",
-        "email": "cloud-partner-eng@google.com",
-        "url": "https://cloud.google.com/partners/"
+        "name": "Neil Kolban",
+        "email": "kolban@google.com"
     },
     "devDependencies": {
         "node-red": "^0.20.7",

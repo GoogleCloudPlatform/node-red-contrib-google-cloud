@@ -13,7 +13,14 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 *
-* A 
+*
+*
+* A compute engine running in GCP has associated metadata.  This node retrieves
+* that metadata and places it in the msg.payload of the outgoing message.
+*
+* For further GCP information on this topic see:
+* https://cloud.google.com/compute/docs/storing-retrieving-metadata
+* 
 */
 module.exports = function(RED) {
     "use strict";
@@ -24,10 +31,13 @@ module.exports = function(RED) {
     function CEMetaDataNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
-        node.log("Metadata was started!");
 
         function Input(msg) {
-            node.log("Input called!");
+    //
+    // Make a request to the GCP metadata server to retrieve the details of the environment.
+    // When a response returns, convert it to a JS object and set it within msg.payload.
+    // The response from the REST request will be a JSON string.
+    //
             const options = {
                 url: 'http://metadata.google.internal/computeMetadata/v1/?recursive=true',
                 headers: {
@@ -42,10 +52,12 @@ module.exports = function(RED) {
                 msg.payload = JSON.parse(body);
                 node.send(msg);
             });
-        }
+        } // Input
+
 
         node.on("input", Input);
-    }
+    } // CEMetaDataNode
+
 
     RED.nodes.registerType(NODE_TYPE, CEMetaDataNode);
 };
