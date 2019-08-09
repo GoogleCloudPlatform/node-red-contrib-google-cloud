@@ -20,9 +20,13 @@ limitations under the License.
         <input type="text" id="node-input-account">        
     </div>
     <div class="form-row">
+        <label for="node-input-filename"><i class="fa fa-file"></i> File Name</label>
+        <input type="text" id="node-input-filename">
+    </div>    
+    <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name">
-    </div>       
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="google-cloud-gcs-write">
@@ -35,7 +39,7 @@ limitations under the License.
         <dd>The payload to write to the Google Cloud Storage object</dd>
 
         <dt>msg.filename
-                <span class="property-type">string</span>
+            <span class="property-type">string</span>
         </dt>
         <dd>The name of the file in URL form.</dd>
         
@@ -46,8 +50,14 @@ limitations under the License.
     </dl>
 
     <h3>Details</h3>
-    <p><code>msg.payload</code> is used as the content of the object written to
-        Google Cloud Storage.  This can be either a Buffer or a string.
+    <p>This node writes the content of the payload to a GCS object. 
+
+        On execution, the data contained in <code>msg.payload</code> is written into the file specified by <code>msg.filename</code>.
+        The format of this field is a GCS Url of the form <code>gs://[BUCKET]/[FILE]</code>.
+        Optionally, the file to be written can be supplied as the file name property during configuration.  If both are supplied,
+        the <code>msg.filename</code> will be used. 
+
+        An optional field called <code>msg.contentType</code> contains the MIME type to be associated with the file.
     </p>
 </script>
 
@@ -56,7 +66,8 @@ RED.nodes.registerType("google-cloud-gcs-write", {
     category: "GCP",
     defaults: {
         account: { type: "google-cloud-credentials", required: true },
-        name: { value: "", required: false }        
+        filename: { value: "", required: false },
+        name: { value: "", required: false }
     },
     inputs: 1,
     outputs: 0,
