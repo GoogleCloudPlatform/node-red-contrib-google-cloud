@@ -1,12 +1,12 @@
 /**
  * Copyright 2019 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,18 +14,20 @@
  * limitations under the License.
  *
  * The node type is "gcs-read".
- * 
+ *
  * This node will read the content of a GCS file (object) and place that data
  * in msg.payload before flowing onwards.  Alterantively, it can return the list
  * of objects found in the bucket.
- * 
+ *
  * # Inputs
  * * msg.filename = File name to be read.  The file name will be of the form gs://[BUCKET]/[FILE_PATH]
- * 
+ *
  * # Outputs
  *  * msg.payload  = Data read from file as a Buffer.
  *  * msg.metadata = The metadata associated with the file.
- * 
+ *
+ * If both msg.filename and configuration property filename are supplied then msg.filename will
+ * be used.
  */
 module.exports = function(RED) {
     "use strict";
@@ -46,14 +48,15 @@ module.exports = function(RED) {
         const node = this;
         const credentials = GetCredentials(config.account);
         const isList = config.list;
+        const fileName_option = config.filename.trim();
 
         /**
          * Extract JSON service account key from "google-cloud-credentials" config node.
          */
-        
         function GetCredentials(node) {
             return JSON.parse(RED.nodes.getCredentials(node).account);
-        }
+        } // GetCredentials
+
 
         async function readFile(msg, gsURL) {
             // At this point we have a URL of the form gs://[BUCKET]/[FILENAME].  We now want
@@ -140,23 +143,32 @@ module.exports = function(RED) {
          * @param {*} msg 
          */
         function Input(msg) {
-            if (!msg.filename) {   // Validate that we have been passed the mandatory filename parameter.
-                node.error("No filename found in msg.filename");
+            let gsURL;
+
+            if (!msg.filename && fileName_option === "") {   // Validate that we have been passed the mandatory filename parameter.
+                node.error('No filename found in msg.filename or configuration.');
                 return;
             }
 
-            if (typeof msg.filename != "string") { // Validate that the mandatory filename is a string.
+            if (typeof msg.filename != "string" && fileName_option === "") { // Validate that the mandatory filename is a string.
                 node.error("The msg.filename was not a string");
                 return;
             }
 
-            let gsURL = msg.filename.trim();
-
-            if (!isList) {
-                readFile(msg, gsURL);
+            // We have two possibilities for supplying a filename.  These are msg.filename at runtime
+            // and the filename configuration property.  If both are present, then msg.filename will
+            // be used.
+            if (msg.filename) {
+                gsURL = msg.filename.trim();
             } else {
+                gsURL = fileName_option;
+            }
+
+            if (isList) {
                 listFiles(msg, gsURL);
-            }            
+            } else {
+                readFile(msg, gsURL);
+            }
         } // Input
 
 
@@ -164,8 +176,8 @@ module.exports = function(RED) {
          * Cleanup this node.
          */
         function Close() {
-        }
-        
+        } // Close
+
 
         node.on("input", Input);
         node.on("close", Close);
@@ -175,7 +187,7 @@ module.exports = function(RED) {
                 "credentials": credentials
             });
         } else {
-            node.error("missing credentials");
+            node.error('missing credentials');
         }
     } // GCSReadNode
 
