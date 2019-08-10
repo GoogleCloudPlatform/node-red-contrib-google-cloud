@@ -22,7 +22,11 @@ limitations under the License.
     <div class="form-row">
         <label for="node-input-filename"><i class="fa fa-file"></i> File Name</label>
         <input type="text" id="node-input-filename">
-    </div>    
+    </div>
+    <div class="form-row">
+            <label for="node-input-contentType"><i class="fa fa-info-circle"></i> Content Type</label>
+            <input type="text" id="node-input-contentType">
+        </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name">
@@ -58,6 +62,8 @@ limitations under the License.
         the <code>msg.filename</code> will be used. 
 
         An optional field called <code>msg.contentType</code> contains the MIME type to be associated with the file.
+        If this is not specified but a configuration property for content type is, then THAT will be used.  If neither are supplied,
+        then we don't specify a content type for the GCS file.
     </p>
 </script>
 
@@ -67,6 +73,7 @@ RED.nodes.registerType("google-cloud-gcs-write", {
     defaults: {
         account: { type: "google-cloud-credentials", required: true },
         filename: { value: "", required: false },
+        contentType: { value: "", required: false },
         name: { value: "", required: false }
     },
     inputs: 1,

@@ -23,6 +23,9 @@
  * AND the configuration filename are both specified, then msg.filename will be used.  It is an error to not
  * supply at least one.
  * 
+ * If we specify a msg.contentType, then that will be used for the MIME type of the file.  If we don't but we do have
+ * a configuration of a content type, then we'll use that.  If neither, then no content type is specified.
+ * 
  */
 module.exports = function(RED) {
     "use strict";
@@ -43,6 +46,7 @@ module.exports = function(RED) {
         const node = this;
         const credentials = GetCredentials(config.account);
         const fileName_options = config.filename.trim();
+        const contentType_options = config.contentType.trim();
 
         /**
          * Extract JSON service account key from "google-cloud-credentials" config node.
@@ -92,8 +96,13 @@ module.exports = function(RED) {
             const file   = bucket.file(fileName);
 
             const writeStreamOptions = {};
+
+            // If we have a msg.contentType field, use it.  If we don't but we have a contentType set in options, use
+            // that.  Otherwise don't supply a content type.
             if (msg.contentType) {
                 writeStreamOptions.contentType = RED.util.ensureString(msg.contentType);
+            } else if (contentType_options !== "") {
+                writeStreamOptions.contentType = contentType_options;
             }
 
             const writeStream = file.createWriteStream(writeStreamOptions);
