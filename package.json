@@ -22,8 +22,7 @@
         "gcs",
         "stackdriver",
         "vision",
-        "sentiment",
-        "node-red"
+        "sentiment"
     ],
     "node-red": {
         "nodes": {
