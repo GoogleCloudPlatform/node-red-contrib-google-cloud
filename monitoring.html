@@ -14,10 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="skeleton">
+<script type="text/x-red" data-template-name="google-cloud-monitoring">
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
         <input type="text" id="node-input-account">        
+    </div>
+    <div class="form-row">
+        <label for="node-input-metricType"><i class="fa fa-tag"></i> Metric Type</label>
+        <input type="text" id="node-input-metricType">
+    </div>    
+    <div class="form-row">
+        <label for="node-input-projectId"><i class="fa fa-tag"></i> Project Id</label>
+        <input type="text" id="node-input-projectId">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -25,25 +33,27 @@ limitations under the License.
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="skeleton">
-    <p>Documentation for skeleton.</p>
+<script type="text/x-red" data-help-name="google-cloud-monitoring">
+    <p>Documentation for Monitoring.</p>
 </script>
 
 <script type="text/javascript">
-RED.nodes.registerType("skeleton", {
+RED.nodes.registerType("google-cloud-monitoring", {
     category: "GCP",
     defaults: {
-        account: { type: "google-cloud-credentials", required: true },
-        name: { value: "", required: false }
+        account:    { type: "google-cloud-credentials", required: true },
+        metricType: { value: "", required: true },
+        projectId:  { value: "", required: true },
+        name:       { value: "", required: false }
     },
     inputs: 1,
-    outputs: 0,
-    icon: "skeleton.png",
+    outputs: 1,
+    icon: "monitoring.png",
     align: "left",
     color: "#3FADB5",
     label: function () {
-        return this.name || "skeleton";
+        return this.name || "monitoring";
     },
-    paletteLabel: "skeleton"
+    paletteLabel: "monitoring"
 });
 </script>

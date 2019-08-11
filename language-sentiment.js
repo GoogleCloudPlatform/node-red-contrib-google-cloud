@@ -65,7 +65,7 @@ module.exports = function(RED) {
 
             if (msg.payload instanceof Buffer) {
                 document.content = msg.payload.toString();
-            } else if (msg.payload instanceof String) {
+            } else if (msg.payload instanceof String || typeof msg.payload === 'string') {
                 document.content = msg.payload;
             } else {
                 node.error("msg.payload neither String nor Buffer");

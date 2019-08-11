@@ -17,7 +17,15 @@
  * 
  * msg.payload  = data to be written.
  * msg.filename = file name to be written.  The file name will be of the form gs://[BUCKET]/[FILE_PATH]
- * msg.contentztype = Content type setting for data (optional)
+ * msg.contentType = Content type setting for data (optional)
+ * 
+ * Note that msg.filename is optional.  If the configuration filename is specified, that can be used.  If msg.filename
+ * AND the configuration filename are both specified, then msg.filename will be used.  It is an error to not
+ * supply at least one.
+ * 
+ * If we specify a msg.contentType, then that will be used for the MIME type of the file.  If we don't but we do have
+ * a configuration of a content type, then we'll use that.  If neither, then no content type is specified.
+ * 
  */
 module.exports = function(RED) {
     "use strict";
@@ -37,6 +45,8 @@ module.exports = function(RED) {
         let storage;
         const node = this;
         const credentials = GetCredentials(config.account);
+        const fileName_options = config.filename.trim();
+        const contentType_options = config.contentType.trim();
 
         /**
          * Extract JSON service account key from "google-cloud-credentials" config node.
@@ -51,8 +61,10 @@ module.exports = function(RED) {
          * @param {*} msg 
          */
         function Input(msg) {
-            if (!msg.filename) {
-                node.error('No filename found in msg.filename');
+            let gsURL;
+
+            if (!msg.filename && fileName_options === "") { // If no msg.filename AND no options for filename, then that would be an error.
+                node.error(`No filename found in msg.filename and no file name configured (${fileName_options})`);
                 return;
             }
             if (!msg.payload) {
@@ -60,13 +72,19 @@ module.exports = function(RED) {
                 return;
             }
 
-            let gsURL = RED.util.ensureString(msg.filename).trim();
+            // If msg.filename is present, use that.  If not present then use the configuration filename.
+            if (msg.filename) {
+                gsURL = RED.util.ensureString(msg.filename).trim();
+            }
+            else {
+                gsURL = fileName_options;
+            }
 
             // At this point we have a URL of the form gs://[BUCKET]/[FILENAME].  We now want
             // to parse this out and get the bucket and file.
 
             const parts = gsURL.match(/gs:\/\/([^\/]*)\/(.*)$/);
-            if (!parts && parts.length != 3) {
+            if (parts === null || parts.length != 3) {
                 node.error(`Badly formed URL: ${gsURL}`);
                 return;
             }
@@ -77,15 +95,20 @@ module.exports = function(RED) {
             const bucket = storage.bucket(bucketName);
             const file   = bucket.file(fileName);
 
-            const options = {};
-            if (msg.contenttype) {
-                options.contentType = RED.util.ensureString(msg.contentType);
+            const writeStreamOptions = {};
+
+            // If we have a msg.contentType field, use it.  If we don't but we have a contentType set in options, use
+            // that.  Otherwise don't supply a content type.
+            if (msg.contentType) {
+                writeStreamOptions.contentType = RED.util.ensureString(msg.contentType);
+            } else if (contentType_options !== "") {
+                writeStreamOptions.contentType = contentType_options;
             }
 
-            const writeStream = file.createWriteStream(options);
+            const writeStream = file.createWriteStream(writeStreamOptions);
 
             writeStream.on('error', (err) => {
-                node.error(`writeStream error: ${JSON.stringify(err)}`);
+                node.error(`writeStream error: ${err.message}`);
             });
             writeStream.write(msg.payload); // Write the data to the object.
             writeStream.end();

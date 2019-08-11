@@ -29,6 +29,9 @@ module.exports = function(RED) {
 
     function VisionNode(config) {
 
+        /**
+         * Extract JSON service account key from "google-cloud-credentials" config node.
+         */
         function GetCredentials(node) {
             return JSON.parse(RED.nodes.getCredentials(node).account);
         } // GetCredentials
@@ -52,9 +55,7 @@ module.exports = function(RED) {
         const isProductSearch = config.productSearch;
         const isObjectLocalization = config.objectLocalization;
 
-        /**
-         * Extract JSON service account key from "google-cloud-credentials" config node.
-         */
+
 
 
 
@@ -125,7 +126,7 @@ module.exports = function(RED) {
             if (msg.filename) {
                 request.image = {
                     source: {
-                        imageUri: RED.util.ensureString(msg.filename)
+                        imageUri: msg.filename
                     }
                 };
             } else {
@@ -140,10 +141,14 @@ module.exports = function(RED) {
                 }
             }
 
-            const [response] = await imageAnnotatorClient.annotateImage(request);
+            try {
+                const [response] = await imageAnnotatorClient.annotateImage(request);
 
-            msg.payload = response;
-            node.send(msg);
+                msg.payload = response;
+                node.send(msg);
+            } catch(err) {
+                node.error(err);
+            }
         } // Input
 
         node.on("input", Input); // Register the handler to be invoked when a new message is to be processed.

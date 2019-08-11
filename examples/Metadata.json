@@ -1,0 +1,70 @@
+[
+    {
+        "id": "456006ec.177c98",
+        "type": "tab",
+        "label": "Metadata",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "e20b659c.cc76e8",
+        "type": "google-cloud-ce-metadata",
+        "z": "456006ec.177c98",
+        "name": "",
+        "x": 320,
+        "y": 160,
+        "wires": [
+            [
+                "27472262.98d24e"
+            ]
+        ],
+        "info": "Retrieve the Compute Engine metadata and save it\nin the `msg.payload` field."
+    },
+    {
+        "id": "245b4059.163ed",
+        "type": "inject",
+        "z": "456006ec.177c98",
+        "name": "Run flow",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 160,
+        "y": 160,
+        "wires": [
+            [
+                "e20b659c.cc76e8"
+            ]
+        ],
+        "info": "Run the example flow."
+    },
+    {
+        "id": "27472262.98d24e",
+        "type": "debug",
+        "z": "456006ec.177c98",
+        "name": "Log results",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 490,
+        "y": 160,
+        "wires": [],
+        "info": "Log the results to the debug panel."
+    },
+    {
+        "id": "725e1504.64c2fc",
+        "type": "comment",
+        "z": "456006ec.177c98",
+        "name": "README",
+        "info": "Execute the retrieval of the Compute Engine metadata\nthat is then logged to the debug panel.\n\n**Note**: This node is only meaningul to be run on Node-RED\nhosted by a Google Cloud Platform Compute Engine.",
+        "x": 140,
+        "y": 100,
+        "wires": []
+    }
+]

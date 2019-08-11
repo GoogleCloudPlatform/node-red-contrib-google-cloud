@@ -1,0 +1,122 @@
+[
+    {
+        "id": "5e16e323.70fc3c",
+        "type": "tab",
+        "label": "GCS",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "a107b80.0d6ff48",
+        "type": "inject",
+        "z": "5e16e323.70fc3c",
+        "name": "Run flow",
+        "topic": "",
+        "payload": "This is the content of the new file!",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 180,
+        "y": 140,
+        "wires": [
+            [
+                "aa7dd9ea.c05ce8"
+            ]
+        ],
+        "info": "Run the flow with a configured file name."
+    },
+    {
+        "id": "aa7dd9ea.c05ce8",
+        "type": "google-cloud-gcs-write",
+        "z": "5e16e323.70fc3c",
+        "account": "",
+        "filename": "gs://kolban-test/text1.txt",
+        "contentType": "text/plain",
+        "name": "",
+        "x": 340,
+        "y": 140,
+        "wires": [],
+        "info": "Write the payload to a GCS file that is configured\non the node's configuration.\n\nNote: You will have to set the URL to your own bucket."
+    },
+    {
+        "id": "2b18c78e.f59358",
+        "type": "inject",
+        "z": "5e16e323.70fc3c",
+        "name": "Run flow",
+        "topic": "",
+        "payload": "This is the content of the new file!",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 180,
+        "y": 200,
+        "wires": [
+            [
+                "6215d7d9.938968"
+            ]
+        ],
+        "info": "Run the flow with a runtime filename."
+    },
+    {
+        "id": "255107d3.848d08",
+        "type": "google-cloud-gcs-write",
+        "z": "5e16e323.70fc3c",
+        "account": "",
+        "filename": "",
+        "contentType": "",
+        "name": "",
+        "x": 560,
+        "y": 200,
+        "wires": [],
+        "info": "Write the payload to a GCS file that is passed in at\nruntime.\n\nNote: You will have to set the URL to your own bucket."
+    },
+    {
+        "id": "6215d7d9.938968",
+        "type": "change",
+        "z": "5e16e323.70fc3c",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "gs://kolban-test/text1.txt",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "contentType",
+                "pt": "msg",
+                "to": "text/plain",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 200,
+        "wires": [
+            [
+                "255107d3.848d08"
+            ]
+        ],
+        "info": "Set the file name to be used as the target of the \nfile write and also set the content type of the file."
+    },
+    {
+        "id": "dcf36b7d.3b03a8",
+        "type": "comment",
+        "z": "5e16e323.70fc3c",
+        "name": "README",
+        "info": "In this example we write content to a new GCS file.\nYou must edit the gcs-write nodes to change the URL\nto point to your own GCS bucket that you have write\npermissions upon.\n\nThere are two test flows here.  One writes to a file\nwhere the name of the file is supplied in the configuration\nproperties of the node while the other supplies the file name\nas a run time property.",
+        "x": 160,
+        "y": 80,
+        "wires": []
+    }
+]

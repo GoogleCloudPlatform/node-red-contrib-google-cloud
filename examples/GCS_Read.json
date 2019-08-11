@@ -1,0 +1,238 @@
+[
+    {
+        "id": "2dedf6c5.94ceca",
+        "type": "tab",
+        "label": "GCS Read",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "a3283e04.b3a3f",
+        "type": "inject",
+        "z": "2dedf6c5.94ceca",
+        "name": "Run flow",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 160,
+        "y": 140,
+        "wires": [
+            [
+                "1cb0b7bd.34afd8"
+            ]
+        ],
+        "info": "Run the flow."
+    },
+    {
+        "id": "1cb0b7bd.34afd8",
+        "type": "google-cloud-gcs-read",
+        "z": "2dedf6c5.94ceca",
+        "account": "",
+        "filename": "gs://kolban-test/text1.txt",
+        "list": false,
+        "name": "",
+        "x": 320,
+        "y": 140,
+        "wires": [
+            [
+                "2929b0a9.2998b"
+            ]
+        ],
+        "info": "Read the content of the GCS file specified in the configuration\nproperties.  You will have to change the name of the file\nto a URL for one of _your_ files."
+    },
+    {
+        "id": "2929b0a9.2998b",
+        "type": "debug",
+        "z": "2dedf6c5.94ceca",
+        "name": "Log results",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 490,
+        "y": 140,
+        "wires": [],
+        "info": "Log the output of the read of the file to the debug panel.\nNote that the results are a Buffer found in `msg.payload`\nand the file's metadata found in `msg.metadata`."
+    },
+    {
+        "id": "f71e4c38.8b42",
+        "type": "comment",
+        "z": "2dedf6c5.94ceca",
+        "name": "README",
+        "info": "These examples illustrate reading a file from\nGCS storage.  In these examples you will have to change the\nURL of the file to be read to one of your own files\ncontained in your own buckets.\n\nThere are three samples here.  The first reads a file\nwith a fixed name as specified in the configuration properties\nof the GCS read node.\n\nThe second example reads a file with the name supplied\nas a runtime property in `msg.filename`.\n\nThe third example lists the files found at the supplied bucket/directory.",
+        "x": 140,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "7c9f6d8b.572024",
+        "type": "inject",
+        "z": "2dedf6c5.94ceca",
+        "name": "Run flow",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 160,
+        "y": 220,
+        "wires": [
+            [
+                "5c20f1ac.897b2"
+            ]
+        ],
+        "info": "Run the flow."
+    },
+    {
+        "id": "9d3402c5.11e03",
+        "type": "google-cloud-gcs-read",
+        "z": "2dedf6c5.94ceca",
+        "account": "",
+        "filename": "",
+        "list": false,
+        "name": "",
+        "x": 540,
+        "y": 220,
+        "wires": [
+            [
+                "6e716520.4683dc"
+            ]
+        ],
+        "info": "Read the content of the GCS file specified in the configuration\nproperties.  You will have to change the name of the file\nto a URL for one of _your_ files."
+    },
+    {
+        "id": "6e716520.4683dc",
+        "type": "debug",
+        "z": "2dedf6c5.94ceca",
+        "name": "Log results",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 710,
+        "y": 220,
+        "wires": [],
+        "info": "Log the output of the read of the file to the debug panel.\nNote that the results are a Buffer found in `msg.payload`\nand the file's metadata found in `msg.metadata`."
+    },
+    {
+        "id": "5c20f1ac.897b2",
+        "type": "change",
+        "z": "2dedf6c5.94ceca",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "gs://kolban-test/text1.txt",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 220,
+        "wires": [
+            [
+                "9d3402c5.11e03"
+            ]
+        ]
+    },
+    {
+        "id": "89c50728.931968",
+        "type": "comment",
+        "z": "2dedf6c5.94ceca",
+        "name": "Configured file name",
+        "info": "This path is for the configured file name which is set in the\nproperties of the node.",
+        "x": 720,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "22c81a78.b2c726",
+        "type": "comment",
+        "z": "2dedf6c5.94ceca",
+        "name": "Runtime filename",
+        "info": "This path specifies the file name to be read at runtime\nwithin the `msg.filename` property.",
+        "x": 930,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "f35c344f.a690c8",
+        "type": "inject",
+        "z": "2dedf6c5.94ceca",
+        "name": "Run flow",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 160,
+        "y": 300,
+        "wires": [
+            [
+                "6de3e0bc.69634"
+            ]
+        ],
+        "info": "Run the flow."
+    },
+    {
+        "id": "6de3e0bc.69634",
+        "type": "google-cloud-gcs-read",
+        "z": "2dedf6c5.94ceca",
+        "account": "",
+        "filename": "gs://kolban-test",
+        "list": true,
+        "name": "",
+        "x": 320,
+        "y": 300,
+        "wires": [
+            [
+                "db931e8a.7d775"
+            ]
+        ],
+        "info": "Read the content of the GCS file specified in the configuration\nproperties.  You will have to change the name of the file\nto a URL for one of _your_ files."
+    },
+    {
+        "id": "db931e8a.7d775",
+        "type": "debug",
+        "z": "2dedf6c5.94ceca",
+        "name": "Log results",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 490,
+        "y": 300,
+        "wires": [],
+        "info": "Log the output of the read of the file to the debug panel.\nNote that the results are a Buffer found in `msg.payload`\nand the file's metadata found in `msg.metadata`."
+    },
+    {
+        "id": "5f40e581.92088c",
+        "type": "comment",
+        "z": "2dedf6c5.94ceca",
+        "name": "List the files",
+        "info": "This path lists the files within a directory at a given GCS bucket.",
+        "x": 690,
+        "y": 300,
+        "wires": []
+    }
+]

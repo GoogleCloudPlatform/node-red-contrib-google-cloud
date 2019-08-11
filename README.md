@@ -16,11 +16,11 @@ One of the key reasons that Node-RED has become as popular as it has is the ease
 sets functions.  Once written, these add-on nodes can be used by flow writers without having to know the complexities of their underlying operation.  One just drags 
 a new node onto the canvas and uses it.
 
-This project provides a set of core Google Cloud Platform oriented Node-RED nodes.  Once installed, the capabilitiy to use a broad set of GCP services are immediately unlocked.
+This project provides a set of core Google Cloud Platform oriented Node-RED nodes.  Once installed, the capability to use a broad set of GCP services are immediately unlocked.
 
 ## Installation
 
-There are multiple ways to install `node-red-contrib-google-cloud`. The official ways are described in the Node-RED [documentation](https://nodered.org/docs/getting-started/adding-nodes).  The name of the package for installation is `node-red-contrib-google-cloud'.
+There are multiple ways to install `node-red-contrib-google-cloud`. The official ways are described in the Node-RED [documentation](https://nodered.org/docs/getting-started/adding-nodes).  The name of the package for installation is `node-red-contrib-google-cloud`.
 
 ## Google Cloud Credentials
 
@@ -30,7 +30,7 @@ within each of the nodes that request service.
 
 | Property    | Type     | Description                                          |
 | ----------- | -------- | ---------------------------------------------------- |
-| **name**    | `string` | Label for easy idetification, essentially a comment. |
+| **name**    | `string` | Label for easy identification, essentially a comment. |
 | **account** | `string` | Credentials in the form of a JSON key.               |
 
 The credentials for a service account can be acquired from the [APIs & Services](https://console.cloud.google.com/apis/credentials) menu. After you finish creating a service account key, it will be downloaded in JSON format and saved to a local file.
@@ -44,7 +44,7 @@ Copy and paste the contents of the file directly into the **Key** field in the n
 
 ## The Google Cloud Platform Node-RED nodes
 
-The set of Node-RED nodes are found in the GCP section of the palette.  These nodes are:
+The set of Node-RED nodes are found in the GCP section of the palette.  The current set of nodes are:
 
 * [PubSub In](docs/pubsub_in.md) - Receive a published message.
 * [PubSub Out](docs/pubsub_out.md) - Publish a new message.
@@ -55,6 +55,7 @@ The set of Node-RED nodes are found in the GCP section of the palette.  These no
 * [Sentiment](docs/sentiment.md) - Perform Natural Language Analytics on a piece of text.
 * [Vision](docs/vision.md) - Analyse an image.
 * [Metadata](docs/metadata.md) - Retrieve the compute engine metadata.
+* [Monitoring](docs/monitoring.md) - Write a new monitoring record.
 
-We are very open to receiving feedback on additional GCP nodes that be of value.  Don't hesitate to open an issue should you have a notion
+We are very open to receiving feedback on additional GCP nodes that may be of value.  Don't hesitate to open an issue should you have a desire
 for incorporating additional GCP functions.

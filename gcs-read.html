@@ -20,13 +20,17 @@ limitations under the License.
         <input type="text" id="node-input-account">        
     </div>
     <div class="form-row">
+        <label for="node-input-list"><i class="fa fa-file"></i> File Name</label>
+        <input type="text" id="node-input-filename">
+    </div>  
+    <div class="form-row">
         <label for="node-input-list"><i class="fa fa-list"></i> List</label>
-        <input type="checkbox" id="node-input-list" style="width: 20px;">  List the files.      
+        <input type="checkbox" id="node-input-list" style="width: 20px;">  List the files.
     </div>    
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name">
-    </div>    
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="google-cloud-gcs-read">
@@ -55,7 +59,8 @@ limitations under the License.
         If reading the contents of a file, <code>msg.filename</code> is the identity of the file to be read
         from GCS.  If listing the contents of a bucket, <code>msg.filename</code> is the identity of the 
         bucket to be listed.  The format of the file name is a URL string of the form
-        <code>gs://[BUCKET]/[FILENAME]</code>.
+        <code>gs://[BUCKET]/[FILENAME]</code>.  Alternatively, we can specify the file to be read in the file name configuration property.
+        If both this property and a runtime value found in <code>msg.filename</code> are present, then the <code>msg.filename</code> name will be used.
     </p>
     The metadata associated with the file is returned in <code>msg.metadata</code>.
     </p>
@@ -66,6 +71,7 @@ RED.nodes.registerType("google-cloud-gcs-read", {
     category: "GCP",
     defaults: {
         account: { type: "google-cloud-credentials", required: true },
+        filename: { value: false, required: false},
         list: { value: false, required: false},
         name: { value: "", required: false }
     },

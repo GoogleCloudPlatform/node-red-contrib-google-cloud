@@ -1,0 +1,92 @@
+[
+    {
+        "id": "c3371d69.5ebec",
+        "type": "tab",
+        "label": "Sentiment",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "f41b94c7.93a538",
+        "type": "google-cloud-language-sentiment",
+        "z": "c3371d69.5ebec",
+        "account": "",
+        "name": "",
+        "x": 440,
+        "y": 320,
+        "wires": [
+            [
+                "eefb3bf3.0d29a8"
+            ]
+        ],
+        "info": "Process sentiment analysis on the incoming text."
+    },
+    {
+        "id": "e17857a.ae12ca8",
+        "type": "inject",
+        "z": "c3371d69.5ebec",
+        "name": "Positive",
+        "topic": "",
+        "payload": "I am very pleased with the service.  This is an excellent product!",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 210,
+        "y": 320,
+        "wires": [
+            [
+                "f41b94c7.93a538"
+            ]
+        ],
+        "info": "The text of a positive sentiment message."
+    },
+    {
+        "id": "7d1e46de.dbd438",
+        "type": "inject",
+        "z": "c3371d69.5ebec",
+        "name": "Negative",
+        "topic": "",
+        "payload": "I am not happy.  The product did not meet my expectations.",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 220,
+        "y": 380,
+        "wires": [
+            [
+                "f41b94c7.93a538"
+            ]
+        ],
+        "info": "The text of a negative sentiment message."
+    },
+    {
+        "id": "eefb3bf3.0d29a8",
+        "type": "debug",
+        "z": "c3371d69.5ebec",
+        "name": "Debug sentiment output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "sentiment",
+        "targetType": "msg",
+        "x": 690,
+        "y": 320,
+        "wires": [],
+        "info": "Log the resulting sentiment (contained in `msg.sentiment`)\nto the debug panel for review."
+    },
+    {
+        "id": "162cf56d.b3cddb",
+        "type": "comment",
+        "z": "c3371d69.5ebec",
+        "name": "README",
+        "info": "This example allows you to submit both positive\nand negative sentiment into the sentiment\nprocessing.  The results are logged to the debug panel.\nClicking on the Positive inject starts a flow with\na positive sentiment text message while clicking\non the Negative inject starts a flow with a negative\nsentiment.",
+        "x": 200,
+        "y": 240,
+        "wires": []
+    }
+]
