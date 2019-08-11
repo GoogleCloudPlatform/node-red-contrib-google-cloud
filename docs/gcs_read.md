@@ -5,6 +5,7 @@
 This node reads the content of a Google Cloud Store (GCS) object and returns the content in the `msg.payload` field.  It has an additional option to list the objects in a bucket.
 
 At runtime, the value of msg.filename contains describes the file to read.  The format of this field is a GCS Url of the form `gs://[BUCKET]/[FILE]`. 
+Alternatively, we can specify the file to be read in the file name configuration property.  If both this property and a runtime value found in `msg.filename` are present, then the `msg.filename` name will be used.
 
 ## List notes
 

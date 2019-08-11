@@ -1,0 +1,52 @@
+[
+    {
+        "id": "86aaaaba.323c28",
+        "type": "tab",
+        "label": "Logging",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "c61b5c4f.77d83",
+        "type": "google-cloud-log",
+        "z": "86aaaaba.323c28",
+        "account": "",
+        "logName": "my-log",
+        "name": "",
+        "x": 470,
+        "y": 180,
+        "wires": [],
+        "info": "Write the text arriving in the incoming `msg.payload`\nto the Stackdriver log called `my-log`."
+    },
+    {
+        "id": "6d2af61.6bd4208",
+        "type": "inject",
+        "z": "86aaaaba.323c28",
+        "name": "",
+        "topic": "",
+        "payload": "This is a new log entry",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 220,
+        "y": 180,
+        "wires": [
+            [
+                "c61b5c4f.77d83"
+            ]
+        ],
+        "info": "The text content that is to be written to the\nStackdriver log."
+    },
+    {
+        "id": "159c19e7.27f276",
+        "type": "comment",
+        "z": "86aaaaba.323c28",
+        "name": "README",
+        "info": "This example writes a message to the GCP Stackdriver\nlog called `my-log`.  Click the button associated with\nthe inject node to run the flow.\n\nAfter execution, you can visit the Log Viewer in the\nGCP console and examine the log at `Global:my-log` to\nsee that the entry was indeed written.",
+        "x": 160,
+        "y": 100,
+        "wires": []
+    }
+]

@@ -16,7 +16,7 @@ One of the key reasons that Node-RED has become as popular as it has is the ease
 sets functions.  Once written, these add-on nodes can be used by flow writers without having to know the complexities of their underlying operation.  One just drags 
 a new node onto the canvas and uses it.
 
-This project provides a set of core Google Cloud Platform oriented Node-RED nodes.  Once installed, the capabilitiy to use a broad set of GCP services are immediately unlocked.
+This project provides a set of core Google Cloud Platform oriented Node-RED nodes.  Once installed, the capability to use a broad set of GCP services are immediately unlocked.
 
 ## Installation
 

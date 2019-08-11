@@ -1,0 +1,55 @@
+[
+    {
+        "id": "ecae8cd5.c055",
+        "type": "tab",
+        "label": "Tasks",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "91634d8f.a735f",
+        "type": "google-cloud-tasks",
+        "z": "ecae8cd5.c055",
+        "account": "",
+        "projectId": "kolban-test",
+        "location": "us-central1",
+        "queue": "my-queue",
+        "url": "https://us-central1-kolban-test.cloudfunctions.net/log1",
+        "name": "",
+        "x": 310,
+        "y": 140,
+        "wires": [],
+        "info": "Fire a task through Cloud Tasks.  You will have to set your\nown specific properties which will include:\n\n* projectId\n* location\n* queue name\n\nand also provide a URL to the task to be launched\nwhich will likely be a Cloud Function."
+    },
+    {
+        "id": "e03e2983.d6dd28",
+        "type": "inject",
+        "z": "ecae8cd5.c055",
+        "name": "Run flow",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 160,
+        "y": 140,
+        "wires": [
+            [
+                "91634d8f.a735f"
+            ]
+        ],
+        "info": "Run the flow."
+    },
+    {
+        "id": "6d664cc6.c2b544",
+        "type": "comment",
+        "z": "ecae8cd5.c055",
+        "name": "README",
+        "info": "Launch a task on Google Cloud Tasks.  You will\nneed to set your own tasks definition properties which\nwill include:\n\n* projectId\n* location\n* queue name\n\nas well as providing a URL endpoint (https) such\nas that of a Cloud Function.",
+        "x": 140,
+        "y": 60,
+        "wires": []
+    }
+]
