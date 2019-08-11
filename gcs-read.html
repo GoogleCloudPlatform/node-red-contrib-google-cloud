@@ -20,7 +20,7 @@ limitations under the License.
         <input type="text" id="node-input-account">        
     </div>
     <div class="form-row">
-        <label for="node-input-list"><i class="fa fa-file"></i> File Name</label>
+        <label for="node-input-filename"><i class="fa fa-file"></i> File Name</label>
         <input type="text" id="node-input-filename">
     </div>  
     <div class="form-row">
@@ -71,7 +71,7 @@ RED.nodes.registerType("google-cloud-gcs-read", {
     category: "GCP",
     defaults: {
         account: { type: "google-cloud-credentials", required: true },
-        filename: { value: false, required: false},
+        filename: { value: "", required: false},
         list: { value: false, required: false},
         name: { value: "", required: false }
     },
