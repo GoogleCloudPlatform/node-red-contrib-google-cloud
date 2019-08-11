@@ -48,6 +48,11 @@ module.exports = function(RED) {
 
         RED.nodes.createNode(this, config);
 
+        if (!config.account) {
+            node.error('No credentials supplied.');
+            return;
+        }
+
         const node = this;
         const credentials = GetCredentials(config.account);
 
@@ -60,6 +65,7 @@ module.exports = function(RED) {
         }
 
         options.subscription = config.subscription;
+        options.assumeJSON = config.assumeJSON;
 
         node.status(STATUS_DISCONNECTED);
 
@@ -68,6 +74,12 @@ module.exports = function(RED) {
             if (message === null) {
                 return;
             }
+
+            // If the configuration property asked for JSON, then convert to an object.
+            if (config.assumeJSON === true) {
+                message.data = JSON.parse(RED.util.ensureString(message.data));
+            }
+
             node.send({
                 payload: message
             });

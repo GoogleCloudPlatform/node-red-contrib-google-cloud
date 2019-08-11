@@ -23,7 +23,11 @@ limitations under the License.
         <label for="node-input-subscription"><i class="fa fa-bars"></i> Subscription</label>
         <input type="text" id="node-input-subscription">
     </div>
-
+    <div>
+        <label for="node-input-assumeJSON"><i class="fa fa-code"></i> Assume JSON&nbsp;
+            <input type="checkbox" id="node-input-assumeJSON" style="vertical-align: top;">
+        </label>
+    </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name">
@@ -49,6 +53,11 @@ limitations under the License.
         payload property corresponding to a GCP PubSub message.  This is described 
         <a href="https://cloud.google.com/nodejs/docs/reference/pubsub/0.28.x/Message">here</a>.  The message is auto acknowledged.    
     </p>
+    <p>
+        If we know that the incoming message contains a data payload that is JSON encoded, a configuration option called
+        Assume JSON can be selected.  When selected, the content of the message is parsed from a JSON string to an object
+        representation and stored at <code>msg.payload.data</code>.
+    </p>
 </script>
 
 <script type="text/javascript">
@@ -57,6 +66,7 @@ RED.nodes.registerType("google-cloud-pubsub in", {
     defaults: {
         account: { type: "google-cloud-credentials", required: true },
         subscription: { required: true },
+        assumeJSON: {value: false, required: false },
         name: { value: "", required: false }
     },
     inputs: 0,
