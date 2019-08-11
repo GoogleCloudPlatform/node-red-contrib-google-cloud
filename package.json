@@ -13,6 +13,7 @@
         "request": "^2.88.0"
     },
     "keywords": [
+        "node-red",
         "google",
         "cloud",
         "pubsub",
