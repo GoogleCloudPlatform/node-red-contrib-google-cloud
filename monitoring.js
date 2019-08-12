@@ -34,10 +34,8 @@ module.exports = function(RED) {
         let metricType = config.metricType;  // custom.googleapis.com/global/numeric_metric
         let projectId = config.projectId;
         const credentials = GetCredentials(config.account);
-        node.log("I was started!");
 
         async function Input(msg) {
-            node.log("Input called!");
             const dataPoint = {
                 interval: {
                     endTime: {
