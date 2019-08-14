@@ -33,7 +33,12 @@ module.exports = function(RED) {
         let metricServiceClient = null;
         let metricType = config.metricType;  // custom.googleapis.com/global/numeric_metric
         let projectId = config.projectId;
-        const credentials = GetCredentials(config.account);
+
+        let credentials = null;
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+        const keyFilename = config.keyFilename;
 
         async function Input(msg) {
             const dataPoint = {
@@ -71,13 +76,21 @@ module.exports = function(RED) {
             }
         } // Input
 
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             metricServiceClient = new monitoring.MetricServiceClient({
                 "credentials": credentials
             });
+        } else if (keyFilename) {
+            metricServiceClient = new monitoring.MetricServiceClient({
+                "keyFilename": keyFilename
+            });
         } else {
-            node.error('missing credentials');
+            node.error('Missing credentials or keyFilename.');
+            return;
         }
+
         node.on('input', Input);
     } // MonitoringNode
 
