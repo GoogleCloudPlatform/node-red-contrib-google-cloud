@@ -35,14 +35,20 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);  // Required by the Node-RED spec.
 
         const node = this;
-        const credentials = GetCredentials(config.account);
+
+        let credentials = null;
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+        const keyFilename = config.keyFilename;
+
         let languageServiceClient; // https://googleapis.dev/nodejs/language/latest/v1.LanguageServiceClient.html
 
 
         /**
          * Extract JSON service account key from "google-cloud-credentials" config node.
          */
-        
+
         function GetCredentials(node) {
             return JSON.parse(RED.nodes.getCredentials(node).account);
         } // GetCredentials
@@ -84,19 +90,25 @@ module.exports = function(RED) {
          */
         function Close() {
         } // Close
-        
 
-        node.on("input", Input);
-        node.on("close", Close);
 
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
-            // API: https://googleapis.dev/nodejs/language/latest/v1.LanguageServiceClient.html
             languageServiceClient = new language.LanguageServiceClient({
                 "credentials": credentials
             });
+        } else if (keyFilename) {
+            languageServiceClient = new language.LanguageServiceClient({
+                "keyFilename": keyFilename
+            });
         } else {
-            node.error("missing credentials");
+            node.error('Missing credentials or keyFilename.');
+            return;
         }
+
+        node.on("input", Input);
+        node.on("close", Close);
     } // SentimentNode
 
     RED.nodes.registerType(NODE_TYPE, SentimentNode); // Register the node.
