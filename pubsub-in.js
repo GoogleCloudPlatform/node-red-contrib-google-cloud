@@ -46,16 +46,15 @@ module.exports = function(RED) {
         let pubsub       = null;
         let subscription = null;
 
+        let credentials = null;
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+        const keyFilename = config.keyFilename;
+
         RED.nodes.createNode(this, config);
 
-        if (!config.account) {
-            node.error('No credentials supplied.');
-            return;
-        }
-
         const node = this;
-        const credentials = GetCredentials(config.account);
-
 
         let options = {};
 
@@ -99,12 +98,18 @@ module.exports = function(RED) {
         } // OnClose
 
 
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             pubsub = new PubSub({
                 "credentials": credentials
             });
+        } else if (keyFilename) {
+            pubsub = new PubSub({
+                "keyFilename": keyFilename
+            });
         } else {
-            node.error("missing credentials");
+            node.error('Missing credentials or keyFilename.');
             return;
         }
 
