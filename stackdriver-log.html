@@ -20,6 +20,10 @@ limitations under the License.
         <input type="text" id="node-input-account">
     </div>
     <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+    <div class="form-row">
         <label for="node-input-logName"><i class="fa fa-user"></i> Log Name</label>
         <input type="text" id="node-input-logName">
     </div>
@@ -56,7 +60,18 @@ limitations under the License.
 RED.nodes.registerType("google-cloud-log", {
     category: "GCP", // Paltette category where the node will be found.
     defaults: {
-        account: { type: "google-cloud-credentials", required: true },
+        account: { type: "google-cloud-credentials", validate: function(value) {
+            if ((value === "" || value == undefined) && this.keyFilename === "") {
+                return false;
+            }
+            return true;
+        }},
+        keyFilename: {value: "", validate: function(value) {
+            if (value === "" && (this.account === "" || this.account == undefined))  {
+                return false;
+            }
+            return true;
+        }},
         logName: { value: "", required: true },  
         name: { value: "", required: false }           
     },
