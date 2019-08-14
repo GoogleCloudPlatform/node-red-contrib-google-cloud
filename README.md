@@ -42,6 +42,37 @@ Copy and paste the contents of the file directly into the **Key** field in the n
 
 ![Step 3](docs/images/credentials3.png)
 
+
+## Installation outside of GCP
+
+When we run Node-RED on GCP compute resources such as Compute Engine or GKE, the environment to make GCP API service calls is already present.  If we run Node-RED outside of GCP (for example on a desktop PC, an on-premises server or a Raspberry Pi) then some additional setup to connect and use GCP APIs is required.  Specifically, an environment variable called `GOOGLE_CLOUD_PROJECT` must be set and be present in the environment in which Node-RED runs.  The value of this variable should be the GCP project that you are going to interact with.
+
+If you are running Node-RED from the command line, you can use:
+
+```
+export GOOGLE_CLOUD_PROJECT=<YourProjectId>
+node-red
+```
+
+You can also permanently set the variable by editing `/etc/environment` and adding a line which reads:
+
+```
+GOOGLE_CLOUD_PROJECT=<YourProjectId>
+```
+
+Note: For Raspberry Pi users - There is the option of starting Node-RED automatically through the Linux systemctl daemon.  This system does not use global environment variables and thus you must explicitly define the variable to use.
+
+Edit the file `/lib/systemd/system/nodered.service`
+
+and add a line which reads:
+
+```
+Environment="GOOGLE_CLOUD_PROJECT=<YourProjectId>"
+```
+
+within the `[Service]` section of the file.
+
+
 ## The Google Cloud Platform Node-RED nodes
 
 The set of Node-RED nodes are found in the GCP section of the palette.  The current set of nodes are:
