@@ -15,7 +15,9 @@
  *
  *
  * The configuration for the node includes:
+ *
  * * account
+ * * keyFilename
  * * projectId
  * * location
  * * queue
@@ -31,7 +33,13 @@ module.exports = function(RED) {
     function TasksNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
-        const credentials = GetCredentials(config.account);
+
+        let credentials = null;
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+        const keyFilename = config.keyFilename;
+
         const projectId   = config.projectId;
         const location    = config.location;
         const queue       = config.queue;
@@ -91,17 +99,24 @@ module.exports = function(RED) {
             const [response] = await tasksClient.createTask(request);
         } // Input
 
-        node.on("input", Input);
 
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             tasksClient = new cloudTasks.CloudTasksClient({
                 "credentials": credentials
             });
+        } else if (keyFilename) {
+            tasksClient = new cloudTasks.CloudTasksClient({
+                "keyFilename": keyFilename
+            });
         } else {
-            node.error('missing credentials');
+            node.error('Missing credentials or keyFilename.');
+            return;
         }
-    } // TasksNode
 
+        node.on("input", Input);
+    } // TasksNode
 
 
     RED.nodes.registerType(NODE_TYPE, TasksNode);
