@@ -74,14 +74,16 @@ module.exports = function(RED) {
                 return;
             }
 
+            const msg = {
+                payload: message.data
+            };
+
             // If the configuration property asked for JSON, then convert to an object.
             if (config.assumeJSON === true) {
-                message.data = JSON.parse(RED.util.ensureString(message.data));
+                msg.payload = JSON.parse(RED.util.ensureString(message.data));
             }
 
-            node.send({
-                payload: message
-            });
+            node.send(msg);
             message.ack();
         } // OnMessage
 
