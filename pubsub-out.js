@@ -55,7 +55,12 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
 
         const node = this;
-        const credentials = GetCredentials(config.account);
+
+        let credentials = null;
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+        const keyFilename = config.keyFilename;
 
         if (!config.topic) {
             node.error('No topic supplied!');
@@ -88,14 +93,21 @@ module.exports = function(RED) {
             pubsub = null;
         }
 
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             pubsub = new PubSub({
-                credentials: credentials
+                "credentials": credentials
+            });
+        } else if (keyFilename) {
+            pubsub = new PubSub({
+                "keyFilename": keyFilename
             });
         } else {
-            node.error("missing credentials");
+            node.error('Missing credentials or keyFilename.');
             return;
         }
+
         node.status(STATUS_CONNECTING);
 
         pubsub.topic(config.topic).get().then((data) => {
