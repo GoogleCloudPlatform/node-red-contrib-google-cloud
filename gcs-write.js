@@ -27,6 +27,7 @@
  * a configuration of a content type, then we'll use that.  If neither, then no content type is specified.
  * 
  */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = 'google-cloud-gcs-write';
@@ -43,8 +44,12 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);  // Required by the Node-RED spec.
 
         let storage;
+        let credentials = null;
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+        const keyFilename = config.keyFilename;
         const node = this;
-        const credentials = GetCredentials(config.account);
         const fileName_options = config.filename.trim();
         const contentType_options = config.contentType.trim();
 
@@ -120,17 +125,25 @@ module.exports = function(RED) {
          */
         function Close() {
         }
-        
-        node.on('input', Input);
-        node.on('close', Close);
 
+
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             storage = new Storage({
                 "credentials": credentials
             });
+        } else if (keyFilename) {
+            storage = new Storage({
+                "keyFilename": keyFilename
+            });
         } else {
-            node.error('missing credentials');
+            node.error('Missing credentials or keyFilename.');
+            return;
         }
+
+        node.on('input', Input);
+        node.on('close', Close);
     } // GCSWriteNode
 
     RED.nodes.registerType(NODE_TYPE, GCSWriteNode); // Register the node.

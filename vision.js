@@ -21,7 +21,7 @@
 *
 */
 
-
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-vision";
@@ -39,7 +39,13 @@ module.exports = function(RED) {
 
         RED.nodes.createNode(this, config);
         const node = this;
-        const credentials = GetCredentials(config.account);
+
+        let credentials = null;
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+        const keyFilename = config.keyFilename;
+
         let imageAnnotatorClient;
 
         const isFaceDetection = config.faceDetection;
@@ -54,9 +60,6 @@ module.exports = function(RED) {
         const isWebDetection = config.webDetection;
         const isProductSearch = config.productSearch;
         const isObjectLocalization = config.objectLocalization;
-
-
-
 
 
         /**
@@ -106,11 +109,6 @@ module.exports = function(RED) {
 
         async function Input(msg) {
 
-            if (!msg.filename) {                                     // Check that a file name was provided.
-                node.error("No file name supplied");
-                return;
-            }
-
             const features = getFeatures();                          // Get the features that the user has asked for from the image.
             if (features.length === 0) {                             // If no features requested, this is an error.
                 node.error("No features selected!");
@@ -151,16 +149,22 @@ module.exports = function(RED) {
             }
         } // Input
 
-        node.on("input", Input); // Register the handler to be invoked when a new message is to be processed.
-
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             imageAnnotatorClient = new vision.ImageAnnotatorClient({
                 "credentials": credentials
             });
+        } else if (keyFilename) {
+            imageAnnotatorClient = new vision.ImageAnnotatorClient({
+                "keyFilename": keyFilename
+            });
         } else {
-            node.error("missing credentials");
+            node.error('Missing credentials or keyFilename.');
             return;
         }
+
+        node.on("input", Input); // Register the handler to be invoked when a new message is to be processed.
 
     } // VisionNode
 

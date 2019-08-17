@@ -17,11 +17,11 @@
 /* jshint esversion: 8 */
 const should = require("should");
 const helper = require('node-red-node-test-helper');
-const sentimentNode = require('../language-sentiment.js');
+const metadataNode = require('../metadata.js');
 
 helper.init(require.resolve('node-red'));
 
-describe('sentiment Node', () => {
+describe('metadata Node', () => {
     beforeEach((done) => {
         helper.startServer(done);
     });
@@ -31,40 +31,24 @@ describe('sentiment Node', () => {
         helper.stopServer(done);
     });
 
-    it('processes positive sentiment', (done) => {
+    it('meta data returned', (done) => {
         const flow = [
-            { id: "n1", type: "google-cloud-language-sentiment", name: "sentiment1", keyFilename: "/home/kolban/node-red/creds.json", wires: [["n2"]]},
+            { id: "n1", type: "google-cloud-ce-metadata", name: "metadata1", keyFilename: "/home/kolban/node-red/creds.json", wires: [["n2"]]},
             { id: "n2", type: "helper" }
         ];
-        helper.load(sentimentNode, flow, () => {
+        helper.load(metadataNode, flow, () => {
             // At this point the flow is "running".  We now need to send in some data.
             const n1 = helper.getNode("n1");
             const n2 = helper.getNode("n2");
             n2.on('input', (msg) => {
-                msg.sentiment.score.should.be.above(0.5);
+                msg.payload.should.be.type('object');
                 done();
             });
-            n1.receive({payload: "This is great!"});
+            n1.receive({payload: ""});
         });
     });
 
 
-    it('processes negative sentiment', (done) => {
-        const flow = [
-            { id: "n1", type: "google-cloud-language-sentiment", name: "sentiment1", keyFilename: "/home/kolban/node-red/creds.json", wires: [["n2"]]},
-            { id: "n2", type: "helper" }
-        ];
-        helper.load(sentimentNode, flow, () => {
-            // At this point the flow is "running".  We now need to send in some data.
-            const n1 = helper.getNode("n1");
-            const n2 = helper.getNode("n2");
-            n2.on('input', (msg) => {
-                msg.sentiment.score.should.be.below(-0.5);
-                done();
-            });
-            n1.receive({payload: "This is very poor!"});
-        });
-    });
 });
 
 /*

@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
 
@@ -46,11 +46,15 @@ module.exports = function(RED) {
         let pubsub       = null;
         let subscription = null;
 
+        let credentials = null;
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+        const keyFilename = config.keyFilename;
+
         RED.nodes.createNode(this, config);
 
         const node = this;
-        const credentials = GetCredentials(config.account);
-
 
         let options = {};
 
@@ -60,6 +64,7 @@ module.exports = function(RED) {
         }
 
         options.subscription = config.subscription;
+        options.assumeJSON = config.assumeJSON;
 
         node.status(STATUS_DISCONNECTED);
 
@@ -68,9 +73,17 @@ module.exports = function(RED) {
             if (message === null) {
                 return;
             }
-            node.send({
-                payload: message
-            });
+
+            const msg = {
+                payload: message.data
+            };
+
+            // If the configuration property asked for JSON, then convert to an object.
+            if (config.assumeJSON === true) {
+                msg.payload = JSON.parse(RED.util.ensureString(message.data));
+            }
+
+            node.send(msg);
             message.ack();
         } // OnMessage
 
@@ -87,12 +100,18 @@ module.exports = function(RED) {
         } // OnClose
 
 
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             pubsub = new PubSub({
                 "credentials": credentials
             });
+        } else if (keyFilename) {
+            pubsub = new PubSub({
+                "keyFilename": keyFilename
+            });
         } else {
-            node.error("missing credentials");
+            node.error('Missing credentials or keyFilename.');
             return;
         }
 

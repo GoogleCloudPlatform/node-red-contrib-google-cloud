@@ -20,10 +20,18 @@ limitations under the License.
         <input type="text" id="node-input-account">
     </div>
     <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+    <div class="form-row">
         <label for="node-input-subscription"><i class="fa fa-bars"></i> Subscription</label>
         <input type="text" id="node-input-subscription">
     </div>
-
+    <div>
+        <label for="node-input-assumeJSON"><i class="fa fa-code"></i> Assume JSON&nbsp;
+            <input type="checkbox" id="node-input-assumeJSON" style="vertical-align: top;">
+        </label>
+    </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name">
@@ -46,8 +54,13 @@ limitations under the License.
     </p>
     <p>
         This is an event generating node and as such has no inputs.  When a message is received, the flowing msg will contain a
-        payload property corresponding to a GCP PubSub message.  This is described 
-        <a href="https://cloud.google.com/nodejs/docs/reference/pubsub/0.28.x/Message">here</a>.  The message is auto acknowledged.    
+        payload property corresponding to a GCP Pub/Sub message data payload.  In addition, the msg.message will contain a read-only copy of the original message.
+        This is described <a href="https://cloud.google.com/nodejs/docs/reference/pubsub/0.28.x/Message">here</a>.  The message is auto acknowledged   
+    </p>
+    <p>
+        If we know that the incoming message contains a data payload that is JSON encoded, a configuration option called
+        Assume JSON can be selected.  When selected, the content of the message is parsed from a JSON string to an object
+        representation and stored at <code>msg.payload</code>.
     </p>
 </script>
 
@@ -55,8 +68,20 @@ limitations under the License.
 RED.nodes.registerType("google-cloud-pubsub in", {
     category: "GCP",
     defaults: {
-        account: { type: "google-cloud-credentials", required: true },
+        account: { type: "google-cloud-credentials", validate: function(value) {
+            if ((value === "" || value == undefined) && this.keyFilename === "") {
+                return false;
+            }
+            return true;
+        }},
+        keyFilename: {value: "", validate: function(value) {
+            if (value === "" && (this.account === "" || this.account == undefined))  {
+                return false;
+            }
+            return true;
+        }},
         subscription: { required: true },
+        assumeJSON: {value: false, required: false },
         name: { value: "", required: false }
     },
     inputs: 0,

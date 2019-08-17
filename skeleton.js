@@ -13,6 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "skeleton";

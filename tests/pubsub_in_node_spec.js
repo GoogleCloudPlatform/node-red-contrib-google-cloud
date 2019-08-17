@@ -17,11 +17,15 @@
 /* jshint esversion: 8 */
 const should = require("should");
 const helper = require('node-red-node-test-helper');
-const sentimentNode = require('../language-sentiment.js');
+const pubsubInNode = require('../pubsub-in.js');
+const {PubSub} = require('@google-cloud/pubsub');
 
 helper.init(require.resolve('node-red'));
 
-describe('sentiment Node', () => {
+describe('pubsub_in Node', () => {
+
+    const pubsub = new PubSub();
+
     beforeEach((done) => {
         helper.startServer(done);
     });
@@ -31,60 +35,55 @@ describe('sentiment Node', () => {
         helper.stopServer(done);
     });
 
-    it('processes positive sentiment', (done) => {
+    it('receive pubsub message', (done) => {
         const flow = [
-            { id: "n1", type: "google-cloud-language-sentiment", name: "sentiment1", keyFilename: "/home/kolban/node-red/creds.json", wires: [["n2"]]},
+            {
+                "id": "n1",
+                "type": "google-cloud-pubsub in",
+                "subscription": "node-red-subscription",
+                "name": "pubsubin",
+                "keyFilename": "/home/kolban/node-red/creds.json",
+                "wires": [["n2"]]
+            },
             { id: "n2", type: "helper" }
         ];
-        helper.load(sentimentNode, flow, () => {
+        helper.load(pubsubInNode, flow, () => {
             // At this point the flow is "running".  We now need to send in some data.
             const n1 = helper.getNode("n1");
             const n2 = helper.getNode("n2");
+            const text = "Hello World!"; // The message we publish which should be received by the flow.
             n2.on('input', (msg) => {
-                msg.sentiment.score.should.be.above(0.5);
+                msg.payload.toString().should.be.equal(text);
                 done();
             });
-            n1.receive({payload: "This is great!"});
+            // Publish a message using the API which should now wake us up.
+            const topic = pubsub.topic('node-red-topic');
+            topic.publish(Buffer.from(text));
         });
     });
 
-
-    it('processes negative sentiment', (done) => {
-        const flow = [
-            { id: "n1", type: "google-cloud-language-sentiment", name: "sentiment1", keyFilename: "/home/kolban/node-red/creds.json", wires: [["n2"]]},
-            { id: "n2", type: "helper" }
-        ];
-        helper.load(sentimentNode, flow, () => {
-            // At this point the flow is "running".  We now need to send in some data.
-            const n1 = helper.getNode("n1");
-            const n2 = helper.getNode("n2");
-            n2.on('input', (msg) => {
-                msg.sentiment.score.should.be.below(-0.5);
-                done();
-            });
-            n1.receive({payload: "This is very poor!"});
-        });
-    });
 });
 
 /*
 [
     {
-        "id": "3e46e5f5.0b0a0a",
+        "id": "cba9b717.aa83c8",
         "type": "tab",
         "label": "Flow 3",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "702dccdd.173f44",
-        "type": "google-cloud-language-sentiment",
-        "z": "3e46e5f5.0b0a0a",
+        "id": "9ceb0ca8.145a6",
+        "type": "google-cloud-pubsub in",
+        "z": "cba9b717.aa83c8",
         "account": "",
-        "keyFilename": "/home/kolban/node-red/creds.json",
+        "keyFilename": "/zzz",
+        "subscription": "node-red-subscription",
+        "assumeJSON": false,
         "name": "",
-        "x": 240,
-        "y": 420,
+        "x": 160,
+        "y": 320,
         "wires": [
             []
         ]

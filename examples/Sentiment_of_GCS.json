@@ -1,0 +1,101 @@
+[
+    {
+        "id": "2aea6d1.5ec2292",
+        "type": "tab",
+        "label": "Sentiment of GCS file",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "3eb0bd12.7997d2",
+        "type": "google-cloud-pubsub in",
+        "z": "2aea6d1.5ec2292",
+        "account": "",
+        "subscription": "my-new-files-sub",
+        "assumeJSON": true,
+        "name": "",
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "16015d30.0629c3"
+            ]
+        ],
+        "info": "Receive a subscription from GCS that a file has\nchanged."
+    },
+    {
+        "id": "60f1607d.5e43f",
+        "type": "debug",
+        "z": "2aea6d1.5ec2292",
+        "name": "Log Sentiment",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "sentiment",
+        "targetType": "msg",
+        "x": 800,
+        "y": 260,
+        "wires": [],
+        "info": "Log the result of the sentiment analysis."
+    },
+    {
+        "id": "16015d30.0629c3",
+        "type": "function",
+        "z": "2aea6d1.5ec2292",
+        "name": "Make filename",
+        "func": "msg.filename = `gs://${msg.payload.data.bucket}/${msg.payload.data.name}`;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 280,
+        "y": 200,
+        "wires": [
+            [
+                "107dfdd4.6007e2"
+            ]
+        ],
+        "info": "Make the file name from the bucket and file."
+    },
+    {
+        "id": "107dfdd4.6007e2",
+        "type": "google-cloud-gcs-read",
+        "z": "2aea6d1.5ec2292",
+        "account": "",
+        "filename": "",
+        "list": false,
+        "name": "",
+        "x": 460,
+        "y": 280,
+        "wires": [
+            [
+                "822352b7.aab2d"
+            ]
+        ],
+        "info": "Read the content of the GCS file."
+    },
+    {
+        "id": "822352b7.aab2d",
+        "type": "google-cloud-language-sentiment",
+        "z": "2aea6d1.5ec2292",
+        "account": "",
+        "name": "",
+        "x": 620,
+        "y": 360,
+        "wires": [
+            [
+                "60f1607d.5e43f"
+            ]
+        ],
+        "info": "Perform sentiment analysis on the content of the file."
+    },
+    {
+        "id": "4acb6695.4ad4e8",
+        "type": "comment",
+        "z": "2aea6d1.5ec2292",
+        "name": "README",
+        "info": "This sample subscribes to changes in a GCS bucket.  When a file\nchanges, a notification is sent to us that tells\nus that a file changed.  We then read the content\nof the file and pass it through sentiment analysis\nand log the result.\n\nTo use this sample, you will have to create a\nPub/Sub subscription against your bucket.",
+        "x": 120,
+        "y": 100,
+        "wires": []
+    }
+]

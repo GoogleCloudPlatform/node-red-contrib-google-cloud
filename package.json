@@ -1,6 +1,6 @@
 {
     "name": "node-red-contrib-google-cloud",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Node-RED nodes for Google Cloud Platform",
     "dependencies": {
         "@google-cloud/language": "latest",
@@ -22,8 +22,7 @@
         "gcs",
         "stackdriver",
         "vision",
-        "sentiment",
-        "node-red"
+        "sentiment"
     ],
     "node-red": {
         "nodes": {

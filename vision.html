@@ -25,6 +25,10 @@ limitations under the License.
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
         <input type="text" id="node-input-account">        
     </div>
+    <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
     <div style="display: flex; flex-direction: row; width: 100%;">
         <div style="display: flex; flex-direction: column; flex-basis: 100%;">
             <div class="vision_row"> 
@@ -125,7 +129,18 @@ limitations under the License.
 RED.nodes.registerType("google-cloud-vision", {
     category: "GCP",
     defaults: {
-        account: { type: "google-cloud-credentials", required: true },
+        account: { type: "google-cloud-credentials", validate: function(value) {
+            if ((value === "" || value == undefined) && this.keyFilename === "") {
+                return false;
+            }
+            return true;
+        }},
+        keyFilename: {value: "", validate: function(value) {
+            if (value === "" && (this.account === "" || this.account == undefined))  {
+                return false;
+            }
+            return true;
+        }},
         faceDetection: { value: false, required: false },
         landmarkDetection: { value: false, required: false },
         logoDetection: { value: false, required: false },

@@ -6,8 +6,8 @@ This node is given an image as input and performs analysis on its content.  The 
 
 The runtime input to the node is a Node-RED message from which we care about:
 
-* `msg.filename` - The URL or GCS file name of the image to be processed.  If we have data for an image, specify msg.payload as the data and do not set msg.filename.
-* `msg.payload` - A buffer of data containing the image we wish to process.  This is ignored if msg.filename is present.
+* `msg.filename` - The URL or GCS file name of the image to be processed.  If we have data for an image, specify msg.payload as the data and do not set `msg.filename`.
+* `msg.payload` - A buffer of data containing the image we wish to process.  This is ignored if `msg.filename` is present.
 
 Note: if `msg.filename` is present, that will be used in precedence to the `msg.payload`.
 

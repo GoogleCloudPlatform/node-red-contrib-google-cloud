@@ -15,6 +15,7 @@
  * 
  * The node type is "stackdriver-log".
  */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-log";
@@ -31,7 +32,13 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);  // Required by the Node-RED spec.
 
         const node = this;
-        const credentials = GetCredentials(config.account);
+
+        let credentials = null;
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+
+        const keyFilename = config.keyFilename;
         let logName = config.logName; // Get the logname from the configuration
         let logging; // This is the object that is the hook to GCP stackdriver logging.
 
@@ -81,17 +88,19 @@ module.exports = function(RED) {
          */
         function Close() {
         } // Close
-        
 
-        node.on("input", Input);
-        node.on("close", Close);
-
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             logging = new Logging({
                 "credentials": credentials
             });
+        } else if (keyFilename) {
+            logging = new Logging({
+                "keyFilename": keyFilename
+            });
         } else {
-            node.error("missing credentials");
+            node.error('Missing credentials or keyFilename.');
             return;
         }
 
@@ -101,6 +110,9 @@ module.exports = function(RED) {
         }
 
         logName = logName.trim(); // Remove any leading or trailing white space.
+
+        node.on("input", Input);
+        node.on("close", Close);
     } // StackdriverLogNode
 
     RED.nodes.registerType(NODE_TYPE, StackdriverLogNode); // Register the node.

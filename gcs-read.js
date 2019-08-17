@@ -29,6 +29,7 @@
  * If both msg.filename and configuration property filename are supplied then msg.filename will
  * be used.
  */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-gcs-read";
@@ -45,13 +46,17 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);  // Required by the Node-RED spec.
 
         let storage;
+        let credentials = null;
         const node = this;
-        const credentials = GetCredentials(config.account);
+        if (config.account) {
+            credentials = GetCredentials(config.account);
+        }
+        const keyFilename = config.keyFilename;
         const isList = config.list;
         const fileName_option = config.filename.trim();
 
         /**
-         * Extract JSON service account key from "google-cloud-credentials" config node.
+         * Extract JSON service credentials key from "google-cloud-credentials" config node.
          */
         function GetCredentials(node) {
             return JSON.parse(RED.nodes.getCredentials(node).account);
@@ -179,16 +184,23 @@ module.exports = function(RED) {
         } // Close
 
 
-        node.on("input", Input);
-        node.on("close", Close);
-
+        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
+        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             storage = new Storage({
                 "credentials": credentials
             });
+        } else if (keyFilename) {
+            storage = new Storage({
+                "keyFilename": keyFilename
+            });
         } else {
-            node.error('missing credentials');
+            node.error('Missing credentials or keyFilename.');
+            return;
         }
+
+        node.on("input", Input);
+        node.on("close", Close);
     } // GCSReadNode
 
     RED.nodes.registerType(NODE_TYPE, GCSReadNode); // Register the node.
