@@ -15,6 +15,7 @@
  * 
  * The node type is "stackdriver-log".
  */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-log";

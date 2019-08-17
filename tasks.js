@@ -23,6 +23,7 @@
  * * queue
  * * url
  */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-tasks";

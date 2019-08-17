@@ -22,6 +22,7 @@
 * https://cloud.google.com/compute/docs/storing-retrieving-metadata
 * 
 */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-ce-metadata";

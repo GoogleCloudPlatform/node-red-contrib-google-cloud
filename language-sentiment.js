@@ -18,6 +18,7 @@
  * msg.payload  = The document to be examined.
  *
  */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
 

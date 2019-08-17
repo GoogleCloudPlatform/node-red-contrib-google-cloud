@@ -29,6 +29,7 @@
  * If both msg.filename and configuration property filename are supplied then msg.filename will
  * be used.
  */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-gcs-read";
@@ -195,7 +196,6 @@ module.exports = function(RED) {
             });
         } else {
             node.error('Missing credentials or keyFilename.');
-            debugger;
             return;
         }
 

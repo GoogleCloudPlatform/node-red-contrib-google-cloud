@@ -21,7 +21,7 @@
 *
 */
 
-
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-vision";
@@ -108,11 +108,6 @@ module.exports = function(RED) {
 
 
         async function Input(msg) {
-
-            if (!msg.filename) {                                     // Check that a file name was provided.
-                node.error("No file name supplied");
-                return;
-            }
 
             const features = getFeatures();                          // Get the features that the user has asked for from the image.
             if (features.length === 0) {                             // If no features requested, this is an error.

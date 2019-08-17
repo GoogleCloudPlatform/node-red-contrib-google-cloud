@@ -27,6 +27,7 @@
  * a configuration of a content type, then we'll use that.  If neither, then no content type is specified.
  * 
  */
+/* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = 'google-cloud-gcs-write';

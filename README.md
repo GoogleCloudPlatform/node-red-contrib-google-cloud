@@ -42,6 +42,7 @@ Copy and paste the contents of the file directly into the **Key** field in the n
 
 ![Step 3](docs/images/credentials3.png)
 
+An alternative to supplying credentials through the  Node-RED credentials mechanism is to point individual GCP nodes to a JSON key file that exists on the file system on which Node-RED is running.  This capability was introduced to support the Kubernetes "secrets" architecture.  A Kubernetes administrator could obtain a JSON key file and save that as a secret in the Kubernetes environment.  Containers within the environment could then see the secrets as mounted files.  This level of indirection and abstraction allows us to build images which don't contain the keys hard-coded into the images but yet make those keys available at run-time.  In addition, if we need to change or rotate the keys, we can do so without having to rebuild any images.
 
 ## Installation outside of GCP
 
