@@ -1,0 +1,8 @@
+# Running the tests
+We can run the tests by executing `npm tests`.
+
+We can run an individual test by running `mocha [JS_FILE]`.
+
+# Preparing the tests
+I order to run some of the tests, GCP resources are expected to exist.  The `terraform` directory
+contains terraform scripts for creating these resources.

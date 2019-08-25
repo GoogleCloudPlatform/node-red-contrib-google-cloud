@@ -38,7 +38,26 @@ limitations under the License.
 </script>
 
 <script type="text/x-red" data-help-name="google-cloud-monitoring">
-    <p>Documentation for Monitoring.</p>
+    <p>Record a monitoring measurement.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">number</span>
+        </dt>
+        <dd>The value to be logged as a measurement.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>
+        The monitoring node provides the ability to record a monitoring record.  At run time, the value of
+        <code>msg.payload</code> should be a monitoring value (usually a numeric).
+    </p>
+    <p>
+        At configuration time, we must provide some values:
+        <ul>
+            <li><code>projectId</code> - The identity of the project that holds the metric definition associated with the value we are recording.</li>
+            <li><code>metricType</code> - The type of the metric we are recording.</li>
+        </ul>
+    </p>
 </script>
 
 <script type="text/javascript">

@@ -111,7 +111,7 @@ module.exports = function(RED) {
                 if (msg.payload == null) {
                     msg.payload = data;
                 } else {
-                    msg.payload = msg.payload.concat([data]);
+                    msg.payload = Buffer.concat([msg.payload, data]);
                 }
             });
 

@@ -1,4 +1,6 @@
 **/coverage/*
 **/node_modules
+**/.teraform
+**/terraform.tfstate*
 *.log
 .vscode
