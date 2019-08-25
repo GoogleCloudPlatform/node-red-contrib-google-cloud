@@ -5,11 +5,12 @@
     "dependencies": {
         "@google-cloud/language": "latest",
         "@google-cloud/logging": "latest",
+        "@google-cloud/monitoring": "latest",
         "@google-cloud/pubsub": "latest",
+        "@google-cloud/speech": "latest",
         "@google-cloud/storage": "latest",
         "@google-cloud/tasks": "latest",
         "@google-cloud/vision": "latest",
-        "@google-cloud/monitoring": "latest",
         "request": "^2.88.0"
     },
     "keywords": [
@@ -22,7 +23,8 @@
         "gcs",
         "stackdriver",
         "vision",
-        "sentiment"
+        "sentiment",
+        "speech"
     ],
     "node-red": {
         "nodes": {
@@ -36,7 +38,8 @@
             "google-cloud-tasks": "tasks.js",
             "google-cloud-vision": "vision.js",
             "google-cloud-ce-metadata": "metadata.js",
-            "google-cloud-monitoring": "monitoring.js"
+            "google-cloud-monitoring": "monitoring.js",
+            "google-cloud-speech-to-text": "speech-to-text.js"
         }
     },
     "scripts": {
