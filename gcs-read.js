@@ -53,7 +53,12 @@ module.exports = function(RED) {
         }
         const keyFilename = config.keyFilename;
         const isList = config.list;
-        const fileName_option = config.filename.trim();
+        let fileName_option;
+        if (!config.filename) {
+            fileName_option = "";
+        } else {
+            fileName_option = config.filename.trim();
+        }
 
         /**
          * Extract JSON service credentials key from "google-cloud-credentials" config node.

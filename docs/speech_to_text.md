@@ -8,6 +8,7 @@ Processing an audio fragment takes time.  A status visualization is associated w
 
 The node has configuration options including:
 
+* Language Code - The language code to be used for processing.  The set of allowed codes can be found [here](https://cloud.google.com/speech-to-text/docs/languages).  The default is en-US.
 * Sample Rate - The sampling rate of the audio input.
 * Encoding - One of:
  * LINEAR16

@@ -1,9 +1,9 @@
 variable "bucket_name" {
-    type = string
+    type = "string"
 }
 
 variable "project" {
-    type = string
+    type = "string"
 }
 
 provider "google" {
@@ -19,12 +19,15 @@ resource "google_pubsub_subscription" "node-red-subscription" {
     topic = "${google_pubsub_topic.node-red-topic.name}"
 }
 
+// Used by GCS read tests.
 resource "google_storage_bucket" "storage-bucket" {
     name = var.bucket_name
 }
 
-resource "google_storage_bucket_object" "wav-file" {
-    name = "OSR_us_000_0030_8k.wav"
-    source = "tmp/OSR_us_000_0030_8k.wav"
+// Used by GCS read tests.
+resource "google_storage_bucket_object" "text-file" {
+    name = "text1.txt"
+    content = "Some text to save"   // Content must match what is expected in tests.
+    content_type = "text/plain"
     bucket = var.bucket_name
 }
