@@ -14,6 +14,18 @@
 * limitations under the License.
 */
 /* jshint esversion: 8 */
+
+/**
+ * This node uses the GCP Speech to Text API.  The primary documentation for this service can
+ * be found here:
+ *
+ * https://cloud.google.com/speech-to-text/docs/
+ * 
+ * The JavaScript docs can be found here:
+ *
+ * https://googleapis.dev/nodejs/speech/latest/index.html
+ *
+ */
 module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-speech-to-text";
@@ -25,8 +37,10 @@ module.exports = function(RED) {
         const node = this;
         let speechClient = null;
         let credentials = null;
+
         const sampleRateHertz = config.sampleRate;
-        const encoding = config.encoding;
+        const encoding        = config.encoding;
+        const languageCode    = config.languageCode || "en-US";
 
         if (config.account) {
             credentials = GetCredentials(config.account);
@@ -50,7 +64,7 @@ module.exports = function(RED) {
             const config = {
                 "encoding": encoding,
                 "sampleRateHertz": sampleRateHertz,
-                "languageCode": "en-US"
+                "languageCode": languageCode               // The currently supported languages can be found here https://cloud.google.com/speech-to-text/docs/languages
             };
             const request = {
                 "audio": audio,
