@@ -137,7 +137,7 @@ module.exports = function(RED) {
 
             const bucket = storage.bucket(bucketName);
             const getFilesOptions = {
-                directory: fileName
+                prefix: fileName
             };
             const [files] = await bucket.getFiles(getFilesOptions);
             const retArray = [];
