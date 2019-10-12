@@ -4,16 +4,18 @@
         "type": "tab",
         "label": "Sentiment",
         "disabled": false,
-        "info": ""
+        "info": "This example allows you to submit both positive\nand negative sentiment into the sentiment\nprocessing.  The results are logged to the debug panel.\n\nClicking on the Positive inject starts a flow with\na positive sentiment text message while clicking\non the Negative inject starts a flow with a negative sentiment."
     },
     {
         "id": "f41b94c7.93a538",
         "type": "google-cloud-language-sentiment",
         "z": "c3371d69.5ebec",
         "account": "",
+        "keyFilename": "",
+        "languageCode": "en",
         "name": "",
-        "x": 440,
-        "y": 320,
+        "x": 360,
+        "y": 100,
         "wires": [
             [
                 "eefb3bf3.0d29a8"
@@ -33,8 +35,8 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 210,
-        "y": 320,
+        "x": 130,
+        "y": 100,
         "wires": [
             [
                 "f41b94c7.93a538"
@@ -54,8 +56,8 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 220,
-        "y": 380,
+        "x": 140,
+        "y": 160,
         "wires": [
             [
                 "f41b94c7.93a538"
@@ -74,19 +76,9 @@
         "tostatus": false,
         "complete": "sentiment",
         "targetType": "msg",
-        "x": 690,
-        "y": 320,
+        "x": 610,
+        "y": 100,
         "wires": [],
         "info": "Log the resulting sentiment (contained in `msg.sentiment`)\nto the debug panel for review."
-    },
-    {
-        "id": "162cf56d.b3cddb",
-        "type": "comment",
-        "z": "c3371d69.5ebec",
-        "name": "README",
-        "info": "This example allows you to submit both positive\nand negative sentiment into the sentiment\nprocessing.  The results are logged to the debug panel.\nClicking on the Positive inject starts a flow with\na positive sentiment text message while clicking\non the Negative inject starts a flow with a negative\nsentiment.",
-        "x": 200,
-        "y": 240,
-        "wires": []
     }
 ]

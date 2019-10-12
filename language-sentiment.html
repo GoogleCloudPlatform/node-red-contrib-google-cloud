@@ -17,11 +17,15 @@ limitations under the License.
 <script type="text/x-red" data-template-name="google-cloud-language-sentiment">
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
-        <input type="text" id="node-input-account">        
+        <input type="text" id="node-input-account">
     </div>
     <div class="form-row">
         <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
         <input type="text" id="node-input-keyFilename">
+    </div>
+    <div class="form-row">
+        <label for="node-input-languageCode"><i class="fa fa-language"></i> Language</label>
+        <input type="text" id="node-input-languageCode">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -54,6 +58,8 @@ limitations under the License.
 
     <h3>Details</h3>
     <p><code>msg.payload</code> is used as the document to perform sentiment analysis upon.</p>
+    <p>The language field defines the language to be used for processing.  It must be one
+        of the <a href="https://cloud.google.com/natural-language/docs/languages#sentiment_analysis">supported</a> languages</p>
 </script>
 
 <script type="text/javascript">
@@ -72,6 +78,7 @@ RED.nodes.registerType("google-cloud-language-sentiment", {
             }
             return true;
         }},
+        languageCode: { value: "en", required: false},
         name: { value: "", required: false }
     },
     inputs: 1,
