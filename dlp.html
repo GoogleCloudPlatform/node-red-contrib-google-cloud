@@ -14,18 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="google-cloud-language-sentiment">
+<script type="text/x-red" data-template-name="google-cloud-dlp">
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
-        <input type="text" id="node-input-account">
+        <input type="text" id="node-input-account">        
     </div>
     <div class="form-row">
         <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
         <input type="text" id="node-input-keyFilename">
     </div>
     <div class="form-row">
-        <label for="node-input-languageCode"><i class="fa fa-language"></i> Language</label>
-        <input type="text" id="node-input-languageCode">
+        <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
+        <input type="text" id="node-input-projectId">
+    </div>
+    <div class="form-row">
+        <label for="node-input-inspectTemplateName"><i class="fa fa-cloud"></i> Inspect Template</label>
+        <input type="text" id="node-input-inspectTemplateName">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -33,37 +37,30 @@ limitations under the License.
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="google-cloud-language-sentiment">
-    <p>Perform sentiment analysis on the document.</p>
-    <p>Additional information on sentiment analysis can be found in the <a href="https://cloud.google.com/natural-language/docs/basics#sentiment_analysis">Google Cloud Docs</a>.</p>
+<script type="text/x-red" data-help-name="google-cloud-dlp">
+    <p>Mask out information that may be sensitive.</p>
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>msg.payload
             <span class="property-type">string</span>
         </dt>
-        <dd>The document on which to perform senitment analysis.</dd>
+        <dd>The payload to be transformed to remove sensitive information.</dd>
     </dl>
-
-    <h3>Outputs</h3>
-    <dl class="message-properties">
-        <dt>msg.sentiment.score
-            <span class="property-type">number</span>
-        </dt>
-        <dd>The sentiment score.</dd>
-        <dt>msg.sentiment.magnitude
-            <span class="property-type">number</span>
-        </dt>
-        <dd>The sentiment magnitude.</dd>        
-    </dl>        
-
     <h3>Details</h3>
-    <p><code>msg.payload</code> is used as the document to perform sentiment analysis upon.</p>
-    <p>The language field defines the language to be used for processing.  It must be one
-        of the <a href="https://cloud.google.com/natural-language/docs/languages#sentiment_analysis">supported</a> languages</p>
+    <p>
+    The DLP node takes as input a piece of text and performs Data Loss Prevention (DLP) processing against it.  The result is the original text with information
+    de-identified.  The items to be scanned are provided in a template that must be configured from the GCP console.
+    </p>
+    <p>
+    The input to the node is a text string found in <code>msg.payload</code>.  The output from the node is an object that conforms to the
+    transformation described <a href="https://googleapis.dev/nodejs/dlp/latest/google.privacy.dlp.v2.html#.DeidentifyContentResponse">here</a>.
+    Specifically, <code>msg.payload.item.value</code> contains the transformed text.  The de-identification rule applied is the built in primitive transformation
+    called <a href="https://googleapis.dev/nodejs/dlp/latest/google.privacy.dlp.v2.html#.ReplaceWithInfoTypeConfig">ReplaceWithInfoTypeConfig</a>.
+    </p>
 </script>
 
 <script type="text/javascript">
-RED.nodes.registerType("google-cloud-language-sentiment", {
+RED.nodes.registerType("google-cloud-dlp", {
     category: "GCP",
     defaults: {
         account: { type: "google-cloud-credentials", validate: function(value) {
@@ -72,23 +69,23 @@ RED.nodes.registerType("google-cloud-language-sentiment", {
             }
             return true;
         }},
-        keyFilename: {value: "", validate: function(value) {
+        keyFilename: { value: "", validate: function(value) {
             if (value === "" && (this.account === "" || this.account == undefined))  {
                 return false;
             }
             return true;
         }},
-        languageCode: { value: "en", required: false},
-        name: { value: "", required: false }
+        projectId: { value: "", required: true },
+        inspectTemplateName: { value: "", required: true },
     },
     inputs: 1,
     outputs: 1,
-    icon: "nl-api.png",
+    icon: "dlp.png",
     align: "left",
     color: "#3FADB5",
     label: function () {
-        return this.name || "sentiment";
+        return this.name || "dlp";
     },
-    paletteLabel: "sentiment"
+    paletteLabel: "dlp"
 });
 </script>

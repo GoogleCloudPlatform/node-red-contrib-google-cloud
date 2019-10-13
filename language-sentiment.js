@@ -16,6 +16,10 @@
  * The node type is "gcp-language-sentiment".
  *
  * msg.payload  = The document to be examined.
+ * 
+ * The configuration parameters are:
+ * 
+ * * languageCode - The language code to be used.
  *
  */
 /* jshint esversion: 8 */
@@ -42,6 +46,7 @@ module.exports = function(RED) {
             credentials = GetCredentials(config.account);
         }
         const keyFilename = config.keyFilename;
+        const languageCode = config.languageCode || "en";
 
         let languageServiceClient; // https://googleapis.dev/nodejs/language/latest/v1.LanguageServiceClient.html
 
@@ -67,7 +72,8 @@ module.exports = function(RED) {
             }
 
             const document = {
-                type: 'PLAIN_TEXT',
+                "type":     'PLAIN_TEXT',
+                "language": languageCode            // https://cloud.google.com/natural-language/docs/languages#sentiment_analysis
             };
 
             if (msg.payload instanceof Buffer) {

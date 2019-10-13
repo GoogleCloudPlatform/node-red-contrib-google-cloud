@@ -11,10 +11,10 @@ The node has configuration options including:
 * Language Code - The language code to be used for processing.  The set of allowed codes can be found [here](https://cloud.google.com/speech-to-text/docs/languages).  The default is en-US.
 * Sample Rate - The sampling rate of the audio input.
 * Encoding - One of:
- * LINEAR16
- * FLAC
- * MULAW
- * AMR
- * AMR_WB
- * OGG_OPUS
- * MP3
+  * LINEAR16
+  * FLAC
+  * MULAW
+  * AMR
+  * AMR_WB
+  * OGG_OPUS
+  * MP3

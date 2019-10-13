@@ -1,0 +1,87 @@
+[
+    {
+        "id": "1d38af3b.ffd391",
+        "type": "tab",
+        "label": "Speech to Text",
+        "disabled": false,
+        "info": "In this example we perform speech to text processing by obtaining a sample fragment of speech as a WAV file.  This is retrieved over the Internet and then passed into the GCP text to speech node.  The results are logged to the debug window."
+    },
+    {
+        "id": "d2c24fee.a4a07",
+        "type": "inject",
+        "z": "1d38af3b.ffd391",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 110,
+        "y": 200,
+        "wires": [
+            [
+                "8e22fe84.22d03"
+            ]
+        ],
+        "info": "Start the test."
+    },
+    {
+        "id": "8e22fe84.22d03",
+        "type": "http request",
+        "z": "1d38af3b.ffd391",
+        "name": "",
+        "method": "GET",
+        "ret": "bin",
+        "paytoqs": false,
+        "url": "https://www.voiptroubleshooter.com/open_speech/american/OSR_us_000_0030_8k.wav",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 270,
+        "y": 200,
+        "wires": [
+            [
+                "1d711986.b326d6"
+            ]
+        ],
+        "info": "Obtain a WAV file from the Internet.  A set of sample WAV files of speech can be found [here](here)."
+    },
+    {
+        "id": "96680795.7ac948",
+        "type": "debug",
+        "z": "1d38af3b.ffd391",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 650,
+        "y": 200,
+        "wires": [],
+        "info": "Log the results of the processing in the debug console."
+    },
+    {
+        "id": "1d711986.b326d6",
+        "type": "google-cloud-speech-to-text",
+        "z": "1d38af3b.ffd391",
+        "account": "",
+        "keyFilename": "",
+        "name": "",
+        "sampleRate": "8000",
+        "encoding": "LINEAR16",
+        "languageCode": "en-US",
+        "x": 460,
+        "y": 200,
+        "wires": [
+            [
+                "96680795.7ac948"
+            ]
+        ],
+        "info": "Perform the speech to text processing."
+    }
+]

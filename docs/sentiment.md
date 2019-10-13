@@ -6,3 +6,5 @@ This node processes text and performs a sentiment analysis using the Natural Lan
 
 * msg.sentiment.score
 * msg.sentiment.magnitude
+
+The input text defaults to be English but this can be changed to one of the [supported](https://cloud.google.com/natural-language/docs/languages#sentiment_analysis) languages.
