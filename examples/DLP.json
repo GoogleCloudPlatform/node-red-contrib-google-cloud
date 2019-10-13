@@ -1,0 +1,18 @@
+[
+    {
+        "id": "969077d0.8a31c8",
+        "type": "debug",
+        "z": "c9c55dc0.67d7a",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 390,
+        "y": 120,
+        "wires": [],
+        "info": "Log the results of the masking to the debug console."
+    }
+]
