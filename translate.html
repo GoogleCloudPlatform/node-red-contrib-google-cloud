@@ -1,0 +1,92 @@
+<!--
+Copyright 2019 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="google-cloud-translate">
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">        
+    </div>
+    <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+    <div class="form-row">
+        <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
+        <input type="text" id="node-input-projectId">
+    </div>
+    <div class="form-row">
+        <label for="node-input-sourceLanguageCode"><i class="fa fa-cloud"></i> Source Language</label>
+        <input type="text" id="node-input-sourceLanguageCode">
+    </div>
+    <div class="form-row">
+        <label for="node-input-targetLanguageCode"><i class="fa fa-cloud"></i> Target Language</label>
+        <input type="text" id="node-input-targetLanguageCode">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="google-cloud-translate">
+    <p>Translate from one language to another.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The payload to be translated.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>
+    The translation API must be enabled for your GCP project before use.  The node expects a text string be supplied as input in <code>msg.payload</code>.
+    The language of the text is specified in the source language configuration parameter and the target language specified in the target
+    language configuration parameter.  After the node has executed, the output will be placed in msg.payload and will be an instance of
+    the object described <a href="https://googleapis.dev/nodejs/translate/latest/google.cloud.translation.v3beta1.html#.TranslateTextResponse">here</a>.
+    </p>
+</script>
+
+<script type="text/javascript">
+RED.nodes.registerType("google-cloud-translate", {
+    category: "GCP",
+    defaults: {
+        account: { type: "google-cloud-credentials", validate: function(value) {
+            if ((value === "" || value == undefined) && this.keyFilename === "") {
+                return false;
+            }
+            return true;
+        }},
+        keyFilename: { value: "", validate: function(value) {
+            if (value === "" && (this.account === "" || this.account == undefined))  {
+                return false;
+            }
+            return true;
+        }},
+        projectId: { value: "", required: true },
+        sourceLanguageCode: { value: "en", required: true },
+        targetLanguageCode: { value: "es", required: true }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "translate.png",
+    align: "left",
+    color: "#3FADB5",
+    label: function () {
+        return this.name || "translate";
+    },
+    paletteLabel: "translate"
+});
+</script>

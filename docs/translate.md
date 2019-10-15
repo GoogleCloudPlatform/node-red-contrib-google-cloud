@@ -1,0 +1,4 @@
+# Translate
+![Translate Node](images/translate_node.png)
+
+The translation API must be enabled for your GCP project before use.  The node expects a text string be supplied as input in `msg.payload`.  The language of the text is specified in the source language configuration parameter and the target language specified in the target language configuration parameter.  After the node has executed, the output will be placed in msg.payload and will be an instance of the object described [here](https://googleapis.dev/nodejs/translate/latest/google.cloud.translation.v3beta1.html#.TranslateTextResponse).

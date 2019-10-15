@@ -1,0 +1,60 @@
+[
+    {
+        "id": "145dc86f.cd8118",
+        "type": "tab",
+        "label": "Translation",
+        "disabled": false,
+        "info": "Perform a translation of a piece of text from one language to another."
+    },
+    {
+        "id": "385ed155.14a31e",
+        "type": "google-cloud-translate",
+        "z": "145dc86f.cd8118",
+        "account": "",
+        "keyFilename": "",
+        "projectId": "kolban-test",
+        "sourceLanguageCode": "en",
+        "targetLanguageCode": "es",
+        "x": 260,
+        "y": 80,
+        "wires": [
+            [
+                "6e1b8a11.7886c4"
+            ]
+        ]
+    },
+    {
+        "id": "5f087135.133fa",
+        "type": "inject",
+        "z": "145dc86f.cd8118",
+        "name": "",
+        "topic": "",
+        "payload": "Hello.  What time is dinner?",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 110,
+        "y": 80,
+        "wires": [
+            [
+                "385ed155.14a31e"
+            ]
+        ]
+    },
+    {
+        "id": "6e1b8a11.7886c4",
+        "type": "debug",
+        "z": "145dc86f.cd8118",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 430,
+        "y": 80,
+        "wires": []
+    }
+]
