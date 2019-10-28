@@ -91,6 +91,7 @@ The set of Node-RED nodes are found in the GCP section of the palette.  The curr
 * [Speech to Text](docs/speech_to_text.md) - Recognize speech from audio.
 * [Data loss prevention](docs/dlp.md) - Mask out identifiable information.
 * [Translation](docs/translate.md) - Translate text from one language to another.
+* [BigQuery](docs/bigquery.md) - Execute a BigQuery query.
 
 We are very open to receiving feedback on additional GCP nodes that may be of value.  Don't hesitate to open an issue should you have a desire
 for incorporating additional GCP functions.
