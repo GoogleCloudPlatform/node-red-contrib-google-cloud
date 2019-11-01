@@ -1,5 +1,5 @@
 # BigQuery
-![BigQuery Node](images/nigquery_node.png)
+![BigQuery Node](images/bigquery_node.png)
 
 The BigQuery node provides an interface to the BigQuery data warehouse.  It has configuration parameters which include the query to run and the name of the project to bill for usage.
 
