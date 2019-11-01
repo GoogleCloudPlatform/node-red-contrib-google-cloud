@@ -77,7 +77,8 @@ RED.nodes.registerType("google-cloud-bigquery", {
             return true;
         }},
         projectId: { value: "", required: true},
-        query: { value: "", required: false}
+        query: { value: "", required: false},
+        name: { value: "", required: false }
     },
     inputs: 1,
     outputs: 1,
