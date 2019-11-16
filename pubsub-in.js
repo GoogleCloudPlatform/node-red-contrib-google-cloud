@@ -75,7 +75,8 @@ module.exports = function(RED) {
             }
 
             const msg = {
-                payload: message.data
+                "payload": message.data,    // Save the payload data at msg.payload
+                "message": message          // Save the original message at msg.message
             };
 
             // If the configuration property asked for JSON, then convert to an object.

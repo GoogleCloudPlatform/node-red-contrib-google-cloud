@@ -14,6 +14,14 @@
  * limitations under the License.
  *
  */
+
+ /**
+  * In these tests we assume the existence of a GCP Pub/Sub environment which has a topic
+  * and subscription.
+  * 
+  * Topic: node-red-topic
+  * Subscription: node-red-subscription
+  */
 /* jshint esversion: 8 */
 const should = require("should");
 const helper = require('node-red-node-test-helper');
@@ -53,6 +61,8 @@ describe('pubsub_in Node', () => {
             const n2 = helper.getNode("n2");
             const text = "Hello World!"; // The message we publish which should be received by the flow.
             n2.on('input', (msg) => {
+                msg.should.have.property('payload');  // Check that we have msg.payload 
+                msg.should.have.property('message');  // Check that we have msg.message 
                 msg.payload.toString().should.be.equal(text);
                 done();
             });

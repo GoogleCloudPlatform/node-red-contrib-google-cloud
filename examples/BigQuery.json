@@ -1,0 +1,137 @@
+[
+    {
+        "id": "c41f917f.99298",
+        "type": "tab",
+        "label": "BigQuery",
+        "disabled": false,
+        "info": "Perform BigQuery executions using public datasets."
+    },
+    {
+        "id": "9aba9cbd.d00c4",
+        "type": "google-cloud-bigquery",
+        "z": "c41f917f.99298",
+        "account": "",
+        "keyFilename": "",
+        "projectId": "kolban-test",
+        "query": "",
+        "x": 280,
+        "y": 300,
+        "wires": [
+            [
+                "cda68fce.26881"
+            ]
+        ],
+        "info": "Perform a query using the query string provided in msg payload."
+    },
+    {
+        "id": "4cb70c23.676024",
+        "type": "inject",
+        "z": "c41f917f.99298",
+        "name": "",
+        "topic": "",
+        "payload": "select id, tags from `bigquery-public-data.stackoverflow.posts_questions` limit 10",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 130,
+        "y": 300,
+        "wires": [
+            [
+                "9aba9cbd.d00c4"
+            ]
+        ],
+        "info": "Start a flow to query the database passing in a query from the message payload."
+    },
+    {
+        "id": "cda68fce.26881",
+        "type": "debug",
+        "z": "c41f917f.99298",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 450,
+        "y": 300,
+        "wires": [],
+        "info": "Log the results to the debug output."
+    },
+    {
+        "id": "1a458c5.7b3a774",
+        "type": "google-cloud-bigquery",
+        "z": "c41f917f.99298",
+        "account": "",
+        "keyFilename": "",
+        "projectId": "kolban-test",
+        "query": "select id, tags from `bigquery-public-data.stackoverflow.posts_questions`\nlimit 10",
+        "x": 280,
+        "y": 160,
+        "wires": [
+            [
+                "e7349733.a311c8"
+            ]
+        ],
+        "info": "Perform a query using the query string provided in the configuration."
+    },
+    {
+        "id": "7f55d3a8.02184c",
+        "type": "inject",
+        "z": "c41f917f.99298",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "1a458c5.7b3a774"
+            ]
+        ],
+        "info": "Start a flow to query the database."
+    },
+    {
+        "id": "e7349733.a311c8",
+        "type": "debug",
+        "z": "c41f917f.99298",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 450,
+        "y": 160,
+        "wires": [],
+        "info": "Log the results to the debug output."
+    },
+    {
+        "id": "7cc66a97.d06e74",
+        "type": "comment",
+        "z": "c41f917f.99298",
+        "name": "Query from properties",
+        "info": "Query comes from properties of BigQuery node.",
+        "x": 160,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "1e44662.4c91b9a",
+        "type": "comment",
+        "z": "c41f917f.99298",
+        "name": "Query from payload",
+        "info": "The query comes from the properties of the payload.",
+        "x": 150,
+        "y": 260,
+        "wires": []
+    }
+]

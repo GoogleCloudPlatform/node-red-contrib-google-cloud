@@ -1,0 +1,131 @@
+<!--
+Copyright 2019 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="google-cloud-firestore">
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">        
+    </div>
+    <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+    <div class="form-row">
+        <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
+        <input type="text" id="node-input-projectId">
+    </div>
+    <div class="form-row">
+        <label for="node-input-mode"><i class="fa fa-gear"></i> Operation</label>
+        <select type="text" id="node-input-mode">
+            <option value="set">set</option>
+            <option value="get">get</option>
+            <option value="update">update</option>
+            <option value="delete">delete</option>
+            <option value="query">query</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="google-cloud-firestore">
+    <p>Execute a Firestore operation.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload.path
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The path to the document to be set, get, updated or deleted.  For a query, this is the path to the collection to be examined.  Required for
+            set, get, update, delete, query.
+        </dd>
+        <dt>msg.payload.content
+            <span class="property-type">object</span>
+        </dt>
+        <dd>The content of the document to be set/updated.  Required for set and update.
+        </dd>
+        <dt>msg.payload.query
+            <span class="property-type">object</span>
+        </dt>
+        <dd>The query to be performed.  This can either be a single object or an array of objects.  The object(s) contain:
+            <ul>
+                <li><code>fieldPath</code> - The field in the document to be examined.</li>
+                <li><code>opStr</code> - The expression operation.  eg. "=="</li>
+                <li><code>value</code> - The value to be used in the expression</li>
+            </ul>
+        </dd>
+    </dl>
+    <h3>Details</h3>
+    <p>
+    The Firestore node provides an interface to the Firestore database.  The following core operations have been exposed:
+    </p>
+
+    <p>
+    <ul>
+        <li><code>get</code> - Get the content of a document.</li>
+        <li><code>set</code> - Set the content of a document.</li>
+        <li><code>update</code> - Change the content of a document leaving some fields unchanged.</li>
+        <li><code>delete</code> - Delete a document.</li>
+        <li><code>query</code> - Query for and return a set of documents matching a search.</li>
+    </ul>
+    </p>
+
+    <p>
+    The configuration parameters of the node include the Project Id to be used for billing.
+    </p>
+
+    <p>
+    Another configuration parameter is the operation to perform.  The operation is selected from the pull-down and is one of the allowed operations.
+    </p>
+
+    <p>
+    On input, <code>msg.payload</code> must contain an object with certain values that are dependent on the operation chosen.
+    </p>
+
+</script>
+
+<script type="text/javascript">
+RED.nodes.registerType("google-cloud-firestore", {
+    category: "GCP",
+    defaults: {
+        account: { type: "google-cloud-credentials", validate: function(value) {
+            if ((value === "" || value == undefined) && this.keyFilename === "") {
+                return false;
+            }
+            return true;
+        }},
+        keyFilename: { value: "", validate: function(value) {
+            if (value === "" && (this.account === "" || this.account == undefined))  {
+                return false;
+            }
+            return true;
+        }},
+        name: { value: "", required: false },
+        projectId: { value: "", required: true},
+        mode: { value: "set", required: false}
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "firestore.png",
+    align: "left",
+    color: "#3FADB5",
+    label: function () {
+        return this.name || "firestore";
+    },
+    paletteLabel: "firestore"
+});
+</script>

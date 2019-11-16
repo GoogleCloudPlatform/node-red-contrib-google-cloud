@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="google-cloud-dlp">
+<script type="text/x-red" data-template-name="google-cloud-bigquery">
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
         <input type="text" id="node-input-account">        
@@ -28,8 +28,8 @@ limitations under the License.
         <input type="text" id="node-input-projectId">
     </div>
     <div class="form-row">
-        <label for="node-input-inspectTemplateName"><i class="fa fa-cloud"></i> Inspect Template</label>
-        <input type="text" id="node-input-inspectTemplateName">
+        <label for="node-input-query"><i class="fa fa-search"></i> Query</label>
+        <textarea id="node-input-query"></textarea>
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -37,30 +37,31 @@ limitations under the License.
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="google-cloud-dlp">
-    <p>Mask out information that may be sensitive.</p>
+<script type="text/x-red" data-help-name="google-cloud-bigquery">
+    <p>Execute a BigQuery query.</p>
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>msg.payload
             <span class="property-type">string</span>
         </dt>
-        <dd>The payload to be transformed to remove sensitive information.</dd>
+        <dd>The query to be executed.</dd>
     </dl>
     <h3>Details</h3>
     <p>
-    The DLP node takes as input a piece of text and performs Data Loss Prevention (DLP) processing against it.  The result is the original text with information
-    de-identified.  The items to be scanned are provided in a template that must be configured from the GCP console.
+    The BigQuery node provides an interface to the BigQuery data warehouse.  It has configuration parameters which include the query to run
+    and the name of the project to bill for usage.
     </p>
     <p>
-    The input to the node is a text string found in <code>msg.payload</code>.  The output from the node is an object that conforms to the
-    transformation described <a href="https://googleapis.dev/nodejs/dlp/latest/google.privacy.dlp.v2.html#.DeidentifyContentResponse">here</a>.
-    Specifically, <code>msg.payload.item.value</code> contains the transformed text.  The de-identification rule applied is the built in primitive transformation
-    called <a href="https://googleapis.dev/nodejs/dlp/latest/google.privacy.dlp.v2.html#.ReplaceWithInfoTypeConfig">ReplaceWithInfoTypeConfig</a>.
+    When executed, if a query string is provided, that fixed string will be used.
+    If no query string is provided, then <code>msg.payload</code> is expected to be a string which will then be used as the query to execute.
+    </p>
+    <p>
+    On return, an array of rows will be saved in <code>msg.payload</code>.
     </p>
 </script>
 
 <script type="text/javascript">
-RED.nodes.registerType("google-cloud-dlp", {
+RED.nodes.registerType("google-cloud-bigquery", {
     category: "GCP",
     defaults: {
         account: { type: "google-cloud-credentials", validate: function(value) {
@@ -75,18 +76,18 @@ RED.nodes.registerType("google-cloud-dlp", {
             }
             return true;
         }},
-        projectId: { value: "", required: true },
-        inspectTemplateName: { value: "", required: true },
+        projectId: { value: "", required: true},
+        query: { value: "", required: false},
         name: { value: "", required: false }
     },
     inputs: 1,
     outputs: 1,
-    icon: "dlp.png",
+    icon: "bigquery.png",
     align: "left",
     color: "#3FADB5",
     label: function () {
-        return this.name || "dlp";
+        return this.name || "bigquery";
     },
-    paletteLabel: "dlp"
+    paletteLabel: "bigquery"
 });
 </script>
