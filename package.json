@@ -1,10 +1,11 @@
 {
     "name": "node-red-contrib-google-cloud",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "description": "Node-RED nodes for Google Cloud Platform",
     "dependencies": {
         "@google-cloud/bigquery": "latest",
         "@google-cloud/dlp": "latest",
+        "@google-cloud/firestore": "latest",
         "@google-cloud/language": "latest",
         "@google-cloud/logging": "latest",
         "@google-cloud/monitoring": "latest",
@@ -30,7 +31,8 @@
         "speech",
         "dlp",
         "translate",
-        "BigQuery"
+        "BigQuery",
+        "Firestore"
     ],
     "node-red": {
         "nodes": {
@@ -48,7 +50,8 @@
             "google-cloud-speech-to-text": "speech-to-text.js",
             "google-cloud-dlp": "dlp.js",
             "google-cloud-translate": "translate.js",
-            "google-cloud-bigquery": "bigquery.js"
+            "google-cloud-bigquery": "bigquery.js",
+            "google-cloud-firestore": "firestore.js"
         }
     },
     "scripts": {
