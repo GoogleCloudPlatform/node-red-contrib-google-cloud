@@ -100,8 +100,7 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            logging = new Logging({});
         }
 
         if (!logName) {

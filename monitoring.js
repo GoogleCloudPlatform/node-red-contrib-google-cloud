@@ -88,8 +88,7 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            metricServiceClient = new monitoring.MetricServiceClient({});
         }
 
         node.on('input', Input);

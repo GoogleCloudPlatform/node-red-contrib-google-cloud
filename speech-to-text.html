@@ -100,18 +100,8 @@ limitations under the License.
 RED.nodes.registerType("google-cloud-speech-to-text", {
     category: "GCP",
     defaults: {
-        account: { type: "google-cloud-credentials", validate: function(value) {
-            if ((value === "" || value == undefined) && this.keyFilename === "") {
-                return false;
-            }
-            return true;
-        }},
-        keyFilename: {value: "", validate: function(value) {
-            if (value === "" && (this.account === "" || this.account == undefined))  {
-                return false;
-            }
-            return true;
-        }},
+        account: { type: "google-cloud-credentials", required: false },
+        keyFilename: {value: "", required: false },
         name: { value: "", required: false },
         sampleRate: { value: 16000, required: false},
         encoding: { value: "LINEAR16", required: false},

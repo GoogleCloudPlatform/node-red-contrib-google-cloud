@@ -64,18 +64,8 @@ limitations under the License.
 RED.nodes.registerType("google-cloud-bigquery", {
     category: "GCP",
     defaults: {
-        account: { type: "google-cloud-credentials", validate: function(value) {
-            if ((value === "" || value == undefined) && this.keyFilename === "") {
-                return false;
-            }
-            return true;
-        }},
-        keyFilename: { value: "", validate: function(value) {
-            if (value === "" && (this.account === "" || this.account == undefined))  {
-                return false;
-            }
-            return true;
-        }},
+        account: { type: "google-cloud-credentials", required: false },
+        keyFilename: { value: "", required: false },
         projectId: { value: "", required: true},
         query: { value: "", required: false},
         name: { value: "", required: false }

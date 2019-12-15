@@ -138,8 +138,7 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            storage = new Storage({});
         }
 
         node.on('input', Input);

@@ -162,8 +162,9 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            firestore = new Firestore({
+                "projectId": projectId
+            });
         }
 
         node.on("input", Input);

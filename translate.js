@@ -78,8 +78,7 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            translationServiceClient = new translate.v3beta1.TranslationServiceClient({});
         }
 
         node.on("input", Input);

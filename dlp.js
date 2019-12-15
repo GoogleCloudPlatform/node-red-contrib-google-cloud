@@ -100,8 +100,7 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            dlpServiceClient = new DLP.DlpServiceClient({});
         }
 
         node.on("input", Input);

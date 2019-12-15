@@ -160,8 +160,7 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            imageAnnotatorClient = new vision.ImageAnnotatorClient({});
         }
 
         node.on("input", Input); // Register the handler to be invoked when a new message is to be processed.
