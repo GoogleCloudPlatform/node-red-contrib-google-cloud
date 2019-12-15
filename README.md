@@ -24,9 +24,14 @@ There are multiple ways to install `node-red-contrib-google-cloud`. The official
 
 ## Google Cloud Credentials
 
-Each of the nodes made available through this package will communicate with GCP.  These interactions must be performed securely and require
-credentials to be passed.  This package allows us to define one or more sets of credentials as named entities that can then be referenced
-within each of the nodes that request service.
+Each of the new nodes made available through this package will communicate with the Google Cloud Platform (GCP).  These interactions must be performed securely and require authentication information to be passed.
+
+If Node-RED is running under a GCP environment such as a Compute Engine, Google Kubernetes Engine or Cloud Run then there is an implicit identity presented
+to GCP and the flow developer need do nothing special for authentication configuration.  However, if your Node-RED runtime is not running
+under GCP or you wish to call a service with adistinct identity, then you will need to use explicit credentials.
+
+On each node, we have the opportunity to supply credentials.  These can be supplied either as a path to a named key file or by creating a Node-RED managed name credentials secret.  Each credential defined as a Node-RED secret has the following properties:
+
 
 | Property    | Type     | Description                                          |
 | ----------- | -------- | ---------------------------------------------------- |

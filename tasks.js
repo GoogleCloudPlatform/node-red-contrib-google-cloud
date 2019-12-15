@@ -112,8 +112,7 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            tasksClient = new cloudTasks.CloudTasksClient({});
         }
 
         node.on("input", Input);

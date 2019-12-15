@@ -112,8 +112,7 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            pubsub = new PubSub({});
         }
 
         node.status(STATUS_CONNECTING);                              // Flag the node as connecting.

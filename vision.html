@@ -129,18 +129,8 @@ limitations under the License.
 RED.nodes.registerType("google-cloud-vision", {
     category: "GCP",
     defaults: {
-        account: { type: "google-cloud-credentials", validate: function(value) {
-            if ((value === "" || value == undefined) && this.keyFilename === "") {
-                return false;
-            }
-            return true;
-        }},
-        keyFilename: {value: "", validate: function(value) {
-            if (value === "" && (this.account === "" || this.account == undefined))  {
-                return false;
-            }
-            return true;
-        }},
+        account: { type: "google-cloud-credentials", required: false },
+        keyFilename: {value: "", required: false },
         faceDetection: { value: false, required: false },
         landmarkDetection: { value: false, required: false },
         logoDetection: { value: false, required: false },

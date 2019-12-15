@@ -94,8 +94,7 @@ module.exports = function(RED) {
                 "keyFilename": keyFilename
             });
         } else {
-            node.error('Missing credentials or keyFilename.');
-            return;
+            speechClient = new speech.SpeechClient({});
         }
 
         node.on("input", Input);
