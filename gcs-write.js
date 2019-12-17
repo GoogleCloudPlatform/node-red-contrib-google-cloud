@@ -97,10 +97,10 @@ module.exports = function(RED) {
             const bucketName = parts[1];
             const fileName   = parts[2];
 
-            const bucket = storage.bucket(bucketName);
-            const file   = bucket.file(fileName);
+            const bucket = storage.bucket(bucketName); // Get access to the bucket
+            const file   = bucket.file(fileName);      // Model access to the file in the bucket
 
-            const writeStreamOptions = {};
+            const writeStreamOptions = {}; // https://googleapis.dev/nodejs/storage/latest/global.html#CreateWriteStreamOptions
 
             // If we have a msg.contentType field, use it.  If we don't but we have a contentType set in options, use
             // that.  Otherwise don't supply a content type.
@@ -110,13 +110,16 @@ module.exports = function(RED) {
                 writeStreamOptions.contentType = contentType_options;
             }
 
-            const writeStream = file.createWriteStream(writeStreamOptions);
+            const writeStream = file.createWriteStream(writeStreamOptions); // Create a write stream to the file.
 
             writeStream.on('error', (err) => {
                 node.error(`writeStream error: ${err.message}`);
             });
-            writeStream.write(msg.payload); // Write the data to the object.
-            writeStream.end();
+            writeStream.on('finish', () => { // When we receive the indication that the write has finished, signal the end.
+                node.send(msg);
+            });
+            writeStream.end(msg.payload); // Write the data to the object.
+
         } // Input
 
 
