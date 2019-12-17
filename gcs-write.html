@@ -75,14 +75,14 @@ limitations under the License.
 RED.nodes.registerType("google-cloud-gcs-write", {
     category: "GCP",
     defaults: {
-        account: { type: "google-cloud-credentials", required: false },
-        keyFilename: {value: "", required: false },
-        filename: { value: "", required: false },
+        account:     { type: "google-cloud-credentials", required: false },
+        keyFilename: { value: "", required: false },
+        filename:    { value: "", required: false },
         contentType: { value: "", required: false },
-        name: { value: "", required: false }
+        name:        { value: "", required: false }
     },
     inputs: 1,
-    outputs: 0,
+    outputs: 1,
     icon: "gcs.png",
     align: "right",
     color: "#3FADB5",
