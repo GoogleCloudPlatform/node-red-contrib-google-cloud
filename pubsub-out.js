@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 /* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
@@ -51,8 +52,8 @@ module.exports = function(RED) {
 
     function GoogleCloudPubSubOutNode(config) {
         let topic  = null;
+        let topicReady = null; // A Promise that will be resolved when the topic is ready.
         let pubsub = null;
-        const messageQueue = [];
         RED.nodes.createNode(this, config);
 
         const node = this;
@@ -76,27 +77,23 @@ module.exports = function(RED) {
                 return;
             }
 
-            // If we don't have a topic, then this is likely because we have received a request to
-            // publish a message while we are still waiting for access to the topic from GCP.
-            if (topic === null) {
-                messageQueue.push(msg);
-                return;
-            }
+            await topicReady;
             node.status(STATUS_PUBLISHING);
             try {
                 await topic.publish(RED.util.ensureBuffer(msg.payload));
                 node.status(STATUS_CONNECTED);
+                node.send(msg); // The message has been published so we can forward through the flow.
             }
             catch(e) {
                 node.status(STATUS_DISCONNECTED);
                 node.error(e);
             }
-        }
+        } // OnInput
 
         function OnClose() {
             node.status(STATUS_DISCONNECTED);
             pubsub = null;
-        }
+        } // OnClose
 
         // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
         // is an error.  If both are supplied, then credentials will be used.
@@ -114,21 +111,18 @@ module.exports = function(RED) {
 
         node.status(STATUS_CONNECTING);
 
-        pubsub.topic(config.topic).get().then((data) => {
-            topic = data[0];
-            node.status(STATUS_CONNECTED);
+        topicReady = new Promise((resolve, reject) => {
+            pubsub.topic(config.topic).get().then((data) => {
+                topic = data[0];
+                node.status(STATUS_CONNECTED);
+                resolve();
+            }).catch((reason) => {
+                node.status(STATUS_DISCONNECTED);
+                node.error(reason);
+                reject(reason);
+            });
+        }); // topicReady
 
-            // We may have been asked to process messages BEFORE the topic access has been received.  In this case,
-            // the messages will have been queued.  We pull the messages from the queue and publish them one at
-            // a time.
-            while(messageQueue.length > 0) {
-                const msg = messageQueue.shift();
-                topic.publish(RED.util.ensureBuffer(msg.payload));
-            }
-        }).catch((reason) => {
-            node.status(STATUS_DISCONNECTED);
-            node.error(reason);
-        });
 
         node.on('close', OnClose);
         node.on('input', OnInput);
