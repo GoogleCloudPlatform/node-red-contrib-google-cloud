@@ -56,13 +56,13 @@ limitations under the License.
 RED.nodes.registerType("google-cloud-pubsub out", {
     category: "GCP",
     defaults: {
-        account: { type: "google-cloud-credentials", required: false },
-        keyFilename: {value: "", required: false },
-        topic: { value: "", required: true },
-        name: { value: "", required: false }
+        account:     { type: "google-cloud-credentials", required: false },
+        keyFilename: { value: "", required: false },
+        topic:       { value: "", required: true },
+        name:        { value: "", required: false }
     },
     inputs: 1,
-    outputs: 0,
+    outputs: 1,
     icon: "cloudpubsub.png",
     align: "right",
     color: "#3FADB5",
