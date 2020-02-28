@@ -74,9 +74,17 @@ module.exports = function(RED) {
                 return;
             }
 
+            console.log("Hi!");
             const msg = {
                 "payload": message.data,    // Save the payload data at msg.payload
-                "message": message          // Save the original message at msg.message
+                "message": {                // Save parts of the original message at msg.message.  We can't save the whole message as it is not serializable.
+                    'ackId': message.ackId,
+                    'attributes': message.attributes,
+                    'id': message.id,
+                    'orderingKey': message.orderingKey,
+                    'publishedTime': message.publishedTime,
+                    'received': message.received
+                }
             };
 
             // If the configuration property asked for JSON, then convert to an object.
