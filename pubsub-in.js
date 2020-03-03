@@ -74,7 +74,6 @@ module.exports = function(RED) {
                 return;
             }
 
-            console.log("Hi!");
             const msg = {
                 "payload": message.data,    // Save the payload data at msg.payload
                 "message": {                // Save parts of the original message at msg.message.  We can't save the whole message as it is not serializable.
