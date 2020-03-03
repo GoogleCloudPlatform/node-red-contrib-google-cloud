@@ -34,10 +34,10 @@ module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-firestore";
     const {Firestore} = require('@google-cloud/firestore');
-    let firestore;
 
     function FireStoreNode(config) {
         RED.nodes.createNode(this, config);
+        let firestore;  // There must be one instance of this object per node.
         const node = this;
         const staticQuery = config.query;
         const projectId = config.projectId;
@@ -47,7 +47,7 @@ module.exports = function(RED) {
             credentials = GetCredentials(config.account);
         }
         const keyFilename = config.keyFilename;
-        const mode = config.mode;  // Get the mode that we are to perform.  One of get/set/update/delete.
+        const mode = config.mode;  // Get the mode that we are to perform.  One of get/set/update/delete/query.
 
         /**
          * Extract JSON service account key from "google-cloud-credentials" config node.
@@ -61,6 +61,7 @@ module.exports = function(RED) {
         // to perform waits on promises to be resolved.
         async function Input(msg) {
             let collection;
+            let document;
             // Set
             if (!msg.payload.path || typeof msg.payload.path != "string") {
                 node.error('msg.payload.path not set properly.');
@@ -74,9 +75,6 @@ module.exports = function(RED) {
                     return;
                 }
             }
-            if (mode == 'set' || mode == 'update' || mode == 'delete' || mode == 'get') {
-                const document = firestore.doc(msg.payload.path);
-            }
 
             if (mode == 'query') {
                 collection = firestore.collection(msg.payload.path);
@@ -86,21 +84,25 @@ module.exports = function(RED) {
                 }
             }
 
+            if (mode == 'set' || mode == 'update' || mode == 'delete' || mode == 'get') {
+                document = firestore.doc(msg.payload.path);
+            }
+
             try {
                 if (mode == 'set') {
                     await document.set(msg.payload.content);
-                    console.log(`Document written to ${msg.payload.path}`);
+                    //console.log(`Document written to ${msg.payload.path}`);
                 } else if (mode == 'update') {
                     await document.update(msg.payload.content);
-                    console.log(`Document updated at ${msg.payload.path}`);
+                    //console.log(`Document updated at ${msg.payload.path}`);
                 } else if (mode == 'delete') {
                     await document.delete();
-                    console.log(`Document deleted at ${msg.payload.path}`);
+                    //console.log(`Document deleted at ${msg.payload.path}`);
                 } else if (mode == 'get') {
                     const documentSnapshot = await document.get();
-                    console.log(`Document retrieved from ${msg.payload.path}`);
+                    //console.log(`Document retrieved from ${msg.payload.path}`);
                     msg.payload = documentSnapshot.data();
-                    console.log(JSON.stringify(msg.payload));
+                    //console.log(JSON.stringify(msg.payload));
                 } else if (mode == 'query') {
                     let query = collection;
                     if (Array.isArray(msg.payload.query)) {
