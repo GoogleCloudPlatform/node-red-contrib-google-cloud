@@ -6,6 +6,7 @@
         "@google-cloud/bigquery": "latest",
         "@google-cloud/dlp": "latest",
         "@google-cloud/firestore": "latest",
+        "@google-cloud/iot": "latest",
         "@google-cloud/language": "latest",
         "@google-cloud/logging": "latest",
         "@google-cloud/monitoring": "latest",
@@ -15,6 +16,7 @@
         "@google-cloud/tasks": "latest",
         "@google-cloud/translate": "latest",
         "@google-cloud/vision": "latest",
+        "axios": "latest",
         "request": "latest"
     },
     "keywords": [
@@ -51,7 +53,9 @@
             "google-cloud-dlp": "dlp.js",
             "google-cloud-translate": "translate.js",
             "google-cloud-bigquery": "bigquery.js",
-            "google-cloud-firestore": "firestore.js"
+            "google-cloud-firestore": "firestore.js",
+            "google-cloud-iot send-command": "iot-command-send.js",
+            "google-cloud-iot config-update": "iot-config-update.js"
         }
     },
     "scripts": {
