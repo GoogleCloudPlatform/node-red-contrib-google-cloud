@@ -16,8 +16,7 @@
         "@google-cloud/tasks": "latest",
         "@google-cloud/translate": "latest",
         "@google-cloud/vision": "latest",
-        "axios": "latest",
-        "request": "latest"
+        "axios": "latest"
     },
     "keywords": [
         "node-red",

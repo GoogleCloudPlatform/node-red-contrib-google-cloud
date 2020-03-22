@@ -114,5 +114,6 @@ getRegion().then(result => {
 module.exports = {
     getProjectId: getProjectId,
     getZone: getZone,
-    getRegion: getRegion
+    getRegion: getRegion,
+    getMetadata: getMetadata
 }
