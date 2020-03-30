@@ -1,7 +1,7 @@
 # BigQuery
 ![BigQuery Node](images/bigquery_node.png)
 
-The BigQuery node provides an interface to the BigQuery data warehouse.  It has configuration parameters which include the query to run and the name of the project to bill for usage.
+The BigQuery node provides an interface to the BigQuery data warehouse.  It has configuration parameters which include the query to run and the name of the project to bill for usage.  If the project id is not supplied, the application default credentials will be used.
 
 When executed, if a query string is provided, that fixed string will be used.  If no query string is provided, then `msg.payload` is expected to be a string which will then be used as the query to execute.
 

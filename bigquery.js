@@ -24,13 +24,18 @@ module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-bigquery";
     const {BigQuery} = require('@google-cloud/bigquery');
-    let bigquery;
+
+
 
     function BigQueryNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
         const staticQuery = config.query;
-        const projectId = config.projectId;
+        let projectId = config.projectId;
+        if (!projectId || projectId.trim().length == 0) {
+            projectId = null;
+        }
+        let bigquery = null;
 
         let credentials = null;
         if (config.account) {
@@ -45,6 +50,7 @@ module.exports = function(RED) {
         function GetCredentials(node) {
             return JSON.parse(RED.nodes.getCredentials(node).account);
         }
+
 
         // Called when a message arrives at the node.
         async function Input(msg) {
@@ -73,21 +79,18 @@ module.exports = function(RED) {
             node.send(msg);
         } // Input
 
-
-        // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
-        // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             bigquery = new BigQuery({
                 "projectId": projectId,
                 "credentials": credentials
             });
         } else if (keyFilename) {
-            bigquery = new BigQuery({
+            bigquery =  new BigQuery({
                 "projectId": projectId,
                 "keyFilename": keyFilename
             });
         } else {
-            bigquery = new BigQuery({
+            bigquery =  new BigQuery({
                 "projectId": projectId
             });
         }

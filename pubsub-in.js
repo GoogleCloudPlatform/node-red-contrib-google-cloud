@@ -64,7 +64,7 @@ module.exports = function(RED) {
         }
 
         options.subscription = config.subscription;
-        options.assumeJSON = config.assumeJSON;
+        options.assumeJSON = config.assumeJSON; // Assume JSON input
 
         node.status(STATUS_DISCONNECTED);
 
@@ -88,7 +88,13 @@ module.exports = function(RED) {
 
             // If the configuration property asked for JSON, then convert to an object.
             if (config.assumeJSON === true) {
-                msg.payload = JSON.parse(RED.util.ensureString(message.data));
+                try {
+                    msg.payload = JSON.parse(RED.util.ensureString(message.data));
+                }
+                catch(err) {
+                    // We failed to parse the data ... log an error.
+                    node.error(`Failed to parse JSON: ${err}`);
+                }
             }
 
             node.send(msg);

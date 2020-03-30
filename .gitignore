@@ -4,3 +4,4 @@
 **/terraform.tfstate*
 *.log
 .vscode
+package-lock.json

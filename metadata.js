@@ -25,40 +25,25 @@
 /* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
-    const NODE_TYPE = "google-cloud-ce-metadata";
-    const request = require('request');
+    const utils = require('./utils.js');
 
-
-    function CEMetaDataNode(config) {
+     function CEMetaDataNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
 
-        function Input(msg) {
-    //
-    // Make a request to the GCP metadata server to retrieve the details of the environment.
-    // When a response returns, convert it to a JS object and set it within msg.payload.
-    // The response from the REST request will be a JSON string.
-    //
-            const options = {
-                url: 'http://metadata.google.internal/computeMetadata/v1/?recursive=true',
-                headers: {
-                    "Metadata-Flavor": "Google"
-                }
-            };
-            request(options, (error, response, body) => {
-                if (error) {
-                    node.error(error);
-                    return;
-                }
-                msg.payload = JSON.parse(body);
-                node.send(msg);
-            });
+        async function Input(msg) {
+            let metadata = await utils.getMetadata('/?recursive=true');
+            if (metadata == null) {
+                node.error('Unable to get metadata');
+                return;
+            }
+            msg.payload = metadata;
+            node.send(msg);
         } // Input
-
 
         node.on("input", Input);
     } // CEMetaDataNode
 
 
-    RED.nodes.registerType(NODE_TYPE, CEMetaDataNode);
+    RED.nodes.registerType('google-cloud-ce-metadata', CEMetaDataNode);
 };
