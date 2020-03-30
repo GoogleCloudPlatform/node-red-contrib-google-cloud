@@ -116,4 +116,4 @@ module.exports = {
     getZone: getZone,
     getRegion: getRegion,
     getMetadata: getMetadata
-}
+};
