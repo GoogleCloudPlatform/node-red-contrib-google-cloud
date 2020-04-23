@@ -124,38 +124,38 @@ RED.nodes.registerType("google-cloud-translate", {
     align: "left",
     color: "#3FADB5",
     label: function () {
-      return (
-        this.name ||
-        `translate ${this.sourceLanguageCode || "[detect-language]"} to ${
-          this.targetLanguageCodeType === "str"
-            ? ""
-            : this.targetLanguageCodeType + "."
-        }${this.targetLanguageCode}`
-      );
+        return (
+            this.name ||
+            `translate ${this.sourceLanguageCode || "[detect-language]"} to ${
+            this.targetLanguageCodeType === "str"
+                ? ""
+                : this.targetLanguageCodeType + "."
+            }${this.targetLanguageCode}`
+        );
     },
     paletteLabel: "translate",
     oneditprepare: function () {
-      $("#node-input-sourceLanguageCodeType").val(this.sourceLanguageCodeType);
-      $("#node-input-sourceLanguageCode").typedInput({
-        default: this.sourceLanguageCodeType || "str",
-        typeField: $("#node-input-sourceLanguageCodeType"),
-        types: ["msg", "flow", "global", "str"],
-      });
-      $("#node-input-sourceLanguageCode").typedInput(
-        "type",
-        this.sourceLanguageCodeType
-      );
+        $("#node-input-sourceLanguageCodeType").val(this.sourceLanguageCodeType);
+        $("#node-input-sourceLanguageCode").typedInput({
+            default: this.sourceLanguageCodeType || "str",
+            typeField: $("#node-input-sourceLanguageCodeType"),
+            types: ["msg", "flow", "global", "str"],
+        });
+        $("#node-input-sourceLanguageCode").typedInput(
+            "type",
+            this.sourceLanguageCodeType
+        );
 
-      $("#node-input-targetLanguageCodeType").val(this.targetLanguageCodeType);
-      $("#node-input-targetLanguageCode").typedInput({
-        default: this.targetLanguageCodeType || "str",
-        typeField: $("#node-input-targetLanguageCodeType"),
-        types: ["msg", "flow", "global", "str"],
-      });
-      $("#node-input-targetLanguageCode").typedInput(
-        "type",
-        this.targetLanguageCodeType
-      );
+        $("#node-input-targetLanguageCodeType").val(this.targetLanguageCodeType);
+        $("#node-input-targetLanguageCode").typedInput({
+            default: this.targetLanguageCodeType || "str",
+            typeField: $("#node-input-targetLanguageCodeType"),
+            types: ["msg", "flow", "global", "str"],
+        });
+        $("#node-input-targetLanguageCode").typedInput(
+            "type",
+            this.targetLanguageCodeType
+        );
     },
 });
 </script>
