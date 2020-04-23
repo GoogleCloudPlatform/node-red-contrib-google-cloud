@@ -65,7 +65,7 @@ module.exports = function (RED) {
                     "displayLanguageCode": displayLanguageCode,
                     "parent": translationServiceClient.locationPath(projectId, "global")
                 };
-                supportedLanguages = await translationServiceClient.getSupportedLanguages(request)[0].languages;
+                supportedLanguages = (await translationServiceClient.getSupportedLanguages(request)[0]).languages;
                 context.global.set("google-cloud-translate-languages", supportedLanguages);
             }
 
