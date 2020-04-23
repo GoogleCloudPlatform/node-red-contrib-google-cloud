@@ -26,56 +26,56 @@ limitations under the License.
 </style>
 
 <script type="text/x-red" data-template-name="google-cloud-translate">
-  <div class="form-row">
-      <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
-      <input type="text" id="node-input-account">
-  </div>
-  <div class="form-row">
-      <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
-      <input type="text" id="node-input-keyFilename">
-  </div>
-  <div class="form-row">
-      <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
-      <input type="text" id="node-input-projectId">
-  </div>
-  <div class="form-row">
-      <label for="node-input-sourceLanguageCode"><i class="fa fa-cloud"></i> Source Language</label>
-      <input type="text" id="node-input-sourceLanguageCode">
-      <input type="hidden" id="node-input-sourceLanguageCodeType">
-  </div>
-  <div class="form-row">
-    <label>&nbsp;</label>
-    <span>(<a href="https://cloud.google.com/translate/docs/languages" target="_blank">view Supported Language Codes</a> or leave blank for automatic detection)</span>
-  </div>
-  <div class="form-row">
-      <label for="node-input-targetLanguageCode"><i class="fa fa-cloud"></i> Target Language</label>
-      <input type="text" id="node-input-targetLanguageCode">
-      <input type="hidden" id="node-input-targetLanguageCodeType">
-  </div>
-  <div class="form-row">
-    <label>&nbsp;</label>
-    <span>(<a href="https://cloud.google.com/translate/docs/languages" target="_blank" style="color: #3289a8; hover">view Supported Language Codes</a>)</span>
-  </div>
-  <div class="form-row">
-    <label for="node-input-outputFormat"><i class="fa fa-envelope"></i> Output Format</label>
-    <select id="node-input-outputFormat">
-        <option value="full">Full (advanced)</option>
-        <option value="str">Translation only</option>
-    </select>
-  </div>
-  <div class="form-row">
-    <label>&nbsp;</label>
-    <label style="width:70%">
-      <ul>
-        <li><strong>Full:</strong> Set <code>msg.payload</code> to the <a href="https://googleapis.dev/nodejs/translate/latest/google.cloud.translation.v3beta1.TranslateTextResponse.html">full response value</a> returned by Google Translate</li>
-        <li><strong>Translation only:</strong> Set <code>msg.payload</code> to the translated value</li>
-      </ul>
-    </label>
-  </div>
-  <div class="form-row">
-      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-      <input type="text" id="node-input-name">
-  </div>
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">
+    </div>
+    <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+    <div class="form-row">
+        <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
+        <input type="text" id="node-input-projectId">
+    </div>
+    <div class="form-row">
+        <label for="node-input-sourceLanguageCode"><i class="fa fa-cloud"></i> Source Language</label>
+        <input type="text" id="node-input-sourceLanguageCode">
+        <input type="hidden" id="node-input-sourceLanguageCodeType">
+    </div>
+    <div class="form-row">
+        <label>&nbsp;</label>
+        <span>(<a href="https://cloud.google.com/translate/docs/languages" target="_blank">view Supported Language Codes</a> or leave blank for automatic detection)</span>
+    </div>
+    <div class="form-row">
+        <label for="node-input-targetLanguageCode"><i class="fa fa-cloud"></i> Target Language</label>
+        <input type="text" id="node-input-targetLanguageCode">
+        <input type="hidden" id="node-input-targetLanguageCodeType">
+    </div>
+    <div class="form-row">
+        <label>&nbsp;</label>
+        <span>(<a href="https://cloud.google.com/translate/docs/languages" target="_blank" style="color: #3289a8; hover">view Supported Language Codes</a>)</span>
+    </div>
+    <div class="form-row">
+        <label for="node-input-outputFormat"><i class="fa fa-envelope"></i> Output Format</label>
+        <select id="node-input-outputFormat">
+            <option value="full">Full (advanced)</option>
+            <option value="str">Translation only</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label>&nbsp;</label>
+        <label style="width:70%">
+        <ul>
+            <li><strong>Full:</strong> Set <code>msg.payload</code> to the <a href="https://googleapis.dev/nodejs/translate/latest/google.cloud.translation.v3beta1.TranslateTextResponse.html">full response value</a> returned by Google Translate</li>
+            <li><strong>Translation only:</strong> Set <code>msg.payload</code> to the translated value</li>
+        </ul>
+        </label>
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="google-cloud-translate">
