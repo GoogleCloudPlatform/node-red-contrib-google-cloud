@@ -79,21 +79,21 @@ limitations under the License.
 </script>
 
 <script type="text/x-red" data-help-name="google-cloud-translate">
-  <p>Translate from one language to another.</p>
-  <h3>Inputs</h3>
-  <dl class="message-properties">
-      <dt>msg.payload
-          <span class="property-type">string</span>
-      </dt>
-      <dd>The payload to be translated.</dd>
-  </dl>
-  <h3>Details</h3>
-  <p>
-  The translation API must be enabled for your GCP project before use.  The node expects a text string be supplied as input in <code>msg.payload</code>.
-  The language of the text is specified in the source language configuration parameter and the target language specified in the target
-  language configuration parameter.  After the node has executed, the output will be placed in msg.payload and will be an instance of
-  the object described <a href="https://googleapis.dev/nodejs/translate/latest/google.cloud.translation.v3beta1.html#.TranslateTextResponse">here</a>.
-  </p>
+    <p>Translate from one language to another.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The payload to be translated.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>
+    The translation API must be enabled for your GCP project before use.  The node expects a text string be supplied as input in <code>msg.payload</code>.
+    The language of the text is specified in the source language configuration parameter and the target language specified in the target
+    language configuration parameter.  After the node has executed, the output will be placed in msg.payload and will be an instance of
+    the object described <a href="https://googleapis.dev/nodejs/translate/latest/google.cloud.translation.v3beta1.html#.TranslateTextResponse">here</a>.
+    </p>
 </script>
 
 <script type="text/javascript">
