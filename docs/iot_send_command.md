@@ -1,6 +1,6 @@
 # IoT Send Command
 
-![IoT Send Command](images/iot-send-command.png)
+![IoT Send Command](images/iot_command_send.png)
 
 The GCP IoT Core allows one to send a command to a connected IoT device.  The IoT - Send Command node encapsulates this function.  In order to send a command to an IoT device, we need to identify that device.  The properties to identify it are the combination of:
 

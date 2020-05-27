@@ -16,7 +16,9 @@
         "@google-cloud/tasks": "latest",
         "@google-cloud/translate": "latest",
         "@google-cloud/vision": "latest",
-        "axios": "latest"
+        "axios": "latest",
+        "jsonwebtoken": "^8.5.1",
+        "mqtt": "^4.0.1"
     },
     "keywords": [
         "node-red",
@@ -33,11 +35,13 @@
         "dlp",
         "translate",
         "BigQuery",
-        "Firestore"
+        "Firestore",
+        "iot"
     ],
     "node-red": {
         "nodes": {
             "google-cloud-credentials": "credentials.js",
+            "google-cloud-private-key": "private-key.js",
             "google-cloud-pubsub in": "pubsub-in.js",
             "google-cloud-pubsub out": "pubsub-out.js",
             "google-cloud-log": "stackdriver-log.js",
@@ -54,7 +58,8 @@
             "google-cloud-bigquery": "bigquery.js",
             "google-cloud-firestore": "firestore.js",
             "google-cloud-iot send-command": "iot-command-send.js",
-            "google-cloud-iot config-update": "iot-config-update.js"
+            "google-cloud-iot config-update": "iot-config-update.js",
+            "google-cloud-iot telemetry-send": "iot-telemetry-send.js"
         }
     },
     "scripts": {
