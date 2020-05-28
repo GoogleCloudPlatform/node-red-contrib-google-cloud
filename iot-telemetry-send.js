@@ -82,7 +82,7 @@ module.exports = function(RED) {
         const transport = config.transport;  // Will be either MQTT or HTTP
 
         node.debug(`transport: ${transport}`);
-        node.debug(`privateKey: ${privateKey}`);
+        //node.debug(`privateKey: ${privateKey}`);
 
 
         // Disconnect from MQTT.
@@ -153,11 +153,11 @@ module.exports = function(RED) {
         async function OnInput(msg) {
             // We have been called to send a telemetry message to GCP IoT. 
             if (transport === "MQTT") {
-                node.log(`Sending a telemetry message from device over MQTT`);
+                node.debug(`Sending a telemetry message from device over MQTT`);
                 transmitMQTT(RED.util.ensureBuffer(msg.payload));  // The body of the data is in msg.payload
             }
             else if (transport === "HTTP") {
-                node.log(`Sending a telemetry message from device over HTTP`);
+                node.debug(`Sending a telemetry message from device over HTTP`);
                 await transmitHTTP(RED.util.ensureBuffer(msg.payload));  // The body of the data is in msg.payload
             }
             node.send(msg);
