@@ -56,6 +56,7 @@
             "google-cloud-dlp": "dlp.js",
             "google-cloud-translate": "translate.js",
             "google-cloud-bigquery": "bigquery.js",
+            "google-cloud-bigquery-insert": "bigquery-insert.js",
             "google-cloud-firestore": "firestore.js",
             "google-cloud-iot send-command": "iot-command-send.js",
             "google-cloud-iot config-update": "iot-config-update.js",
