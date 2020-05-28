@@ -14,10 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<style>
+  .red-ui-editor a {
+    text-decoration: none;
+    color: cornflowerblue;
+  }
+
+  .red-ui-editor a:hover {
+    text-decoration: underline;
+  }
+</style>
+
 <script type="text/x-red" data-template-name="google-cloud-translate">
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
-        <input type="text" id="node-input-account">        
+        <input type="text" id="node-input-account">
     </div>
     <div class="form-row">
         <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
@@ -30,10 +41,36 @@ limitations under the License.
     <div class="form-row">
         <label for="node-input-sourceLanguageCode"><i class="fa fa-cloud"></i> Source Language</label>
         <input type="text" id="node-input-sourceLanguageCode">
+        <input type="hidden" id="node-input-sourceLanguageCodeType">
+    </div>
+    <div class="form-row">
+        <label>&nbsp;</label>
+        <span>(<a href="https://cloud.google.com/translate/docs/languages" target="_blank">view Supported Language Codes</a> or leave blank for automatic detection)</span>
     </div>
     <div class="form-row">
         <label for="node-input-targetLanguageCode"><i class="fa fa-cloud"></i> Target Language</label>
         <input type="text" id="node-input-targetLanguageCode">
+        <input type="hidden" id="node-input-targetLanguageCodeType">
+    </div>
+    <div class="form-row">
+        <label>&nbsp;</label>
+        <span>(<a href="https://cloud.google.com/translate/docs/languages" target="_blank">view Supported Language Codes</a>)</span>
+    </div>
+    <div class="form-row">
+        <label for="node-input-outputFormat"><i class="fa fa-envelope"></i> Output Format</label>
+        <select id="node-input-outputFormat">
+            <option value="full">Full (advanced)</option>
+            <option value="str">Translation only</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label>&nbsp;</label>
+        <label style="width:70%">
+        <ul>
+            <li><strong>Full:</strong> Set <code>msg.payload</code> to the <a href="https://googleapis.dev/nodejs/translate/latest/google.cloud.translation.v3beta1.TranslateTextResponse.html">full response value</a> returned by Google Translate</li>
+            <li><strong>Translation only:</strong> Set <code>msg.payload</code> to the translated value</li>
+        </ul>
+        </label>
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -66,9 +103,20 @@ RED.nodes.registerType("google-cloud-translate", {
         account: { type: "google-cloud-credentials", required: false },
         keyFilename: { value: "", required: false },
         projectId: { value: "", required: true },
-        sourceLanguageCode: { value: "en", required: true },
-        targetLanguageCode: { value: "es", required: true },
-        name: { value: "", required: false }
+        sourceLanguageCode: {
+            value: "en",
+            required: false,
+            validate: RED.validators.typedInput("sourceLanguageCodeType"),
+        },
+        sourceLanguageCodeType: { value: "str" },
+        targetLanguageCode: {
+            value: "es",
+            required: true,
+            validate: RED.validators.typedInput("targetLanguageCodeType"),
+        },
+        targetLanguageCodeType: { value: "str" },
+        outputFormat: { value: "full" },
+        name: { value: "", required: false },
     },
     inputs: 1,
     outputs: 1,
@@ -76,8 +124,38 @@ RED.nodes.registerType("google-cloud-translate", {
     align: "left",
     color: "#3FADB5",
     label: function () {
-        return this.name || "translate";
+        return (
+            this.name ||
+            `translate ${this.sourceLanguageCode || "[detect-language]"} to ${
+            this.targetLanguageCodeType === "str"
+                ? ""
+                : this.targetLanguageCodeType + "."
+            }${this.targetLanguageCode}`
+        );
     },
-    paletteLabel: "translate"
+    paletteLabel: "translate",
+    oneditprepare: function () {
+        $("#node-input-sourceLanguageCodeType").val(this.sourceLanguageCodeType);
+        $("#node-input-sourceLanguageCode").typedInput({
+            default: this.sourceLanguageCodeType || "str",
+            typeField: $("#node-input-sourceLanguageCodeType"),
+            types: ["msg", "flow", "global", "str"],
+        });
+        $("#node-input-sourceLanguageCode").typedInput(
+            "type",
+            this.sourceLanguageCodeType
+        );
+
+        $("#node-input-targetLanguageCodeType").val(this.targetLanguageCodeType);
+        $("#node-input-targetLanguageCode").typedInput({
+            default: this.targetLanguageCodeType || "str",
+            typeField: $("#node-input-targetLanguageCodeType"),
+            types: ["msg", "flow", "global", "str"],
+        });
+        $("#node-input-targetLanguageCode").typedInput(
+            "type",
+            this.targetLanguageCodeType
+        );
+    },
 });
 </script>
