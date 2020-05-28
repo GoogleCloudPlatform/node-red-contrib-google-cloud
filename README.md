@@ -97,6 +97,10 @@ The set of Node-RED nodes are found in the GCP section of the palette.  The curr
 * [Data loss prevention](docs/dlp.md) - Mask out identifiable information.
 * [Translation](docs/translate.md) - Translate text from one language to another.
 * [BigQuery](docs/bigquery.md) - Execute a BigQuery query.
+* [BigQuery Insert](docs/bigquery-insert.md) - Execute a BigQuery insert.
+* [IoT Command Send](docs/iot_send_command.md) - Send an IoT command to a device.
+* [IoT Config Update](docs/iot_update_config.md) - Update the config of an IoT device.
+* [IoT Telemetry Send](docs/iot_telemetry_send.md) - Send a telemetry message from a device.
 
 We are very open to receiving feedback on additional GCP nodes that may be of value.  Don't hesitate to open an issue should you have a desire
 for incorporating additional GCP functions.

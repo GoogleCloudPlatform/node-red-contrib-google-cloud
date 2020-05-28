@@ -1,0 +1,120 @@
+<!--
+Copyright 2020 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="google-cloud-iot telemetry-send">
+    <div class="form-row">
+        <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project ID</label>
+        <input type="text" id="node-input-projectId">
+    </div>
+    <div class="form-row">
+        <label for="node-input-region"><i class="fa fa-globe"></i> Region</label>
+        <input type="text" id="node-input-region">
+    </div>
+    <div class="form-row">
+        <label for="node-input-registryId"><i class="fa fa-book"></i> Registry ID</label>
+        <input type="text" id="node-input-registryId">
+    </div>
+    <div class="form-row">
+        <label for="node-input-deviceId"><i class="fa fa-microchip"></i> Device ID</label>
+        <input type="text" id="node-input-deviceId">
+    </div> 
+    <div class="form-row">
+        <label for="node-input-privateKey"><i class="fa fa-key"></i> Private Key</label>
+        <input type="text" id="node-input-privateKey">
+    </div>
+    <div class="form-row">
+        <label for="node-input-transport"><i class="fa fa-gear"></i> Transport</label>
+        <select type="text" id="node-input-transport">
+            <option value="MQTT">MQTT</option>
+            <option value="HTTP">HTTP</option>
+        </select>
+    </div>
+    
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="google-cloud-iot telemetry-send">
+    <p>Send a telemetry message to the cloud.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.gcp.projectId
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The project id hosting the registry of devices.</dd>
+
+        <dt>msg.gcp.region
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The region in which the registry is defined..</dd>
+        
+        <dt>msg.gcp.registryId
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The identity of the registry.</dd>
+
+        <dt>msg.gcp.deviceId
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The identity of the device.</dd>
+    </dl>
+
+    <h3>Details</h3>
+    
+    <p>
+        The GCP IoT Core allows one to send messages from the device to the Cloud.  The transmission can occur over either TCP/IP or MQTT.
+
+        In order to send telemetry to the cloud, we need to identify that device. The properties to identify it are the combination of:
+        
+        <ul>
+            <li><code>project id</code> - The project hosting the registry.</li>
+            <li><code>region</code> - The region in which the registry is defined.</li>
+            <li><code>registry id</code> - The identity of the registry.</li>
+            <li><code>device id</code> - The identity of the device.</li>
+        </ul>
+    </p>
+    <p>
+        The device must also authenticate itself and needs to be supplied a private key corresponding to the public key associated with the device in the registry.
+
+        The <code>msg.payload</code> field is the content that is sent as telemetry.
+    </p>
+</script>
+
+<script type="text/javascript">
+RED.nodes.registerType("google-cloud-iot telemetry-send", {
+    "category": "GCP",
+    "defaults": {
+        "projectId": { "required": true },
+        "region": { "required": true },
+        "registryId": { "required": true },
+        "deviceId": { "required": true },
+        "name": { "value": "", "required": false },
+        "privateKey": { "type": "google-cloud-private-key", "required": true },
+        "transport": { "value": "MQTT", "required": false }
+    },
+    "inputs": 1,
+    "outputs": 1,
+    "icon": "iot.png",
+    "align": "left",
+    "color": "#3FADB5",
+    "label": function () {
+        return this.name || this.topic || "iot telemetry-send";
+    },
+    "paletteLabel": "iot telemetry send"
+});
+</script>

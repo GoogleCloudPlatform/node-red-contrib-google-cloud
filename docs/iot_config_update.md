@@ -1,6 +1,6 @@
 # IoT Config Update
 
-![IoT Config Update](images/iot-send-command.png)
+![IoT Config Update](images/iot_config_update.png)
 
 The GCP IoT Core allows one to update the configuration of a connected IoT device.  The IoT - Config Update node encapsulates this function.  In order to send an to an IoT device, we need to identify that device.  The properties to identify it are the combination of:
 
