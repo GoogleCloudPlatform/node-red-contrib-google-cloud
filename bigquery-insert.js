@@ -24,6 +24,7 @@ module.exports = function(RED) {
     "use strict";
     const NODE_TYPE = "google-cloud-bigquery-insert";
     const {BigQuery} = require('@google-cloud/bigquery');
+    const util = require("util");
 
 
 
@@ -61,12 +62,22 @@ module.exports = function(RED) {
                 node.send(msg);
             }
             catch(ex) {
+                // Error messages are encoded in an object that needs expanded
+                let res = ex;
+                if (ex.response && ex.response.kind && ex.response.kind === "bigquery#tableDataInsertAllResponse") {
+                    res = ex.name + ": ";
+                    ex.response.insertErrors.forEach((element) => {
+                        element.errors.forEach((element2) => {
+                            res += `message: ${element2.message}, location: ${element2.location} `;
+                        });
+                    });
+                }
                 if (done) {
-                    done(ex);
+                    done(res);
                 }
                 else
                 {
-                    node.err(ex, msg);
+                    node.err(res, msg);
                 }
             }
         } // Input
