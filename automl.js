@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Google Inc.
+ * Copyright 2020 Google Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * The node type is "gcp-language-sentiment".
- *
- * msg.payload  = The document to be examined.
- * 
- * The configuration parameters are:
- * 
- * * languageCode - The language code to be used.
- *
  */
 /* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
 
-    const NODE_TYPE = "google-cloud-language-sentiment";
-    const language  = require("@google-cloud/language");
+    const NODE_TYPE = "google-cloud-automl";
+    const automl  = require("@google-cloud/automl");
 
     /**
      * Called when a new instance of the node is created.
      * @param {*} config 
      */
-    function SentimentNode(config) {
+    function AutoMLNode(config) {
         // The config contains the properties defined in the default object in the HTML or modified through configuration in the editor.
         //
 
@@ -46,9 +38,11 @@ module.exports = function(RED) {
             credentials = GetCredentials(config.account);
         }
         const keyFilename = config.keyFilename;
-        const languageCode = config.languageCode || "en";
+        const projectId   = config.projectId;
+        const location    = config.location;
+        const modelId     = config.modelId;
 
-        let languageServiceClient; // https://googleapis.dev/nodejs/language/latest/v1.LanguageServiceClient.html
+        let predictionServiceClient; // https://googleapis.dev/nodejs/automl/latest/v1.PredictionServiceClient.html
 
 
         /**
@@ -67,28 +61,19 @@ module.exports = function(RED) {
          */
         async function Input(msg, send, done) {
             try {
-                if (!msg.payload) {
-                    node.error("No data found in msg.payload");
+                if (!msg.payload.payload) {
+                    node.error("No data found in msg.payload.payload");
                     return;
                 }
+                node.debug(`ModelID: ${modelFullId}`);
+                const [response] = await predictionServiceClient.predict({
+                    "name":    modelFullId,
+                    "payload": msg.payload.payload,
+                    "params":  msg.payload.params
+                });
 
-                const document = {
-                    "type":     'PLAIN_TEXT',
-                    "language": languageCode            // https://cloud.google.com/natural-language/docs/languages#sentiment_analysis
-                };
+                msg.payload = response;
 
-                if (msg.payload instanceof Buffer) {
-                    document.content = msg.payload.toString();
-                } else if (msg.payload instanceof String || typeof msg.payload === 'string') {
-                    document.content = msg.payload;
-                } else {
-                    node.error("msg.payload neither String nor Buffer");
-                    return;
-                }
-
-                const [analyzeSentimentResponse] = await languageServiceClient.analyzeSentiment({"document": document});  // Process the document for sentiment.
-                msg.sentiment = analyzeSentimentResponse.documentSentiment; // Data: https://googleapis.dev/nodejs/language/latest/google.cloud.language.v1.html#.Sentiment
-                // The sentiment field contains magnitude and score.
                 node.send(msg);
             } catch(ex) {
                 if (done) {
@@ -112,21 +97,23 @@ module.exports = function(RED) {
         // We must have EITHER credentials or a keyFilename.  If neither are supplied, that
         // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
-            languageServiceClient = new language.LanguageServiceClient({
+            predictionServiceClient = new automl.PredictionServiceClient({
                 "credentials": credentials
             });
         } else if (keyFilename) {
-            languageServiceClient = new language.LanguageServiceClient({
+            predictionServiceClient = new automl.PredictionServiceClient({
                 "keyFilename": keyFilename
             });
         } else {
-            languageServiceClient = new language.LanguageServiceClient({});
+            predictionServiceClient = new automl.PredictionServiceClient({});
         }
+
+        const modelFullId = predictionServiceClient.modelPath(projectId, location, modelId);
 
         node.on("input", Input);
         node.on("close", Close);
-    } // SentimentNode
+    } // AutoMLNode
 
-    RED.nodes.registerType(NODE_TYPE, SentimentNode); // Register the node.
+    RED.nodes.registerType(NODE_TYPE, AutoMLNode); // Register the node.
 
 }; // End of export.
