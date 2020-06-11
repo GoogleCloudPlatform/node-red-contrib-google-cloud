@@ -37,7 +37,10 @@ module.exports = function(RED) {
         if (config.account) {
             credentials = GetCredentials(config.account);
         }
-
+        let projectId = config.projectId;
+        if (!projectId || projectId.trim().length == 0) {
+            projectId = null;
+        }
         const keyFilename = config.keyFilename;
         let logName = config.logName; // Get the logname from the configuration
         let logging; // This is the object that is the hook to GCP stackdriver logging.
@@ -74,7 +77,8 @@ module.exports = function(RED) {
             const metadata = {
                 resource: {
                     type: "global"
-                }
+                },
+                severity: (msg.severity) ? msg.severity : 'DEFAULT'
             };
               
             const entry = log.entry(metadata, msg.payload); // Create the log entry to write.
@@ -93,14 +97,18 @@ module.exports = function(RED) {
         // is an error.  If both are supplied, then credentials will be used.
         if (credentials) {
             logging = new Logging({
+                "projectId": projectId,
                 "credentials": credentials
             });
         } else if (keyFilename) {
             logging = new Logging({
+                "projectId": projectId,
                 "keyFilename": keyFilename
             });
         } else {
-            logging = new Logging({});
+            logging = new Logging({
+                "projectId": projectId,
+            });
         }
 
         if (!logName) {
