@@ -24,6 +24,10 @@ limitations under the License.
         <input type="text" id="node-input-keyFilename">
     </div>
     <div class="form-row">
+        <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
+        <input type="text" id="node-input-projectId">
+    </div>
+    <div class="form-row">
         <label for="node-input-logName"><i class="fa fa-user"></i> Log Name</label>
         <input type="text" id="node-input-logName">
     </div>
@@ -46,7 +50,13 @@ limitations under the License.
             <span class="property-type">string</span>
         </dt>
         <dd>[Optional] The log name to which this message will be written.  If not
-            supplied, the configured log name will be used.</dd>        
+            supplied, the configured log name will be used.</dd>    
+        <dt>msg.severity
+            <span class="property-type">string</span>
+        </dt>
+        <dd>[Optional] Used to set the severity level of the log. Acceptable values are 
+            DEFAULT, DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT, or EMERGENCY. If not supplied,
+            DEFAULT will be used.</p></dd>    
     </dl>
 
     <h3>Details</h3>
@@ -62,6 +72,7 @@ RED.nodes.registerType("google-cloud-log", {
     defaults: {
         account: { type: "google-cloud-credentials", required: false },
         keyFilename: {value: "", required: false },
+        projectId: { value: "", required: false},
         logName: { value: "", required: true },  
         name: { value: "", required: false }           
     },
