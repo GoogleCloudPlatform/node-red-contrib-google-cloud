@@ -41,6 +41,7 @@ module.exports = function(RED) {
         let region     = null;
         let registryId = null;
         let deviceId   = null;
+		let subfolder  = null;
         let privateKey = null;
 
         let jwtRefreshTimeout = null;
@@ -50,13 +51,13 @@ module.exports = function(RED) {
             shape: "dot",
             text:  "connected"
         };
-    
+
         const STATUS_DISCONNECTED = {
             fill:  "red",
             shape: "dot",
             text:  "disconnected"
         };
-    
+
         /*
         const STATUS_CONNECTING = {
             fill:  "yellow",
@@ -76,6 +77,7 @@ module.exports = function(RED) {
         region     = config.region;
         registryId = config.registryId;
         deviceId   = config.deviceId;
+		subfolder  = config.subfolder;
         //debugger;
         //let xxx = RED.nodes.getNode(config.privateKey);
         privateKey = RED.nodes.getNode(config.privateKey).credentials.privateKey;
@@ -110,7 +112,14 @@ module.exports = function(RED) {
                 return;
             }
             // https://github.com/mqttjs/MQTT.js#publish
-            mqttClient.publish(`/devices/${deviceId}/events`, payload, { "qos": 1 }, (err) => {
+
+			let finalUrl = `/devices/${deviceId}/events`;
+			if(subfolder){
+				finalUrl = finalUrl+`/${subfolder}`;
+			}
+
+            //mqttClient.publish(`/devices/${deviceId}/events`, payload, { "qos": 1 }, (err) => {
+				mqttClient.publish(finalUrl, payload, { "qos": 1 }, (err) => {
                 if (err) {
                     node.debug(`Publish error: ${err}`);
                 }
