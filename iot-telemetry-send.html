@@ -31,6 +31,10 @@ limitations under the License.
         <label for="node-input-deviceId"><i class="fa fa-microchip"></i> Device ID</label>
         <input type="text" id="node-input-deviceId">
     </div> 
+	<div class="form-row">
+        <label for="node-input-subfolder"><i class="fa fa-folder"></i> SubFolder</label>
+        <input type="text" id="node-input-subfolder">
+    </div>
     <div class="form-row">
         <label for="node-input-privateKey"><i class="fa fa-key"></i> Private Key</label>
         <input type="text" id="node-input-privateKey">
@@ -42,7 +46,7 @@ limitations under the License.
             <option value="HTTP">HTTP</option>
         </select>
     </div>
-    
+
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name">
@@ -62,7 +66,7 @@ limitations under the License.
             <span class="property-type">string</span>
         </dt>
         <dd>The region in which the registry is defined..</dd>
-        
+
         <dt>msg.gcp.registryId
             <span class="property-type">string</span>
         </dt>
@@ -72,15 +76,20 @@ limitations under the License.
             <span class="property-type">string</span>
         </dt>
         <dd>The identity of the device.</dd>
+
+		<dt>msg.gcp.subFolder
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The topic sub folder.</dd>
     </dl>
 
     <h3>Details</h3>
-    
+
     <p>
         The GCP IoT Core allows one to send messages from the device to the Cloud.  The transmission can occur over either TCP/IP or MQTT.
 
         In order to send telemetry to the cloud, we need to identify that device. The properties to identify it are the combination of:
-        
+
         <ul>
             <li><code>project id</code> - The project hosting the registry.</li>
             <li><code>region</code> - The region in which the registry is defined.</li>
@@ -103,6 +112,7 @@ RED.nodes.registerType("google-cloud-iot telemetry-send", {
         "region": { "required": true },
         "registryId": { "required": true },
         "deviceId": { "required": true },
+		"subfolder": { "required": false },
         "name": { "value": "", "required": false },
         "privateKey": { "type": "google-cloud-private-key", "required": true },
         "transport": { "value": "MQTT", "required": false }
