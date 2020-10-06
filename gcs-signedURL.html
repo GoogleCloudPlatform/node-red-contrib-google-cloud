@@ -1,0 +1,100 @@
+<!--
+Copyright 2019 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="google-cloud-gcs-signedURL">
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">        
+    </div>
+    <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>  
+    <div class="form-row">
+        <label for="node-input-filename"><i class="fa fa-file"></i> File Name</label>
+        <input type="text" id="node-input-filename">
+    </div>  
+    <div class="form-row">
+        <label for="node-input-action"><i class="fa fa-gear"></i> Action</label>
+        <select id="node-input-action" type="text">
+            <option value = "read">Read</option>
+            <option value = "write">Write</option>
+        </select>
+    </div> 
+    <div class="form-row">
+        <label for="node-input-expiration"><i class="fa fa-file"></i> Expiration</label>
+        <input type="number" id="node-input-expiration">
+    </div>   
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="google-cloud-gcs-signedURL">
+    <p>Read data from Google Cloud Storage.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.filename
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The name of the file in URL form.</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The payload read from the Google Cloud Storage object</dd>
+        <dt>msg.contenttype
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The MIME content type of the object.</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>This node generates the signed URL of a Google Cloud Store (GCS) object with action (READ/WRITE) and expiration time in mins .It returns the URL in the <code>msg.payload</code> field.
+
+        At runtime, the value of msg.filename contains describes the file to read.  The format of this field is a GCS Url of the form <code>gs://[BUCKET]/[FILE]`</code> 
+        Alternatively, we can specify the file to be read in the file name configuration property.  If both this property and a runtime value found in <code>msg.filename</code> are present, then the `msg.filename` name will be used.
+    </p>
+    The metadata associated with the file is returned in <code>msg.metadata</code>.
+    </p>
+</script>
+
+<script type="text/javascript">
+
+RED.nodes.registerType("google-cloud-gcs-signedURL", {
+    category: "GCP",
+    defaults: {
+        account: { type: "google-cloud-credentials", required: false },
+        keyFilename: {value: "", required: false },
+        filename: { required: false },
+        action: { value: "read", required: true},
+        name: { value: "", required: false },
+        expiration:{value:15,required: true}
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "gcs.png",
+    align: "left",
+    color: "#3FADB5",
+    label: function () {
+        return this.name || "gcs-signedURL";
+    },
+    paletteLabel: "gcs-signedURL"
+});
+</script>
