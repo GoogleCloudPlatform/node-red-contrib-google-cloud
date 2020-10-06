@@ -85,7 +85,7 @@ RED.nodes.registerType("google-cloud-gcs-signedURL", {
         filename: { required: false },
         action: { value: "read", required: true},
         name: { value: "", required: false },
-        expiration:{value:15,required:false}
+        expiration:{value:15,required: true}
     },
     inputs: 1,
     outputs: 1,
