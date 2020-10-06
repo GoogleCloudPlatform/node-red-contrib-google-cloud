@@ -44,7 +44,7 @@ limitations under the License.
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="google-cloud-gcs-read">
+<script type="text/x-red" data-help-name="google-cloud-gcs-signedURL">
     <p>Read data from Google Cloud Storage.</p>
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -66,12 +66,10 @@ limitations under the License.
     </dl>
 
     <h3>Details</h3>
-    <p>This node can either read the contents of a file or list the files in a bucket.
-        If reading the contents of a file, <code>msg.filename</code> is the identity of the file to be read
-        from GCS.  If listing the contents of a bucket, <code>msg.filename</code> is the identity of the 
-        bucket to be listed.  The format of the file name is a URL string of the form
-        <code>gs://[BUCKET]/[FILENAME]</code>.  Alternatively, we can specify the file to be read in the file name configuration property.
-        If both this property and a runtime value found in <code>msg.filename</code> are present, then the <code>msg.filename</code> name will be used.
+    <p>This node generates the signed URL of a Google Cloud Store (GCS) object with action (READ/WRITE) and expiration time in mins .It returns the URL in the <code>msg.payload</code> field.
+
+        At runtime, the value of msg.filename contains describes the file to read.  The format of this field is a GCS Url of the form <code>gs://[BUCKET]/[FILE]`</code> 
+        Alternatively, we can specify the file to be read in the file name configuration property.  If both this property and a runtime value found in <code>msg.filename</code> are present, then the `msg.filename` name will be used.
     </p>
     The metadata associated with the file is returned in <code>msg.metadata</code>.
     </p>
@@ -85,7 +83,7 @@ RED.nodes.registerType("google-cloud-gcs-signedURL", {
         account: { type: "google-cloud-credentials", required: false },
         keyFilename: {value: "", required: false },
         filename: { required: false },
-        action: { value: "read", required: false},
+        action: { value: "read", required: true},
         name: { value: "", required: false },
         expiration:{value:15,required:false}
     },

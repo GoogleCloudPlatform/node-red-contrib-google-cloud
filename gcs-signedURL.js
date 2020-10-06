@@ -54,9 +54,9 @@ module.exports = function(RED) {
         const keyFilename = config.keyFilename;
         //const isList = config.list;
         const action = config.action;
-        console.log(action)
+        //console.log(action)
         const expiration = config.expiration;
-        console.log(expiration);
+        //console.log(expiration);
         let options = null;
 
         let fileName_option;
@@ -74,7 +74,7 @@ module.exports = function(RED) {
         } // GetCredentials
 
 
-        async function readFile(msg, gsURL) {
+        async function signedURL(msg, gsURL) {
             // At this point we have a URL of the form gs://[BUCKET]/[FILENAME].  We now want
             // to parse this out and get the bucket and file.
 
@@ -133,35 +133,9 @@ module.exports = function(RED) {
                 node.error(`getSignedURL error: ${err.message}`);
                 return;
             }
-/*
-            
 
-            const readStream = file.createReadStream();
 
-            readStream.on("error", (err) => {
-                node.error(`readStream error: ${err.message}`);
-            });
-
-            readStream.on("end", () => {
-                // TBD: Currently we are returning a Buffer.  We may wish to consider examining
-                // the metadata and see if it of text/* and, if it is, convert the payload
-                // to a string.
-                node.send(msg);   // Send the message onwards to the next node.
-            });
-
-            readStream.on("data", (data) => {
-                if (data == null) {
-                    return;
-                }
-                if (msg.payload == null) {
-                    msg.payload = data;
-                } else {
-                    msg.payload = Buffer.concat([msg.payload, data]);
-                }
-            });
-            */
-
-        } // readFile
+        } // signedURL
 
         
         /**
@@ -190,7 +164,7 @@ module.exports = function(RED) {
                 gsURL = fileName_option;
             }
             
-            readFile(msg, gsURL);
+            signedURL(msg, gsURL);
             
         } // Input
 
