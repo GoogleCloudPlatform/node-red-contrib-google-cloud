@@ -48,6 +48,7 @@
             "google-cloud-log": "stackdriver-log.js",
             "google-cloud-gcs-write": "gcs-write.js",
             "google-cloud-gcs-read": "gcs-read.js",
+            "google-cloud-gcs-signedURL": "gcs-signedURL.js",
             "google-cloud-language-sentiment": "language-sentiment.js",
             "google-cloud-tasks": "tasks.js",
             "google-cloud-vision": "vision.js",
