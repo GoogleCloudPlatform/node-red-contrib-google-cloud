@@ -6,6 +6,7 @@
         "@google-cloud/automl": "^2.0.0",
         "@google-cloud/bigquery": "latest",
         "@google-cloud/dlp": "latest",
+        "@google-cloud/dns": "latest",
         "@google-cloud/firestore": "latest",
         "@google-cloud/iot": "latest",
         "@google-cloud/language": "latest",
@@ -42,6 +43,8 @@
     "node-red": {
         "nodes": {
             "google-cloud-credentials": "credentials.js",
+            "google-cloud-dns-change-create": "dns-change-create.js",
+            "google-cloud-dns-records-list": "dns-records-list.js",
             "google-cloud-private-key": "private-key.js",
             "google-cloud-pubsub in": "pubsub-in.js",
             "google-cloud-pubsub out": "pubsub-out.js",
