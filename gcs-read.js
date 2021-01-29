@@ -98,6 +98,11 @@ module.exports = function(RED) {
 
             const readStream = file.createReadStream();
 
+            // Pre-allocate the download buffer
+            const fileSize = parseInt(msg.metadata.size, 10)
+            msg.payload = Buffer.allocUnsafe(fileSize)
+            let pos = 0
+
             readStream.on("error", (err) => {
                 node.error(`readStream error: ${err.message}`);
             });
@@ -113,11 +118,8 @@ module.exports = function(RED) {
                 if (data == null) {
                     return;
                 }
-                if (msg.payload == null) {
-                    msg.payload = data;
-                } else {
-                    msg.payload = Buffer.concat([msg.payload, data]);
-                }
+                msg.payload.fill(data, pos, pos + data.length)
+                pos += data.length
             });
 
         } // readFile
