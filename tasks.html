@@ -15,34 +15,47 @@ limitations under the License.
 -->
 
 <script type="text/x-red" data-template-name="google-cloud-tasks">
+    <!--Name-->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    <!--Credentials-->
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
         <input type="text" id="node-input-account">        
     </div>
+
+    <!--Key File-->
     <div class="form-row">
         <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
         <input type="text" id="node-input-keyFilename">
     </div>
+
+    <!--Project-->
     <div class="form-row">
          <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
         <input type="text" id="node-input-projectId">
     </div>
+
+    <!--Location-->
     <div class="form-row">
         <label for="node-input-location"><i class="fa fa-map-marker"></i> Location</label>
         <input type="text" id="node-input-location">
     </div>
+
+    <!--Queue-->
     <div class="form-row">
         <label for="node-input-queue"><i class="fa fa-inbox"></i> Queue</label>
         <input type="text" id="node-input-queue">
     </div>
+
+    <!--URL-->
     <div class="form-row">
         <label for="node-input-url"><i class="fa fa-link"></i> URL</label>
         <input type="text" id="node-input-url">
     </div>     
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name">
-    </div>       
 </script>
 
 <script type="text/x-red" data-help-name="google-cloud-tasks">

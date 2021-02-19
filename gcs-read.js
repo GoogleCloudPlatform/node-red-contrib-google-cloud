@@ -52,7 +52,8 @@ module.exports = function(RED) {
             credentials = GetCredentials(config.account);
         }
         const keyFilename = config.keyFilename;
-        const isList = config.list;
+        const isList      = config.list;
+        const toBase64    = config.toBase64;
         let fileName_option;
         if (!config.filename) {
             fileName_option = "";
@@ -111,6 +112,11 @@ module.exports = function(RED) {
                 // TBD: Currently we are returning a Buffer.  We may wish to consider examining
                 // the metadata and see if it of text/* and, if it is, convert the payload
                 // to a string.
+
+                // If we wish to be base64 encoded, do it now.
+                if (toBase64) {
+                    msg.payload = msg.payload.toString('base64');
+                }
                 node.send(msg);   // Send the message onwards to the next node.
             });
 

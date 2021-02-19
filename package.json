@@ -1,12 +1,13 @@
 {
     "name": "node-red-contrib-google-cloud",
-    "version": "0.0.20",
+    "version": "0.0.21",
     "description": "Node-RED nodes for Google Cloud Platform",
     "dependencies": {
-        "@google-cloud/automl": "^2.0.0",
+        "@google-cloud/automl": "latest",
         "@google-cloud/bigquery": "latest",
         "@google-cloud/dlp": "latest",
         "@google-cloud/dns": "latest",
+        "@google-cloud/documentai": "latest",
         "@google-cloud/firestore": "latest",
         "@google-cloud/iot": "latest",
         "@google-cloud/language": "latest",
@@ -66,7 +67,8 @@
             "google-cloud-iot send-command": "iot-command-send.js",
             "google-cloud-iot config-update": "iot-config-update.js",
             "google-cloud-iot telemetry-send": "iot-telemetry-send.js",
-            "google-cloud-automl": "automl.js"
+            "google-cloud-automl": "automl.js",
+            "google-cloud-documentai": "documentai.js"
         }
     },
     "scripts": {

@@ -1,0 +1,124 @@
+<!--
+Copyright 2021 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="google-cloud-documentai">
+    <!--Name-->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    <!--Credentials-->
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">
+    </div>
+
+    <!--Key File-->
+    <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+
+    <!--Project ID-->
+    <div class="form-row">
+        <label for="node-input-projectId"><i class="fa fa-object-group"></i> Project ID</label>
+        <input type="text" id="node-input-projectId">
+    </div>
+
+    <!--Location-->
+    <div class="form-row">
+        <label for="node-input-location"><i class="fa fa-map-signs"></i> Location</label>
+        <select type="text" id="node-input-location">
+          <option value="us">us</option>
+          <option value="eu">eu</option>
+        </select>
+    </div>
+
+    <!--ProcessorId-->
+    <div class="form-row">
+        <label for="node-input-processorId"><i class="fa fa-object-group"></i> Processor ID</label>
+        <input type="text" id="node-input-processorId">
+    </div>
+
+    <!--Mime Type-->
+    <div class="form-row">
+        <label for="node-input-mimeType"><i class="fa fa-gear"></i> Mime Type</label>
+        <select type="text" id="node-input-mimeType">
+          <option value="application/pdf">application/pdf</option>
+          <option value="image/gif">image/gif</option>
+          <option value="image/tiff">image/tiff</option>
+        </select>
+    </div>
+
+    <!--Form Fields-->
+    <div class="form-row">
+        <label for="node-input-extractFormFields"><i class="fa fa-list"></i> Fields</label>
+        <input type="checkbox" id="node-input-extractFormFields" style="width: 20px;vertical-align: top;">  Extract Form Fields
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="google-cloud-documentai">
+    <p>Process a document and parse its content.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">String</span>
+        </dt>
+        <dd>The base64 encoding of the data of the document.</dd>
+    </dl>  
+
+    <h3>Details</h3>
+    <p>The GCP Document AI service allows us to process documents in PDF or image format and extract the content of the document in a structured format.  In this node, we pass in the base 64 encoded content
+        of the document as <code>msg.payload</code> with the type of the document specified in the node's configuration (PDF, TIFF or GIF) or in the <code>msg.mimeType</code> if present.
+        On return, the response is found in <code>msg.payload</code> as a JavaScript object corresponding to the Document object documented <a href="https://cloud.google.com/document-ai/docs/reference/rest/v1beta3/Document">here</a>.
+    </p>
+    <p>Before using the node, a processor instance must be configured within the GCP console.  This will result in a Processor ID being created that will be passed in the configuration.</p>
+    <p>The configuration of the node requires:</p>
+    <ul>        
+        <li><code>Project ID</code> - The project ID for which the processor has been defined.</li>
+        <li><code>Location</code> - The location where the service is to be executed.  One of "us" or "eu".</li>
+        <li><code>Processor ID</code> - The identity of the processor defined in the GCP console.</li>
+        <li><code>Mime Type</code> - The Mime type of the data.</li>
+        <li><code>Extract Form Fields</code> - If true, extract the form fields into <code>msg.payload.formFields</code> which is an array of objects with fields of name and value.</li>
+    </ul>
+</script>
+
+<script type="text/javascript">
+RED.nodes.registerType("google-cloud-documentai", {
+    category: "GCP",
+    defaults: {
+        account: { type: "google-cloud-credentials", required: false },
+        keyFilename: {value: "", required: false },
+        projectId: { value: "", required: true },
+        location: { value: "us", required: true },
+        processorId: { value: "", required: true },
+        name: { value: "", required: false },
+        mimeType: { value: "application/pdf", required: true },
+        extractFormFields: { value: false }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "nl-api.png",
+    align: "left",
+    color: "#3FADB5",
+    label: function () {
+        return this.name || "documentai";
+    },
+    paletteLabel: "documentai"
+});
+</script>

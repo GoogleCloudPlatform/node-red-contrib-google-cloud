@@ -15,41 +15,55 @@ limitations under the License.
 -->
 
 <script type="text/x-red" data-template-name="google-cloud-iot telemetry-send">
+    <!--Name-->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    <!--Project ID-->
     <div class="form-row">
         <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project ID</label>
         <input type="text" id="node-input-projectId">
     </div>
+
+    <!--Region-->
     <div class="form-row">
         <label for="node-input-region"><i class="fa fa-globe"></i> Region</label>
         <input type="text" id="node-input-region">
     </div>
+
+    <!--Registry ID-->
     <div class="form-row">
         <label for="node-input-registryId"><i class="fa fa-book"></i> Registry ID</label>
         <input type="text" id="node-input-registryId">
     </div>
+
+    <!--Device ID-->
     <div class="form-row">
         <label for="node-input-deviceId"><i class="fa fa-microchip"></i> Device ID</label>
         <input type="text" id="node-input-deviceId">
     </div> 
+
+    <!--SubFolder-->
 	<div class="form-row">
         <label for="node-input-subfolder"><i class="fa fa-folder"></i> SubFolder</label>
         <input type="text" id="node-input-subfolder">
     </div>
+
+    <!--Private Key-->
     <div class="form-row">
         <label for="node-input-privateKey"><i class="fa fa-key"></i> Private Key</label>
         <input type="text" id="node-input-privateKey">
     </div>
+
+    <!--Transport-->
     <div class="form-row">
         <label for="node-input-transport"><i class="fa fa-gear"></i> Transport</label>
         <select type="text" id="node-input-transport">
             <option value="MQTT">MQTT</option>
             <option value="HTTP">HTTP</option>
         </select>
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name">
     </div>
 </script>
 
