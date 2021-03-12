@@ -26,23 +26,38 @@ limitations under the License.
 </style>
 
 <script type="text/x-red" data-template-name="google-cloud-translate">
+    <!--Name-->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    <!--Credentials-->
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
         <input type="text" id="node-input-account">
     </div>
+
+    <!--Key File-->
     <div class="form-row">
         <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
         <input type="text" id="node-input-keyFilename">
     </div>
+
+    <!--Project-->
     <div class="form-row">
         <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
         <input type="text" id="node-input-projectId">
     </div>
+
+    <!--Source Language-->
     <div class="form-row">
         <label for="node-input-sourceLanguageCode"><i class="fa fa-cloud"></i> Source Language</label>
         <input type="text" id="node-input-sourceLanguageCode">
         <input type="hidden" id="node-input-sourceLanguageCodeType">
     </div>
+
+    <!--Target Language-->
     <div class="form-row">
         <label>&nbsp;</label>
         <span>(<a href="https://cloud.google.com/translate/docs/languages" target="_blank">view Supported Language Codes</a> or leave blank for automatic detection)</span>
@@ -52,6 +67,8 @@ limitations under the License.
         <input type="text" id="node-input-targetLanguageCode">
         <input type="hidden" id="node-input-targetLanguageCodeType">
     </div>
+
+    <!--Output Format-->
     <div class="form-row">
         <label>&nbsp;</label>
         <span>(<a href="https://cloud.google.com/translate/docs/languages" target="_blank">view Supported Language Codes</a>)</span>
@@ -72,10 +89,7 @@ limitations under the License.
         </ul>
         </label>
     </div>
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name">
-    </div>
+
 </script>
 
 <script type="text/x-red" data-help-name="google-cloud-translate">

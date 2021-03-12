@@ -15,22 +15,37 @@ limitations under the License.
 -->
 
 <script type="text/x-red" data-template-name="google-cloud-speech-to-text">
+    <!--Name-->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    <!--Credentials-->
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
         <input type="text" id="node-input-account">        
     </div>
+
+    <!--Key File-->
     <div class="form-row">
         <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
         <input type="text" id="node-input-keyFilename">
     </div>
+
+    <!--Language-->
     <div class="form-row">
         <label for="node-input-languageCode"><i class="fa fa-language"></i> Language</label>
         <input type="text" id="node-input-languageCode">
-    </div>    
+    </div>
+
+    <!--Sample Rate-->
     <div class="form-row">
         <label for="node-input-sampleRate"><i class="fa fa-gear"></i> Sample Rate</label>
         <input type="number" min="0" step="1000" id="node-input-sampleRate">
     </div>
+
+    <!--Encoding-->
     <div class="form-row">
         <label for="node-input-encoding"><i class="fa fa-gear"></i> Encoding</label>
         <select type="text" id="node-input-encoding">
@@ -43,10 +58,7 @@ limitations under the License.
             <option value="MP3">MP3</option>
         </select>
     </div>
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name">
-    </div>
+
 </script>
 
 <script type="text/x-red" data-help-name="google-cloud-speech-to-text">

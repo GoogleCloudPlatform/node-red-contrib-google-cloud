@@ -14,46 +14,49 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="google-cloud-gcs-read">
-    <!--Name-->
+<script type="text/x-red" data-template-name="google-cloud-gcs-signedURL">
+    <!-- Name-->
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name">
     </div>
-    
-    <!--Account-->
+
+    <!--Credentials-->
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
-        <input type="text" id="node-input-account">
+        <input type="text" id="node-input-account">        
     </div>
 
-    <!--Key Filename-->
+    <!--Key File-->
     <div class="form-row">
         <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
         <input type="text" id="node-input-keyFilename">
     </div>
 
-    <!--Filename-->
+    <!--File Name-->
     <div class="form-row">
         <label for="node-input-filename"><i class="fa fa-file"></i> File Name</label>
         <input type="text" id="node-input-filename">
     </div>
 
-    <!--List-->
+    <!--Action-->
     <div class="form-row">
-        <label for="node-input-list"><i class="fa fa-list"></i> List</label>
-        <input type="checkbox" id="node-input-list" style="width: 20px;vertical-align: top;">  List the files.
-    </div>  
-    
-    <!--To Base64-->
-    <div class="form-row">
-        <label for="node-input-toBase64"><i class="fa fa-code"></i> Base64</label>
-        <input type="checkbox" id="node-input-toBase64" style="width: 20px;vertical-align: top;">  Convert to base64
+        <label for="node-input-action"><i class="fa fa-gear"></i> Action</label>
+        <select id="node-input-action" type="text">
+            <option value = "read">Read</option>
+            <option value = "write">Write</option>
+        </select>
     </div>
+
+    <!--Expiration-->
+    <div class="form-row">
+        <label for="node-input-expiration"><i class="fa fa-file"></i> Expiration</label>
+        <input type="number" id="node-input-expiration">
+    </div>   
 
 </script>
 
-<script type="text/x-red" data-help-name="google-cloud-gcs-read">
+<script type="text/x-red" data-help-name="google-cloud-gcs-signedURL">
     <p>Read data from Google Cloud Storage.</p>
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -75,12 +78,10 @@ limitations under the License.
     </dl>
 
     <h3>Details</h3>
-    <p>This node can either read the contents of a file or list the files in a bucket.
-        If reading the contents of a file, <code>msg.filename</code> is the identity of the file to be read
-        from GCS.  If listing the contents of a bucket, <code>msg.filename</code> is the identity of the 
-        bucket to be listed.  The format of the file name is a URL string of the form
-        <code>gs://[BUCKET]/[FILENAME]</code>.  Alternatively, we can specify the file to be read in the file name configuration property.
-        If both this property and a runtime value found in <code>msg.filename</code> are present, then the <code>msg.filename</code> name will be used.
+    <p>This node generates the signed URL of a Google Cloud Store (GCS) object with action (READ/WRITE) and expiration time in mins .It returns the URL in the <code>msg.payload</code> field.
+
+        At runtime, the value of msg.filename contains describes the file to read.  The format of this field is a GCS Url of the form <code>gs://[BUCKET]/[FILE]`</code> 
+        Alternatively, we can specify the file to be read in the file name configuration property.  If both this property and a runtime value found in <code>msg.filename</code> are present, then the `msg.filename` name will be used.
     </p>
     The metadata associated with the file is returned in <code>msg.metadata</code>.
     </p>
@@ -88,15 +89,15 @@ limitations under the License.
 
 <script type="text/javascript">
 
-RED.nodes.registerType("google-cloud-gcs-read", {
+RED.nodes.registerType("google-cloud-gcs-signedURL", {
     category: "GCP",
     defaults: {
         account: { type: "google-cloud-credentials", required: false },
         keyFilename: {value: "", required: false },
         filename: { required: false },
-        list: { value: false, required: false},
-        toBase64: {value: false, required: false },
-        name: { value: "", required: false }
+        action: { value: "read", required: true},
+        name: { value: "", required: false },
+        expiration:{value:15,required: true}
     },
     inputs: 1,
     outputs: 1,
@@ -104,8 +105,8 @@ RED.nodes.registerType("google-cloud-gcs-read", {
     align: "left",
     color: "#3FADB5",
     label: function () {
-        return this.name || "gcs-read";
+        return this.name || "gcs-signedURL";
     },
-    paletteLabel: "gcs-read"
+    paletteLabel: "gcs-signedURL"
 });
 </script>

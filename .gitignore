@@ -5,3 +5,4 @@
 *.log
 .vscode
 package-lock.json
+tmp/

@@ -15,25 +15,34 @@ limitations under the License.
 -->
 
 <script type="text/x-red" data-template-name="google-cloud-monitoring">
+    <!--Name-->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    <!--Credentials-->
     <div class="form-row">
         <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
         <input type="text" id="node-input-account">        
     </div>
+
+    <!--Key File-->
     <div class="form-row">
         <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
         <input type="text" id="node-input-keyFilename">
     </div>
+
+    <!--Metric Type-->
     <div class="form-row">
         <label for="node-input-metricType"><i class="fa fa-tag"></i> Metric Type</label>
         <input type="text" id="node-input-metricType">
-    </div>    
-    <div class="form-row">
-        <label for="node-input-projectId"><i class="fa fa-tag"></i> Project Id</label>
-        <input type="text" id="node-input-projectId">
     </div>
+
+    <!--Project ID-->
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name">
+        <label for="node-input-projectId"><i class="fa fa-tag"></i> Project ID</label>
+        <input type="text" id="node-input-projectId">
     </div>
 </script>
 

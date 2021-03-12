@@ -32,7 +32,7 @@
 /* jshint esversion: 8 */
 module.exports = function(RED) {
     "use strict";
-    const NODE_TYPE = "google-cloud-gcs-read";
+    const NODE_TYPE = "google-cloud-gcs-signedURL";
     const {Storage} = require("@google-cloud/storage");
 
     /**
@@ -52,8 +52,13 @@ module.exports = function(RED) {
             credentials = GetCredentials(config.account);
         }
         const keyFilename = config.keyFilename;
-        const isList      = config.list;
-        const toBase64    = config.toBase64;
+        //const isList = config.list;
+        const action = config.action;
+        //console.log(action)
+        const expiration = config.expiration;
+        //console.log(expiration);
+        let options = null;
+
         let fileName_option;
         if (!config.filename) {
             fileName_option = "";
@@ -69,7 +74,7 @@ module.exports = function(RED) {
         } // GetCredentials
 
 
-        async function readFile(msg, gsURL) {
+        async function signedURL(msg, gsURL) {
             // At this point we have a URL of the form gs://[BUCKET]/[FILENAME].  We now want
             // to parse this out and get the bucket and file.
 
@@ -84,77 +89,54 @@ module.exports = function(RED) {
 
             const bucket = storage.bucket(bucketName);
             const file   = bucket.file(fileName);
+            msg.payload = null; // Set the initial output to be nothing.
 
-            // Get the metadata for the object/file and store it at msg.metadata.
             try {
+                if(action == "read"){
                 const [metadata] = await file.getMetadata();
                 msg.metadata = metadata;
+                }
             }
             catch(err) {
                 node.error(`getMetadata error: ${err.message}`);
                 return;
             }
 
-            msg.payload = null; // Set the initial output to be nothing.
+            try{
+                if(action == "read"){
+            options = {
+                // version: 'v4',
+                action: action,
+                expires: Date.now() + (expiration * 60 * 1000), // 15 minutes
+              };
+            }
+            else{
+                options = {
+                    // version: 'v4',
+                    action: action,
+                    expires: Date.now() + (expiration * 60 * 1000), // 15 minutes
+                    contentType: 'application/octet-stream',
+                  };
+            }
+            }
+            catch(err){
+                node.error(`getSignedURL options error: ${err.message}`);
+            }
 
-            const readStream = file.createReadStream();
-
-            // Pre-allocate the download buffer
-            const fileSize = parseInt(msg.metadata.size, 10)
-            msg.payload = Buffer.allocUnsafe(fileSize)
-            let pos = 0
-
-            readStream.on("error", (err) => {
-                node.error(`readStream error: ${err.message}`);
-            });
-
-            readStream.on("end", () => {
-                // TBD: Currently we are returning a Buffer.  We may wish to consider examining
-                // the metadata and see if it of text/* and, if it is, convert the payload
-                // to a string.
-
-                // If we wish to be base64 encoded, do it now.
-                if (toBase64) {
-                    msg.payload = msg.payload.toString('base64');
-                }
-                node.send(msg);   // Send the message onwards to the next node.
-            });
-
-            readStream.on("data", (data) => {
-                if (data == null) {
-                    return;
-                }
-                msg.payload.fill(data, pos, pos + data.length)
-                pos += data.length
-            });
-
-        } // readFile
-
-        async function listFiles(msg, gsURL) {
-            // At this point we have a URL of the form gs://[BUCKET]/[FILENAME].  We now want
-            // to parse this out and get the bucket and file.
-
-            const parts = gsURL.match(/gs:\/\/([^\/]+)(?:\/(.*))?$/);
-            if (!parts && parts.length != 3) {
-                node.error(`Badly formed URL: ${gsURL}`);
+            // Get the metadata for the object/file and store it at msg.metadata.
+            try {
+                const signedURL = await file.getSignedUrl(options);
+                msg.payload = signedURL;
+                node.send(msg); 
+            }
+            catch(err) {
+                node.error(`getSignedURL error: ${err.message}`);
                 return;
             }
 
-            const bucketName = parts[1];
-            const fileName   = parts[2];
 
-            const bucket = storage.bucket(bucketName);
-            const getFilesOptions = {
-                prefix: fileName
-            };
-            const [files] = await bucket.getFiles(getFilesOptions);
-            const retArray = [];
-            files.forEach((file) => {
-                retArray.push(file.metadata);
-            });
-            msg.payload = retArray;
-            node.send(msg);
-        }
+        } // signedURL
+
         
         /**
          * Receive an input message for processing.
@@ -181,12 +163,9 @@ module.exports = function(RED) {
             } else {
                 gsURL = fileName_option;
             }
-
-            if (isList) {
-                listFiles(msg, gsURL);
-            } else {
-                readFile(msg, gsURL);
-            }
+            
+            signedURL(msg, gsURL);
+            
         } // Input
 
 

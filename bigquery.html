@@ -15,30 +15,39 @@ limitations under the License.
 -->
 
 <script type="text/x-red" data-template-name="google-cloud-bigquery">
-    <div class="form-row">
-        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
-        <input type="text" id="node-input-account">        
-    </div>
-    <div class="form-row">
-        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
-        <input type="text" id="node-input-keyFilename">
-    </div>
-    <div class="form-row">
-        <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
-        <input type="text" id="node-input-projectId">
-    </div>
-    <div class="form-row">
-        <label for="node-input-query"><i class="fa fa-search"></i> Query</label>
-        <textarea id="node-input-query"></textarea>
-    </div>
+    <!--Name-->
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name">
     </div>
+
+    <!--Credentials-->
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">        
+    </div>
+
+    <!--Key File-->
+    <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+
+    <!--Project-->
+    <div class="form-row">
+        <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
+        <input type="text" id="node-input-projectId">
+    </div>
+
+    <!--Query-->
+    <div class="form-row">
+        <label for="node-input-query"><i class="fa fa-search"></i> Query</label>
+        <textarea id="node-input-query"></textarea>
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="google-cloud-bigquery">
-    <p>Execute a BigQuery query.</p>
+    <p>Perform a BigQuery insert.</p>
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>msg.payload

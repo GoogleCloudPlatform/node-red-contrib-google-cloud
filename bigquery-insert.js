@@ -36,9 +36,9 @@ module.exports = function(RED) {
             projectId = null;
         }
         let datasetId = config.datasetId;
-        let tableId = config.tableId;
-        let bigquery = null;
-        let table = null;
+        let tableId   = config.tableId;
+        let bigquery  = null;
+        let table     = null;
 
         let credentials = null;
         if (config.account) {
@@ -98,7 +98,7 @@ module.exports = function(RED) {
             });
         }
         const dataset = bigquery.dataset(datasetId);
-        table =  dataset.table(tableId);
+        table = dataset.table(tableId);
 
         node.on("input", Input);
     } // BigQueryInsertNode
