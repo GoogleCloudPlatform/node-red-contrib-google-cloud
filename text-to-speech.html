@@ -1,0 +1,139 @@
+<!--
+Copyright 2020 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="google-cloud-text-to-speech">
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">        
+    </div>
+    <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+    <div class="form-row">
+        <label for="node-input-languageCode"><i class="fa fa-language"></i> Language</label>
+        <input type="text" id="node-input-languageCode">
+    </div>
+    <div class="form-row">
+        <label for="node-input-gender"><i class="fa fa-female"></i> Gender</label>
+        <select type="text" id="node-input-gender">
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+            <option value="NEUTRAL">Neutral</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-encoding"><i class="fa fa-file-audio-o"></i> Encoding</label>
+        <select type="text" id="node-input-encoding">
+            <option value="LINEAR16">LINEAR16</option>
+            <option value="MP3">MP3</option>
+            <option value="OGG_OPUS">OGG_OPUS</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-voiceName"><i class="fa fa-bullhorn"></i> Voice Name</label>
+        <input type="text" id="node-input-voiceName">
+    </div>
+    <div class="form-row">
+        <label for="node-input-pitch"><i class="fa fa-music"></i> Pitch</label>
+        <input type="number" id="node-input-pitch" step="1" min="-20" max="20">
+    </div>
+    <div class="form-row">
+        <label for="node-input-rate"><i class="fa fa-fast-forward"></i> Rate</label>
+        <input type="number" id="node-input-rate" step="0.05" min="0.25" manx="4">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="google-cloud-text-to-speech">
+    <p>
+        Convert text to speech.
+    </p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">String</span>
+        </dt>
+        <dd>Text data to be vocalized.</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload.audio.data
+            <span class="property-type">Buffer</span>
+        </dt>
+        <dd>Encoded data representing the audio.</dd>
+        <dt>msg.payload.audio.mime
+            <span class="property-type">String</span>
+        </dt>
+        <dd>Mime type of the encoded audio data.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>
+    The text to speech node takes as input a text string in <code>msg.payload</code> and returns an encoded audio blob of data that represents what
+    the text would sound like if spoken aloud.  The encoding of the audio can be one of MP3, WAV (LINEAR16) or OGG.
+    The data is returned in <code>msg.payload.audio.data</code> as a buffer object instance.  We select which of the encodings to use through the
+    Encoding entry in the configuration properties of the node.
+    </p>
+    <p>
+    It is not uncommon to return the buffer data in an HTTP response where we would also want to set the response MIME type.
+    The <code>msg.payload.audio.mime</code> property contains the string of the content-Type HTTP header.
+    </p>
+    <p>
+    When configuring the node we can specify the language we wish to use (eg. en-US) and the gender of the voice (Male or Female).
+    If we wish, we can optionally specify a voice name that is the identity of a specific Google voice to be used to encode the 
+    speech.  The list of available voices is found here.
+    </p>
+    <p>
+    Finally, we have the opportunity to tweak the pitch of the voice as well as the speech rate.
+    </p>
+    <p>
+    Before using Text to Speech we must enable the service on GCP.
+    </p>
+    <p>
+    gcloud services enable texttospeech.googleapis.com
+    </p>
+
+    </p>
+</script>
+
+<script type="text/javascript">
+RED.nodes.registerType("google-cloud-text-to-speech", {
+    category: "GCP",
+    defaults: {
+        account: { type: "google-cloud-credentials", required: false },
+        keyFilename: {value: "", required: false },
+        name: { value: "", required: false },
+        languageCode: { value: "en-US", required: false },
+        gender: { value: "MALE", required: false },
+        encoding: { value: "MP3", required: false},
+        rate: { value: 1, required: false},
+        pitch: { value: 0, required: false},
+        voiceName: { value: "", required: false}
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "text-to-speech.png",
+    align: "left",
+    color: "#3FADB5",
+    label: function () {
+        return this.name || "Text to Speech";
+    },
+    paletteLabel: "Text To Speech"
+});
+</script>

@@ -1,0 +1,108 @@
+[
+    {
+        "id": "433de0cb.1918c",
+        "type": "tab",
+        "label": "Text To Speech",
+        "disabled": false,
+        "info": "Demonstrate text to speech by listening on the /speak endpoint for a GET request with a query parameter of text which contains the text to speak.  The response will be encoded audio."
+    },
+    {
+        "id": "e5a0de52.c33e5",
+        "type": "http in",
+        "z": "433de0cb.1918c",
+        "name": "",
+        "url": "/speak",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 80,
+        "wires": [
+            [
+                "940e950b.a23b78"
+            ]
+        ],
+        "info": "Start listening on /speak URL and also expect a query parameter of \"text\"."
+    },
+    {
+        "id": "940e950b.a23b78",
+        "type": "change",
+        "z": "433de0cb.1918c",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.text",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 80,
+        "wires": [
+            [
+                "68c5aac6.44d9a4"
+            ]
+        ],
+        "info": "Copy the msg.payload.text field which will be the incoming query property to the msg.payload field which will be used as the text to be transformed to audio."
+    },
+    {
+        "id": "68c5aac6.44d9a4",
+        "type": "google-cloud-text-to-speech",
+        "z": "433de0cb.1918c",
+        "account": "",
+        "keyFilename": "",
+        "name": "",
+        "languageCode": "en-US",
+        "gender": "MALE",
+        "encoding": "OGG_OPUS",
+        "rate": "1",
+        "pitch": "0",
+        "voiceName": "en-GB-Wavenet-C",
+        "x": 520,
+        "y": 80,
+        "wires": [
+            [
+                "9a7bc4f4.011b98"
+            ]
+        ],
+        "info": "Invoke the text to speech synthesizer from GCP."
+    },
+    {
+        "id": "9a7bc4f4.011b98",
+        "type": "function",
+        "z": "433de0cb.1918c",
+        "name": "",
+        "func": "msg.headers = {\n    \"content-Type\": msg.payload.audio.mime\n}\nmsg.payload = msg.payload.audio.data\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 700,
+        "y": 80,
+        "wires": [
+            [
+                "9caa88be.f6bbf8"
+            ]
+        ],
+        "info": "Build the response data which will be the returned audio and the Mime type returned as content-Type header."
+    },
+    {
+        "id": "9caa88be.f6bbf8",
+        "type": "http response",
+        "z": "433de0cb.1918c",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 860,
+        "y": 80,
+        "wires": [],
+        "info": "Return the HTTP response."
+    }
+]

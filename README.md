@@ -94,6 +94,7 @@ The set of Node-RED nodes are found in the GCP section of the palette.  The curr
 * [Metadata](docs/metadata.md) - Retrieve the compute engine metadata.
 * [Monitoring](docs/monitoring.md) - Write a new monitoring record.
 * [Speech to Text](docs/speech_to_text.md) - Recognize speech from audio.
+* Text to Speech - Encode text as spoken audio.
 * [Data loss prevention](docs/dlp.md) - Mask out identifiable information.
 * [Translation](docs/translate.md) - Translate text from one language to another.
 * [BigQuery](docs/bigquery.md) - Execute a BigQuery query.

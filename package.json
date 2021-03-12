@@ -17,6 +17,7 @@
         "@google-cloud/speech": "latest",
         "@google-cloud/storage": "latest",
         "@google-cloud/tasks": "latest",
+        "@google-cloud/text-to-speech": "latest",
         "@google-cloud/translate": "latest",
         "@google-cloud/vision": "latest",
         "axios": "latest",
@@ -68,6 +69,7 @@
             "google-cloud-iot config-update": "iot-config-update.js",
             "google-cloud-iot telemetry-send": "iot-telemetry-send.js",
             "google-cloud-automl": "automl.js",
+            "google-cloud-text-to-speech": "text-to-speech.js",
             "google-cloud-documentai": "documentai.js"
         }
     },
