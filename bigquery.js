@@ -82,16 +82,19 @@ module.exports = function(RED) {
         if (credentials) {
             bigquery = new BigQuery({
                 "projectId": projectId,
-                "credentials": credentials
+                "credentials": credentials,
+                "scopes": ["https://www.googleapis.com/auth/drive.readonly"]
             });
         } else if (keyFilename) {
             bigquery =  new BigQuery({
                 "projectId": projectId,
-                "keyFilename": keyFilename
+                "keyFilename": keyFilename,
+                "scopes": ["https://www.googleapis.com/auth/drive.readonly"]
             });
         } else {
             bigquery =  new BigQuery({
-                "projectId": projectId
+                "projectId": projectId,
+                "scopes": ["https://www.googleapis.com/auth/drive.readonly"]
             });
         }
 
