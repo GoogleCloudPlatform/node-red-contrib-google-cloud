@@ -110,3 +110,9 @@ The set of Node-RED nodes are found in the GCP section of the palette.  The curr
 
 We are very open to receiving feedback on additional GCP nodes that may be of value.  Don't hesitate to open an issue should you have a desire
 for incorporating additional GCP functions.
+
+## See also:
+
+* [Blog: Low code programming with Node-RED comes to GCP - 2020-02](https://cloud.google.com/blog/products/application-development/using-node-red-with-google-cloud)
+* [Medium: GCP Document AI and Node-RED - 2021-02](https://medium.com/google-cloud/gcp-document-ai-and-node-red-d062d7d7768e)
+* [Medium: Node-RED solution deployment on GCP - 2021-03](https://medium.com/google-cloud/node-red-solution-deployment-on-gcp-cb885e3528f9)
