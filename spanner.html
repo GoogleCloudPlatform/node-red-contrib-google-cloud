@@ -1,0 +1,111 @@
+<!--
+Copyright 2019 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/html" data-template-name="google-cloud-spanner">
+    <!--Name-->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    <!--Credentials-->
+    <div class="form-row">
+        <label for="node-input-account"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-account">        
+    </div>
+
+    <!--Key File-->
+    <div class="form-row">
+        <label for="node-input-keyFilename"><i class="fa fa-user"></i> Key File</label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+
+    <!--Project-->
+    <!--
+    <div class="form-row">
+        <label for="node-input-projectId"><i class="fa fa-cloud"></i> Project</label>
+        <input type="text" id="node-input-projectId">
+    </div>
+    -->
+
+    <!--Instance ID-->
+    <div class="form-row">
+        <label for="node-input-instanceId"><i class="fa fa-cloud"></i> Instance ID</label>
+        <input type="text" id="node-input-instanceId">
+    </div>
+
+    <!--Database ID-->
+    <div class="form-row">
+        <label for="node-input-databaseId"><i class="fa fa-cloud"></i> Database ID</label>
+        <input type="text" id="node-input-databaseId">
+    </div>
+
+    <!--SQL Statement-->
+    <div class="form-row">
+        <label for="node-input-sqlStatement"><i class="fa fa-search"></i> SQL Statement</label>
+        <textarea id="node-input-sqlStatement"></textarea>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="google-cloud-spanner">
+    <p>Perform a Spanner SQL statement execution.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.payload
+            <span class="property-type">string</span>
+        </dt>
+        <dd>The SQL statement to be executed.</dd>
+    </dl>
+    <h3>Configuration</h3>
+    <ul>
+        <li>Instance ID - The ID of the Spanner instance to use.</li>
+        <li>Database ID - The ID of the Spanner database to use.</li>
+    </ul>
+    <h3>Details</h3>
+    <p>
+        The Spanner node provides the ability to execute SQL statements against the Spanner RDBMS.
+        It has configuration parameters which include the SQL statement to run and the identities of the instance and database to use.
+    </p>
+    <p>
+        When executed, if a SQL statement string is provided, that fixed string will be used.  If no SQL statement string is provided, then msg.payload is expected to be a string which will then be used as the statement to execute.
+    </p>
+        On return, an array of rows will be saved in <code>msg.payload</code>.
+    </p>
+</script>
+
+<script type="text/javascript">
+RED.nodes.registerType("google-cloud-spanner", {
+    category: "GCP",
+    defaults: {
+        account: { type: "google-cloud-credentials", required: false },
+        keyFilename: { value: "", required: false },
+        //projectId: { value: "", required: false},
+        sqlStatement: { value: "", required: false},
+        name: { value: "", required: false },
+        instanceId: { value: "", required: true },
+        databaseId: { value: "", required: true }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "spanner.png",
+    align: "left",
+    color: "#3FADB5",
+    label: function () {
+        return this.name || "spanner";
+    },
+    paletteLabel: "spanner"
+});
+</script>

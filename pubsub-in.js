@@ -68,7 +68,7 @@ module.exports = function(RED) {
 
         node.status(STATUS_DISCONNECTED);
 
-        // Called when a new message is received from PubSub.
+        // Called when a new message is received from PubSub.  This function is registered with the Pub/Sub event called "message".
         function OnMessage(message) {
             if (message === null) {
                 return;

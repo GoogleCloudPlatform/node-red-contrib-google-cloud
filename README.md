@@ -107,6 +107,7 @@ The set of Node-RED nodes are found in the GCP section of the palette.  The curr
 * DNS Records List
 * GCS Signed URL
 * Document AI - Parse the contents of a PDF or image of a document.
+* Spanner - Execute a SQL statement against Spanner.
 
 We are very open to receiving feedback on additional GCP nodes that may be of value.  Don't hesitate to open an issue should you have a desire
 for incorporating additional GCP functions.
