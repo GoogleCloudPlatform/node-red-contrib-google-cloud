@@ -67,6 +67,7 @@
             "google-cloud-firestore": "firestore.js",
             "google-cloud-iot send-command": "iot-command-send.js",
             "google-cloud-iot config-update": "iot-config-update.js",
+            "google-cloud-iot config-in": "iot-config-in.js",
             "google-cloud-iot telemetry-send": "iot-telemetry-send.js",
             "google-cloud-automl": "automl.js",
             "google-cloud-text-to-speech": "text-to-speech.js",
