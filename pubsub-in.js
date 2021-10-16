@@ -101,6 +101,20 @@ module.exports = function(RED) {
             message.ack();
         } // OnMessage
 
+        // Called when error event is received from PubSub.
+        function OnError(error) {
+            if (error === null) {
+                return;
+            }
+
+            const msg = {
+                "payload": `${error}`,    // Set error details to msg.payload
+            };
+
+            node.error(error);
+
+            node.send(msg);
+        } // OnError
 
         function OnClose() {
             node.status(STATUS_DISCONNECTED);
@@ -132,7 +146,7 @@ module.exports = function(RED) {
         pubsub.subscription(options.subscription).get().then((data) => {
             subscription = data[0];
             subscription.on('message', OnMessage);
-            subscription.on('error',   OnClose);
+            subscription.on('error',   OnError);
             node.status(STATUS_CONNECTED);
         }).catch((reason) => {
             node.error(reason);
