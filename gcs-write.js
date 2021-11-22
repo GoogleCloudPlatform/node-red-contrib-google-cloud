@@ -100,7 +100,9 @@ module.exports = function(RED) {
             const bucket = storage.bucket(bucketName); // Get access to the bucket
             const file   = bucket.file(fileName);      // Model access to the file in the bucket
 
-            const writeStreamOptions = {}; // https://googleapis.dev/nodejs/storage/latest/global.html#CreateWriteStreamOptions
+            const writeStreamOptions = {
+                resumable: false
+            }; // https://googleapis.dev/nodejs/storage/latest/global.html#CreateWriteStreamOptions
 
             // If we have a msg.contentType field, use it.  If we don't but we have a contentType set in options, use
             // that.  Otherwise don't supply a content type.
