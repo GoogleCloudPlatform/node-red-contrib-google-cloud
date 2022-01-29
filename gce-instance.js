@@ -158,7 +158,7 @@ module.exports = function (RED) {
                         .insert({
                             project: projectId,
                             zone: zone,
-                            instanceResource: JSON.parse(template)
+                            instanceResource: typeof template === "string" ? JSON.parse(template) : template
                         })
                         .then(response => {
                             msg.payload = response.length ? response[0] : {};
