@@ -1,0 +1,149 @@
+<!--
+Copyright 2022 Google Inc.
+Created by Ari Victor
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<script type="text/javascript">
+    RED.nodes.registerType('google-cloud-compute-engine-instance', {
+        category: 'GCP',
+        color: '#3FADB5',
+        defaults: {
+            account: { type: "google-cloud-credentials", required: false },
+            keyFilename: {value: "", required: false },
+            name: { value: "" },
+            projectId: { value: "" },
+            zone: { value: "" },
+            instance: { value: "" },
+            operation: { value: "" },
+            template: { value: "{}" },
+        },
+        inputs:1,
+        outputs:1,
+        icon: "font-awesome/fa-television",
+        label: function () {
+            return this.name || "gce-instance";
+        },
+        paletteLabel: "gce-instance",
+        oneditprepare: function() {
+            // Template JSON input
+            $("#node-input-template").typedInput({
+                type:"json",
+                types:["json"],
+            });
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="google-cloud-compute-engine-instance">
+    <!-- Node Name -->
+    <div class="form-row">
+        <label for="node-input-name">
+            <i class="fa fa-tag"></i> 
+            Node Name
+        </label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <hr>
+
+    <!-- Account -->
+    <div class="form-row">
+        <label for="node-input-account">
+            <i class="fa fa-user"></i> 
+            Credentials
+        </label>
+        <input type="text" id="node-input-account">
+    </div>
+
+    <!-- Key Filename -->
+    <div class="form-row">
+        <label for="node-input-keyFilename">
+            <i class="fa fa-user"></i> 
+            Key File
+        </label>
+        <input type="text" id="node-input-keyFilename">
+    </div>
+
+    <hr>
+
+    <!-- Operation -->
+    <div class="form-row">
+        <label for="node-input-operation">
+            Operation
+        </label>
+        <select id="node-input-operation">
+            <option value="get">get</option>
+            <option value="list">list</option>
+            <option value="start">start</option>
+            <option value="stop">stop</option>
+            <option value="reset">reset</option>
+            <option value="delete">delete</option>
+            <option value="create">create</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <!-- Project ID -->
+    <div class="form-row">
+        <label for="node-input-projectId">
+            Project ID
+        </label>
+        <input type="text" id="node-input-projectId" placeholder="msg.payload.projectId">
+    </div>
+
+    <!-- Zone -->
+    <div class="form-row">
+        <label for="node-input-zone">
+            Zone
+        </label>
+        <input type="text" id="node-input-zone" placeholder="msg.payload.zone">
+    </div>
+
+    <!-- Instance Name -->
+    <div class="form-row">
+        <label for="node-input-instance">
+            Instance Name
+        </label>
+        <input type="text" id="node-input-instance" placeholder="msg.payload.instance">
+    </div>
+
+    <!-- Template -->
+    <div class="form-row">
+        <label for="node-input-template">
+            Instance Template
+        </label>
+        <input type="text" id="node-input-template" placeholder="msg.payload.template">
+    </div>
+
+</script>
+
+<!-- Documentation -->
+<script type="text/html" data-help-name="google-cloud-compute-engine-instance">
+    <p>A node for working with Cloud Compute Engine (GCP) instances</p>
+
+    <h3>Configuration</h3>
+    <p>
+        Properties can be explicitly set in the node. The node will also accept a dynamic payload object with the
+        set properties. Some operations will not require all properties to be configured.
+    </p>
+
+    <h3>Credentials</h3>
+    <p>
+        Credentials can be explicitly configured in the attached google-cloud-credentials node. If credentials are not specified the node will attempt 
+        to use any implicit GCP identity found in the Node Red environment. For local use we recommend setting your Application Default Credentials.
+    </p>
+</script>
+
