@@ -1,0 +1,523 @@
+[
+  {
+    "id": "015951b46535519c",
+    "type": "tab",
+    "label": "Flow - Scheduling Example",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "2b532bc030cb7f6d",
+    "type": "inject",
+    "z": "015951b46535519c",
+    "name": "start",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 230,
+    "y": 100,
+    "wires": [
+      [
+        "55434ecb6a3c587b"
+      ]
+    ]
+  },
+  {
+    "id": "55434ecb6a3c587b",
+    "type": "google-cloud-compute-engine-instance",
+    "z": "015951b46535519c",
+    "account": "",
+    "keyFilename": "",
+    "name": "List Instances",
+    "projectId": "my-project",
+    "zone": "us-central1-a",
+    "instance": "",
+    "operation": "list",
+    "template": "",
+    "x": 400,
+    "y": 100,
+    "wires": [
+      [
+        "e4907b54d98e1fed"
+      ]
+    ]
+  },
+  {
+    "id": "e4907b54d98e1fed",
+    "type": "split",
+    "z": "015951b46535519c",
+    "name": "for each",
+    "splt": "\\n",
+    "spltType": "str",
+    "arraySplt": 1,
+    "arraySpltType": "len",
+    "stream": false,
+    "addname": "",
+    "x": 580,
+    "y": 100,
+    "wires": [
+      [
+        "1049222ea688a36f"
+      ]
+    ]
+  },
+  {
+    "id": "ef20e05e55660db2",
+    "type": "switch",
+    "z": "015951b46535519c",
+    "name": "check status",
+    "property": "payload.status",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "RUNNING",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "TERMINATED",
+        "vt": "str"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 3,
+    "x": 310,
+    "y": 200,
+    "wires": [
+      [
+        "2553a892b293221c"
+      ],
+      [
+        "ff6db305d5306ad2"
+      ],
+      [
+        "7fc006ebc5792b76"
+      ]
+    ]
+  },
+  {
+    "id": "a82675c4a33692b0",
+    "type": "function",
+    "z": "015951b46535519c",
+    "name": "Handle Running",
+    "func": "const self = msg.payload.selfLink.split(\"/\")\n\nmsg.payload = {\n    projectId: self[6],\n    zone: self[8],\n    instance: self[10]\n}\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 300,
+    "wires": [
+      [
+        "71f19db2b96e3d87"
+      ]
+    ]
+  },
+  {
+    "id": "1049222ea688a36f",
+    "type": "link out",
+    "z": "015951b46535519c",
+    "name": "",
+    "mode": "link",
+    "links": [
+      "29f4ef94b3860270"
+    ],
+    "x": 695,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "29f4ef94b3860270",
+    "type": "link in",
+    "z": "015951b46535519c",
+    "name": "",
+    "links": [
+      "1049222ea688a36f",
+      "0f9e8118afd60b82"
+    ],
+    "x": 185,
+    "y": 200,
+    "wires": [
+      [
+        "ef20e05e55660db2"
+      ]
+    ]
+  },
+  {
+    "id": "2553a892b293221c",
+    "type": "link out",
+    "z": "015951b46535519c",
+    "name": "",
+    "mode": "link",
+    "links": [
+      "429314c3d6645736"
+    ],
+    "x": 455,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "429314c3d6645736",
+    "type": "link in",
+    "z": "015951b46535519c",
+    "name": "",
+    "links": [
+      "2553a892b293221c"
+    ],
+    "x": 185,
+    "y": 300,
+    "wires": [
+      [
+        "a82675c4a33692b0"
+      ]
+    ]
+  },
+  {
+    "id": "5a9f0d699d3ff714",
+    "type": "debug",
+    "z": "015951b46535519c",
+    "name": "Instance Stopped",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 730,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "71f19db2b96e3d87",
+    "type": "google-cloud-compute-engine-instance",
+    "z": "015951b46535519c",
+    "account": "",
+    "keyFilename": "",
+    "name": "Stop Instance",
+    "projectId": "",
+    "zone": "",
+    "instance": "",
+    "operation": "stop",
+    "template": "",
+    "x": 520,
+    "y": 300,
+    "wires": [
+      [
+        "5a9f0d699d3ff714"
+      ]
+    ]
+  },
+  {
+    "id": "ff6db305d5306ad2",
+    "type": "link out",
+    "z": "015951b46535519c",
+    "name": "",
+    "mode": "link",
+    "links": [
+      "3e7dcbe622403b02"
+    ],
+    "x": 455,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "7fc006ebc5792b76",
+    "type": "link out",
+    "z": "015951b46535519c",
+    "name": "",
+    "mode": "link",
+    "links": [
+      "a4d6254ca6358a18"
+    ],
+    "x": 455,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "44f9c0711f9f1e55",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "-> Stage 3a",
+    "info": "",
+    "x": 560,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "df132eb2f06291c1",
+    "type": "function",
+    "z": "015951b46535519c",
+    "name": "Handle Stopped",
+    "func": "const self = msg.payload.selfLink.split(\"/\")\n\nmsg.payload = {\n    projectId: self[6],\n    zone: self[8],\n    instance: self[10]\n}\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 360,
+    "wires": [
+      [
+        "3fb1e8d77156d4c9"
+      ]
+    ]
+  },
+  {
+    "id": "7e690a0d8bdb4a17",
+    "type": "debug",
+    "z": "015951b46535519c",
+    "name": "Instance Stopped",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 730,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "3fb1e8d77156d4c9",
+    "type": "google-cloud-compute-engine-instance",
+    "z": "015951b46535519c",
+    "account": "",
+    "keyFilename": "",
+    "name": "Start Instance",
+    "projectId": "",
+    "zone": "",
+    "instance": "",
+    "operation": "start",
+    "template": "",
+    "x": 520,
+    "y": 360,
+    "wires": [
+      [
+        "7e690a0d8bdb4a17"
+      ]
+    ]
+  },
+  {
+    "id": "b1ecfee8f5033f26",
+    "type": "function",
+    "z": "015951b46535519c",
+    "name": "Handle Other",
+    "func": "const self = msg.payload.selfLink.split(\"/\")\n\nmsg.payload = {\n    projectId: self[6],\n    zone: self[8],\n    instance: self[10]\n}\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 310,
+    "y": 420,
+    "wires": [
+      [
+        "2f7fbe3344309c8e"
+      ]
+    ]
+  },
+  {
+    "id": "56e2707e816442c1",
+    "type": "google-cloud-compute-engine-instance",
+    "z": "015951b46535519c",
+    "account": "",
+    "keyFilename": "",
+    "name": "Get Instance",
+    "projectId": "",
+    "zone": "",
+    "instance": "",
+    "operation": "get",
+    "template": "",
+    "x": 630,
+    "y": 420,
+    "wires": [
+      [
+        "0f9e8118afd60b82"
+      ]
+    ]
+  },
+  {
+    "id": "2f7fbe3344309c8e",
+    "type": "delay",
+    "z": "015951b46535519c",
+    "name": "Wait",
+    "pauseType": "delay",
+    "timeout": "10",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 470,
+    "y": 420,
+    "wires": [
+      [
+        "56e2707e816442c1"
+      ]
+    ]
+  },
+  {
+    "id": "3e7dcbe622403b02",
+    "type": "link in",
+    "z": "015951b46535519c",
+    "name": "",
+    "links": [
+      "ff6db305d5306ad2"
+    ],
+    "x": 185,
+    "y": 360,
+    "wires": [
+      [
+        "df132eb2f06291c1"
+      ]
+    ]
+  },
+  {
+    "id": "a4d6254ca6358a18",
+    "type": "link in",
+    "z": "015951b46535519c",
+    "name": "",
+    "links": [
+      "7fc006ebc5792b76"
+    ],
+    "x": 185,
+    "y": 420,
+    "wires": [
+      [
+        "b1ecfee8f5033f26"
+      ]
+    ]
+  },
+  {
+    "id": "71465d1468094d9b",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "Stage 1",
+    "info": "",
+    "x": 70,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "c613ec4c81c4b822",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "Stage 2",
+    "info": "",
+    "x": 70,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "183c3931ed332ad0",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "Stage 3a",
+    "info": "",
+    "x": 80,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "42adcba5e2be9426",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "Stage 3b",
+    "info": "",
+    "x": 80,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "891e7f6462ffa6d8",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "Stage 3c",
+    "info": "",
+    "x": 80,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "30e3a86e23ffbed8",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "-> Stage 2",
+    "info": "",
+    "x": 840,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "3985869ae09dbf48",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "-> Stage 3b",
+    "info": "",
+    "x": 560,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "0698e289bff8e234",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "-> Stage 3c",
+    "info": "",
+    "x": 560,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "0f9e8118afd60b82",
+    "type": "link out",
+    "z": "015951b46535519c",
+    "name": "",
+    "mode": "link",
+    "links": [
+      "29f4ef94b3860270"
+    ],
+    "x": 755,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "10ae5019c1b76bb4",
+    "type": "comment",
+    "z": "015951b46535519c",
+    "name": "Configure This Node ",
+    "info": "",
+    "x": 410,
+    "y": 60,
+    "wires": []
+  }
+]
