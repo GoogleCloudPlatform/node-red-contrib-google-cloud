@@ -102,7 +102,7 @@ The set of Node-RED nodes are found in the GCP section of the palette.  The curr
 * [IoT Command Send](docs/iot_send_command.md) - Send an IoT command to a device.
 * [IoT Config Update](docs/iot_update_config.md) - Update the config of an IoT device.
 * [IoT Telemetry Send](docs/iot_telemetry_send.md) - Send a telemetry message from a device.
-* AutomML
+* AutoML
 * DNS Change Create
 * DNS Records List
 * GCS Signed URL
