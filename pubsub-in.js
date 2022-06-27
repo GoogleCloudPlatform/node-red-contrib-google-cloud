@@ -81,7 +81,7 @@ module.exports = function(RED) {
                     'attributes': message.attributes,
                     'id': message.id,
                     'orderingKey': message.orderingKey,
-                    'publishedTime': message.publishedTime,
+                    'publishTime': message.publishTime, //modified publishedTime to publishTime
                     'received': message.received
                 }
             };
