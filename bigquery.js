@@ -39,7 +39,13 @@ module.exports = function(RED) {
 
         let credentials = null;
         if (config.account) {
-            credentials = GetCredentials(config.account);
+            try {
+                credentials = GetCredentials(config.account);
+            }
+            catch(error) {
+                node.error('Unable to retrieve credentials, please check account details');
+                return;
+            }
         }
         const keyFilename = config.keyFilename;
 
@@ -73,8 +79,17 @@ module.exports = function(RED) {
                     node.error('No query found to execute.');
                     return;
                 }
-            } // We do no have a static query
-            const results = await bigquery.query(query);
+            } 
+
+            // We do not have a static query
+            try {
+                const results = await bigquery.query(query);
+            }
+            catch(error) {
+                node.error('Error, unable to execute query.');
+                return;
+            }
+            
             msg.payload = results[0];
             node.send(msg);
         } // Input
