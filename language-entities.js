@@ -87,7 +87,7 @@ module.exports = function(RED) {
                 }
 
                 const [analyzeEntitiesResponse] = await languageServiceClient.analyzeEntities({"document": document});  // Process the document for sentiment.
-                msg.entites = analyzeEntitiesResponse.entities; // Data: https://googleapis.dev/nodejs/language/latest/google.cloud.language.v1.Entity.html
+                msg.entities = analyzeEntitiesResponse.entities; // Data: https://googleapis.dev/nodejs/language/latest/google.cloud.language.v1.Entity.html
                 // The sentiment field contains magnitude and score.
                 node.send(msg);
             } catch(ex) {
