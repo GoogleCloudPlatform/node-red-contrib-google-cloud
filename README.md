@@ -89,7 +89,8 @@ The set of Node-RED nodes are found in the GCP section of the palette.  The curr
 * [Google Cloud Store Write](docs/gcs_write.md) - Write to the object store.
 * [Log](docs/log.md) - Write an entry to Stackdriver logging.
 * [Tasks](docs/tasks.md) - Create a new Cloud Task instance.
-* [Sentiment](docs/sentiment.md) - Perform Natural Language Analytics on a piece of text.
+* [Entities](docs/entities.md) - Perform Natural Language analysis of entities on a piece of text.
+* [Sentiment](docs/sentiment.md) - Perform Natural Language analysis of sentiment on a piece of text.
 * [Vision](docs/vision.md) - Analyse an image.
 * [Metadata](docs/metadata.md) - Retrieve the compute engine metadata.
 * [Monitoring](docs/monitoring.md) - Write a new monitoring record.
