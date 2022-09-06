@@ -71,7 +71,7 @@
             "google-cloud-iot send-command": "iot-command-send.js",
             "google-cloud-iot config-update": "iot-config-update.js",
             "google-cloud-iot telemetry-send": "iot-telemetry-send.js",
-            "google-cloud-iot message-receiver": "iot-message-receiver.js",
+            "google-cloud-iot message-hub": "iot-message-hub.js",
             "google-cloud-automl": "automl.js",
             "google-cloud-text-to-speech": "text-to-speech.js",
             "google-cloud-documentai": "documentai.js",
