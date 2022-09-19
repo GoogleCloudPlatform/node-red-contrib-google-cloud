@@ -6,17 +6,23 @@ class IotUtils {
 
     //Map of device/mqqtClient
     connectionPool = null;
+    //Map of device/config
     paramPool = null;
-    jwtExpMinutes = 2; //24 * 60; // How long (in minutes) before the JWT token expires.
-    jwtRefreshTimeout = null;
+    //Map of device/timeout function
+    jwtRefreshTimeoutPool = null;
+    // How long (in minutes) before the JWT token expires
+    jwtExpMinutes = 24 * 60; 
+    
 
     constructor() {
         this.connectionPool = new Map();
         this.paramPool = new Map();
+        this.jwtRefreshTimeoutPool = new Map();
     }
 
     mqttConnect(config, RED) {
 
+        console.log("New connect for "+config.deviceId);
         this.mqttDisconnect(config.deviceId); // If we are already connected, disconnect.
 
         //******************* SET CONFIG PARAMETERS
@@ -63,20 +69,29 @@ class IotUtils {
 
             let self = this;
 
-            this.jwtRefreshTimeout = setTimeout(function () {
-                // If we have a jwtRefreshTimeout timer active then cancel it from firing.
-                if (!self.jwtRefreshTimeout) {
-                    clearTimeout(self.jwtRefreshTimeout);
-                    self.jwtRefreshTimeout = null;
-                }
+            //delete existing Timeout fonction, if any
+            let existing = this.jwtRefreshTimeoutPool.get(deviceId);
+            if (null!=existing) {
+                console.log("On connect - Deleting timeout function for "+deviceId);
+                clearTimeout(existing);
+                existing = null;
+                this.jwtRefreshTimeoutPool.delete(deviceId);
+            }
+
+            //create new Timeout fonction for the new client
+            let jwtRefreshTimeout = setTimeout(function () {
                 console.log(Math.round(new Date().getTime() / 1000) + " - Reconnect & refresh connection, after JWT expiration !")
                 self.reconnect(deviceId, RED);
             }, interval);
-
+                        
             //keep the client for reuse
             this.connectionPool.set(deviceId, mqttClient);
             this.paramPool.set(deviceId, config);
+            this.jwtRefreshTimeoutPool.set(deviceId,jwtRefreshTimeout);
 
+        }, (err) => {
+            console.log("Error on connect ");
+            console.log(err);
         });
 
         mqttClient.on("error", (err) => {
@@ -95,12 +110,14 @@ class IotUtils {
     mqttDisconnect(deviceId) {
 
         let mqttClient = this.connectionPool.get(deviceId);
-        let config = this.paramPool.get(deviceId);
 
-        // If we have a jwtRefreshTimeout timer active then cancel it from firing.
-        if (!this.jwtRefreshTimeout) {
-            clearTimeout(this.jwtRefreshTimeout);
-            this.jwtRefreshTimeout = null;
+        //delete existing Timeout function, if any for the client
+        let existing = this.jwtRefreshTimeoutPool.get(deviceId);
+        if (null!=existing) {
+            console.log("Disconnect - Deleting timeout function for "+deviceId);
+            clearTimeout(existing);
+            existing = null;
+            this.jwtRefreshTimeoutPool.delete(deviceId);
         }
 
         // If we have an mqttClient, disconnect it.
@@ -110,7 +127,6 @@ class IotUtils {
             this.connectionPool.delete(deviceId);
             //this.paramPool.delete(deviceId);
         }
-
 
     } // mqttDisconnect
 
@@ -137,26 +153,15 @@ class IotUtils {
         let config = this.paramPool.get(deviceId);
         let self = this;
 
-        // If we have a jwtRefreshTimeout timer active then cancel it from firing.
-        if (!this.jwtRefreshTimeout) {
-            clearTimeout(this.jwtRefreshTimeout);
-            this.jwtRefreshTimeout = null;
-        }
-
         const disconnectionPromise = new Promise((resolve, reject) => {
             resolve(self.mqttDisconnect(deviceId));
         });
 
-        return disconnectionPromise.then(() => {
+        disconnectionPromise.then(() => {
 
-            let mqttClient = self.mqttConnect(config, RED);
+            self.mqttConnect(config, RED);
 
-            if (mqttClient != null && mqttClient.connected)
-                return true;
-            else
-                return false;
         });
-
     }
 
     // Transmit a telemetry message to GCP IoT Core over MQTT.
