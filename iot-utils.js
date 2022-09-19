@@ -19,6 +19,9 @@ class IotUtils {
         //let mqttClient = this.connectionPool.get(config.deviceId);
         this.mqttDisconnect(config.deviceId); // If we are already connected, disconnect.
 
+        console.log("in connect...");
+        console.log(config);
+
         //******************* SET CONFIG PARAMETERS
         let projectId = config.projectId;
         let region = config.region;
@@ -57,7 +60,7 @@ class IotUtils {
 
             //*********** Subscriptions to the config and commands topics in order to keep an operational bidirectional communication
             mqttClient.subscribe(`/devices/${deviceId}/config`, { qos: 1 });
-            mqttClient.subscribe(`/devices/${deviceId}/commands/#`, { qos: 0 });
+            mqttClient.subscribe(`/devices/${deviceId}/commands/#`, { qos: 1 });
 
             // The connection has succeeded but the JWT token will expire after a period of time.  We setup a time
             // that will fire before the expiration which will form a new connection.
@@ -76,7 +79,7 @@ class IotUtils {
         });
 
         mqttClient.on("error", (err) => {
-            this.mqttDisconnect(deviceId);
+            //this.mqttDisconnect(deviceId);
         });
 
         return mqttClient;
@@ -103,7 +106,7 @@ class IotUtils {
             mqttClient.end();
             mqttClient = null;
             this.connectionPool.delete(deviceId);
-            this.paramPool.delete(deviceId);
+            //this.paramPool.delete(deviceId);
         }
 
 
@@ -127,15 +130,33 @@ class IotUtils {
     } // createJwt
 
 
+    reconnect(deviceId, RED) {
+
+        let config = this.paramPool.get(deviceId);
+        let mqttClient = this.connectionPool.get(deviceId);
+       
+        if (null!=config ) {
+            
+            if (null==mqttClient) {
+                mqttClient = this.mqttConnect(config,RED);
+                console.log(mqttClient);
+            } else {
+                mqttClient.reconnect();
+            }
+        }
+  
+        if (mqttClient!=null && mqttClient.connected)
+            return true;
+        else    
+            return false;
+
+    }
+
     // Transmit a telemetry message to GCP IoT Core over MQTT.
     transmitMQTT(payload, deviceId) {
 
         let mqttClient = this.connectionPool.get(deviceId);
         let config = this.paramPool.get(deviceId);
-
-        if (!mqttClient || !mqttClient.connected) {
-            return;
-        }
 
         // https://github.com/mqttjs/MQTT.js#publish
 
@@ -148,6 +169,7 @@ class IotUtils {
         mqttClient.publish(finalUrl, payload, { "qos": 1 }, (err) => {
             if (err) {
                 node.debug(`Publish error: ${err}`);
+                console.log("payload:"+payload);
             }
         });
     } // transmitMQTT
