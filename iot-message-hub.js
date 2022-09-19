@@ -54,16 +54,22 @@ module.exports = function (RED) {
                 node.debug(`Sending a telemetry message from device over MQTT`);
                 let deviceMqqttClient = iotUtils.connectionPool.get(config.deviceId);
 
-                if (null!=deviceMqqttClient && deviceMqqttClient.connected)
+                if (null!=deviceMqqttClient && deviceMqqttClient.connected) {
                     this.status(STATUS_CONNECTED);
-                else
+                    iotUtils.transmitMQTT(RED.util.ensureBuffer(msg.payload), config.deviceId);  // The body of the data is in msg.payload
+                    msg.send_status = true;
+                }
+                else {
                     this.status(STATUS_DISCONNECTED);
+                    msg.send_status = false;
+                    //no transmit here and no msg send after the iot-message-hub
+                }
 
-                iotUtils.transmitMQTT(RED.util.ensureBuffer(msg.payload), config.deviceId);  // The body of the data is in msg.payload
             }
             else if (config.transport === "HTTP") {
                 node.debug(`Sending a telemetry message from device over HTTP`);
                 await iotUtils.transmitHTTP(RED.util.ensureBuffer(msg.payload), config.deviceId);  // The body of the data is in msg.payload
+                
             }
             node.send(msg);
         } // OnInput
