@@ -51,7 +51,7 @@ module.exports = function (RED) {
 
             // We have been called to send a telemetry message to GCP IoT. 
             if (config.transport === "MQTT") {
-                node.debug(`Sending a telemetry message from device over MQTT`);
+                //node.debug(`Sending a telemetry message from device over MQTT`);
                 let deviceMqqttClient = iotUtils.connectionPool.get(config.deviceId);
 
                 if (null!=deviceMqqttClient && deviceMqqttClient.connected) {

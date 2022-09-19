@@ -7,7 +7,8 @@ class IotUtils {
     //Map of device/mqqtClient
     connectionPool = null;
     paramPool = null;
-    jwtExpMinutes = 24 * 60; // How long (in minutes) before the JWT token expires.
+    jwtExpMinutes = 2; //24 * 60; // How long (in minutes) before the JWT token expires.
+    jwtRefreshTimeout = null;
 
     constructor() {
         this.connectionPool = new Map();
@@ -16,11 +17,7 @@ class IotUtils {
 
     mqttConnect(config, RED) {
 
-        //let mqttClient = this.connectionPool.get(config.deviceId);
         this.mqttDisconnect(config.deviceId); // If we are already connected, disconnect.
-
-        console.log("in connect...");
-        console.log(config);
 
         //******************* SET CONFIG PARAMETERS
         let projectId = config.projectId;
@@ -28,13 +25,11 @@ class IotUtils {
         let registryId = config.registryId;
         let deviceId = config.deviceId;
         let subfolder = config.subfolder;
-        let jwtRefreshTimeout = null;
-
-        //let xxx = RED.nodes.getNode(config.privateKey);
+        let nodePKey = RED.nodes.getNode(config.privateKey);
         let privateKey = null;
         
-        if (null!=RED.nodes.getNode(config.privateKey)) 
-            privateKey = RED.nodes.getNode(config.privateKey).credentials.privateKey;
+        if (null!=nodePKey) 
+            privateKey = nodePKey.credentials.privateKey;
 
         let transport = config.transport;  // Will be either MQTT or HTTP
 
@@ -66,20 +61,26 @@ class IotUtils {
             // that will fire before the expiration which will form a new connection.
             const interval = (this.jwtExpMinutes - 1) * 60 * 1000;
             
-            jwtRefreshTimeout = setTimeout(function () {
-                this.mqttConnnect(config);
+            let self = this;
+
+            this.jwtRefreshTimeout = setTimeout(function () {
+                console.log(Math.round( new Date().getTime() / 1000 ) + " - Reconnect & refresh connection, after JWT expiration !")
+                self.reconnect(deviceId, RED);
             }, interval);
 
             //keep the client for reuse
             this.connectionPool.set(deviceId, mqttClient);
-            config.jwtRefreshTimeout = jwtRefreshTimeout;
-            config.privateKey = privateKey;
             this.paramPool.set(deviceId, config);
 
         });
 
         mqttClient.on("error", (err) => {
-            //this.mqttDisconnect(deviceId);
+            console.log("**************************");
+            console.log(Math.round( new Date().getTime() / 1000 ) + " - error in node : "+config.name+" !");
+            console.log(err);
+            //this.reconnect(deviceId, RED);
+            console.log("**************************");
+
         });
 
         return mqttClient;
@@ -90,15 +91,11 @@ class IotUtils {
 
         let mqttClient = this.connectionPool.get(deviceId);
         let config = this.paramPool.get(deviceId);
-        let jwtRefreshTimeout = null;
-
-        if (config)
-            jwtRefreshTimeout = config.jwtRefreshTimeout;
 
         // If we have a jwtRefreshTimeout timer active then cancel it from firing.
-        if (!jwtRefreshTimeout) {
-            clearTimeout(jwtRefreshTimeout);
-            jwtRefreshTimeout = null;
+        if (!this.jwtRefreshTimeout) {
+            clearTimeout(this.jwtRefreshTimeout);
+            this.jwtRefreshTimeout = null;
         }
 
         // If we have an mqttClient, disconnect it.
@@ -133,22 +130,21 @@ class IotUtils {
     reconnect(deviceId, RED) {
 
         let config = this.paramPool.get(deviceId);
-        let mqttClient = this.connectionPool.get(deviceId);
-       
-        if (null!=config ) {
-            
-            if (null==mqttClient) {
-                mqttClient = this.mqttConnect(config,RED);
-                console.log(mqttClient);
-            } else {
-                mqttClient.reconnect();
-            }
-        }
-  
-        if (mqttClient!=null && mqttClient.connected)
-            return true;
-        else    
-            return false;
+        let self = this;
+
+        const disconnectionPromise = new Promise((resolve, reject) => {
+            resolve(self.mqttDisconnect(deviceId));
+        });
+
+        return disconnectionPromise.then(() => {
+        
+            let mqttClient = self.mqttConnect(config, RED);
+
+            if (mqttClient!=null && mqttClient.connected)
+                return true;
+            else    
+                return false;
+        });
 
     }
 
@@ -166,9 +162,9 @@ class IotUtils {
         }
 
         //mqttClient.publish(`/devices/${deviceId}/events`, payload, { "qos": 1 }, (err) => {
-        mqttClient.publish(finalUrl, payload, { "qos": 1 }, (err) => {
+        mqttClient.publish(finalUrl, payload, { "qos": 0 }, (err) => {
             if (err) {
-                node.debug(`Publish error: ${err}`);
+                console.log(`Publish error: ${err}`);
                 console.log("payload:"+payload);
             }
         });
