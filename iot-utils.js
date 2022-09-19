@@ -12,7 +12,7 @@ class IotUtils {
 
     constructor() {
         this.connectionPool = new Map();
-        this.paramPool = new Map(); 
+        this.paramPool = new Map();
     }
 
     mqttConnect(config, RED) {
@@ -27,8 +27,8 @@ class IotUtils {
         let subfolder = config.subfolder;
         let nodePKey = RED.nodes.getNode(config.privateKey);
         let privateKey = null;
-        
-        if (null!=nodePKey) 
+
+        if (null != nodePKey)
             privateKey = nodePKey.credentials.privateKey;
 
         let transport = config.transport;  // Will be either MQTT or HTTP
@@ -50,7 +50,7 @@ class IotUtils {
         };
 
         let mqttClient = mqtt.connect(connectionArgs);  // Connect to the MQTT bridge
-        
+
         mqttClient.on("connect", (success) => {
 
             //*********** Subscriptions to the config and commands topics in order to keep an operational bidirectional communication
@@ -60,11 +60,16 @@ class IotUtils {
             // The connection has succeeded but the JWT token will expire after a period of time.  We setup a time
             // that will fire before the expiration which will form a new connection.
             const interval = (this.jwtExpMinutes - 1) * 60 * 1000;
-            
+
             let self = this;
 
             this.jwtRefreshTimeout = setTimeout(function () {
-                console.log(Math.round( new Date().getTime() / 1000 ) + " - Reconnect & refresh connection, after JWT expiration !")
+                // If we have a jwtRefreshTimeout timer active then cancel it from firing.
+                if (!self.jwtRefreshTimeout) {
+                    clearTimeout(self.jwtRefreshTimeout);
+                    self.jwtRefreshTimeout = null;
+                }
+                console.log(Math.round(new Date().getTime() / 1000) + " - Reconnect & refresh connection, after JWT expiration !")
                 self.reconnect(deviceId, RED);
             }, interval);
 
@@ -76,7 +81,7 @@ class IotUtils {
 
         mqttClient.on("error", (err) => {
             console.log("**************************");
-            console.log(Math.round( new Date().getTime() / 1000 ) + " - error in node : "+config.name+" !");
+            console.log(Math.round(new Date().getTime() / 1000) + " - error in node : " + config.name + " !");
             console.log(err);
             //this.reconnect(deviceId, RED);
             console.log("**************************");
@@ -116,10 +121,10 @@ class IotUtils {
             exp: parseInt(Date.now() / 1000) + this.jwtExpMinutes * 60,
             aud: projectId,
         };
-        
+
         //this is needed in case of the credentials of the node are empty (crash of node-red...)
         let jwtResult = "init";
-        if (null!=privateKey)
+        if (null != privateKey)
             jwtResult = jwt.sign(token, privateKey, { algorithm: algorithm });
         //node.log(`<< Creating JWT`);
 
@@ -132,17 +137,23 @@ class IotUtils {
         let config = this.paramPool.get(deviceId);
         let self = this;
 
+        // If we have a jwtRefreshTimeout timer active then cancel it from firing.
+        if (!this.jwtRefreshTimeout) {
+            clearTimeout(this.jwtRefreshTimeout);
+            this.jwtRefreshTimeout = null;
+        }
+
         const disconnectionPromise = new Promise((resolve, reject) => {
             resolve(self.mqttDisconnect(deviceId));
         });
 
         return disconnectionPromise.then(() => {
-        
+
             let mqttClient = self.mqttConnect(config, RED);
 
-            if (mqttClient!=null && mqttClient.connected)
+            if (mqttClient != null && mqttClient.connected)
                 return true;
-            else    
+            else
                 return false;
         });
 
@@ -165,7 +176,7 @@ class IotUtils {
         mqttClient.publish(finalUrl, payload, { "qos": 0 }, (err) => {
             if (err) {
                 console.log(`Publish error: ${err}`);
-                console.log("payload:"+payload);
+                console.log("payload:" + payload);
             }
         });
     } // transmitMQTT

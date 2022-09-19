@@ -49,6 +49,8 @@ module.exports = function (RED) {
         // Called to send a command to the device.
         async function OnInput(msg) {
 
+            msg.send_status = false;
+
             // We have been called to send a telemetry message to GCP IoT. 
             if (config.transport === "MQTT") {
                 //node.debug(`Sending a telemetry message from device over MQTT`);
@@ -61,7 +63,6 @@ module.exports = function (RED) {
                 }
                 else {
                     this.status(STATUS_DISCONNECTED);
-                    msg.send_status = false;
                     //no transmit here and no msg send after the iot-message-hub
                 }
 
