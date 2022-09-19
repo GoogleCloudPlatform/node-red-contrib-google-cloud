@@ -52,6 +52,14 @@ module.exports = function (RED) {
             // We have been called to send a telemetry message to GCP IoT. 
             if (config.transport === "MQTT") {
                 node.debug(`Sending a telemetry message from device over MQTT`);
+
+                client = iotUtils.connectionPool.get(config.deviceId);
+
+                if (client.connected)
+                    this.status(STATUS_CONNECTED);
+                else
+                    this.status(STATUS_DISCONNECTED);
+
                 iotUtils.transmitMQTT(RED.util.ensureBuffer(msg.payload), config.deviceId);  // The body of the data is in msg.payload
             }
             else if (config.transport === "HTTP") {
@@ -77,27 +85,33 @@ module.exports = function (RED) {
         // and subscribe to the config/commands topics
         if (config.transport === "MQTT") {
             node.status(STATUS_DISCONNECTED);
-                        
+
             const connectionPromise = new Promise((resolve, reject) => {
-                
+
                 resolve(iotUtils.mqttConnect(config, RED));
 
             });
-            
+
             connectionPromise.then((client) => {
 
-                this.status(STATUS_CONNECTED);
+                if (client.connected)
+                    this.status(STATUS_CONNECTED);
 
                 client.on('message', (topic, message) => {
-    
+
+                    if (client.connected)
+                        this.status(STATUS_CONNECTED);
+                    else
+                        this.status(STATUS_DISCONNECTED);
+
                     var obj = {};
                     obj.topic = topic;
                     obj.payload = message;
-    
+
                     node.send(obj);
-                });         
+                });
             });
-            
+
         }
         // If the transport is HTTP, nothing need be done.
         node.on('close', OnClose);

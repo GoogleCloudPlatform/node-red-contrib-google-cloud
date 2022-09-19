@@ -11,7 +11,7 @@ class IotUtils {
 
     constructor() {
         this.connectionPool = new Map();
-        this.paramPool = new Map();
+        this.paramPool = new Map(); 
     }
 
     mqttConnect(config, RED) {
@@ -28,7 +28,11 @@ class IotUtils {
         let jwtRefreshTimeout = null;
 
         //let xxx = RED.nodes.getNode(config.privateKey);
-        let privateKey = RED.nodes.getNode(config.privateKey).credentials.privateKey;
+        let privateKey = null;
+        
+        if (null!=RED.nodes.getNode(config.privateKey)) 
+            privateKey = RED.nodes.getNode(config.privateKey).credentials.privateKey;
+
         let transport = config.transport;  // Will be either MQTT or HTTP
 
         //******************* END CONFIG PARAMETERS
@@ -48,13 +52,12 @@ class IotUtils {
         };
 
         let mqttClient = mqtt.connect(connectionArgs);  // Connect to the MQTT bridge
-
+        
         mqttClient.on("connect", (success) => {
 
             //*********** Subscriptions to the config and commands topics in order to keep an operational bidirectional communication
             mqttClient.subscribe(`/devices/${deviceId}/config`, { qos: 1 });
             mqttClient.subscribe(`/devices/${deviceId}/commands/#`, { qos: 0 });
-
 
             // The connection has succeeded but the JWT token will expire after a period of time.  We setup a time
             // that will fire before the expiration which will form a new connection.
@@ -113,8 +116,13 @@ class IotUtils {
             exp: parseInt(Date.now() / 1000) + this.jwtExpMinutes * 60,
             aud: projectId,
         };
-        const jwtResult = jwt.sign(token, privateKey, { algorithm: algorithm });
+        
+        //this is needed in case of the credentials of the node are empty (crash of node-red...)
+        let jwtResult = "init";
+        if (null!=privateKey)
+            jwtResult = jwt.sign(token, privateKey, { algorithm: algorithm });
         //node.log(`<< Creating JWT`);
+
         return jwtResult;
     } // createJwt
 
