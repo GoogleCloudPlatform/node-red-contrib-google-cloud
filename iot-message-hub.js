@@ -54,7 +54,7 @@ module.exports = function (RED) {
                 node.debug(`Sending a telemetry message from device over MQTT`);
                 let deviceMqqttClient = iotUtils.connectionPool.get(config.deviceId);
 
-                if (deviceMqqttClient.connected)
+                if (null!=deviceMqqttClient && deviceMqqttClient.connected)
                     this.status(STATUS_CONNECTED);
                 else
                     this.status(STATUS_DISCONNECTED);
