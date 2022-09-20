@@ -31,6 +31,7 @@ class IotUtils {
         let registryId = config.registryId;
         let deviceId = config.deviceId;
        // let subfolder = config.subfolder;
+        let qosValue = config.qos;
         let nodePKey = RED.nodes.getNode(config.privateKey);
         let privateKey = null;
 
@@ -60,6 +61,7 @@ class IotUtils {
         mqttClient.on("connect", (success) => {
 
             //*********** Subscriptions to the config and commands topics in order to keep an operational bidirectional communication
+            //*********** Subscriptions need to be subscribded with qos 1
             mqttClient.subscribe(`/devices/${deviceId}/config`, { qos: 1 });
             mqttClient.subscribe(`/devices/${deviceId}/commands/#`, { qos: 1 });
 
@@ -172,7 +174,7 @@ class IotUtils {
 
         // https://github.com/mqttjs/MQTT.js#publish
 
-        let finalUrl = `/devices/${deviceId}/events`;
+        let finalUrl = '/devices/'+deviceId+'/events';
         
         /*
         if (config.subfolder) {
@@ -184,7 +186,7 @@ class IotUtils {
         }
 
         //mqttClient.publish(`/devices/${deviceId}/events`, payload, { "qos": 1 }, (err) => {
-        mqttClient.publish(finalUrl, payload, { "qos": 1 }, (err) => {
+        mqttClient.publish(finalUrl, payload, { "qos": config.qos }, (err) => {
             if (err) {
                 console.log(`Publish error: ${err}`);
                 console.log("payload:" + payload);

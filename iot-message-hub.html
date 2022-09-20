@@ -52,6 +52,15 @@ limitations under the License.
     </div>
     -->
 
+   <!--QoS-->
+	<div class="form-row">
+        <label for="node-input-qos"><i class="fa fa-tag"></i> QoS </label>
+        <select type="text" id="node-input-qos">
+            <option value="0">0 - delivers at most once</option>
+            <option value="1">1 - delivers at least once</option>
+        </select>
+    </div>
+    
     <!--Private Key-->
     <div class="form-row">
         <label for="node-input-privateKey"><i class="fa fa-key"></i> Private Key</label>
@@ -96,6 +105,10 @@ limitations under the License.
             <span class="property-type">string</span>
         </dt>
         <dd>The topic sub folder.</dd>-->
+        <dt>msg.gcp.qos
+            <span class="property-type">int</span>
+        </dt>
+        <dd>The QoS 0 (delivers at most once) or 1 value (delivers at least once)</dd>
     </dl>
 
     <h3>Details</h3>
@@ -130,6 +143,7 @@ RED.nodes.registerType("google-cloud-iot message-hub", {
         "registryId": { "required": true },
         "deviceId": { "required": true },
 //		"subfolder": { "required": false },
+        "qos": { "required": true },
         "name": { "value": "", "required": false },
         "privateKey": { "type": "google-cloud-private-key", "required": true },
         "transport": { "value": "MQTT", "required": false }
