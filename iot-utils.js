@@ -30,7 +30,7 @@ class IotUtils {
         let region = config.region;
         let registryId = config.registryId;
         let deviceId = config.deviceId;
-        let subfolder = config.subfolder;
+       // let subfolder = config.subfolder;
         let nodePKey = RED.nodes.getNode(config.privateKey);
         let privateKey = null;
 

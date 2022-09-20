@@ -92,10 +92,10 @@ limitations under the License.
         </dt>
         <dd>The identity of the device.</dd>
 
-		<dt>msg.gcp.subFolder
+		<!--<dt>msg.gcp.subFolder
             <span class="property-type">string</span>
         </dt>
-        <dd>The topic sub folder.</dd>
+        <dd>The topic sub folder.</dd>-->
     </dl>
 
     <h3>Details</h3>
@@ -129,7 +129,7 @@ RED.nodes.registerType("google-cloud-iot message-hub", {
         "region": { "required": true },
         "registryId": { "required": true },
         "deviceId": { "required": true },
-		"subfolder": { "required": false },
+//		"subfolder": { "required": false },
         "name": { "value": "", "required": false },
         "privateKey": { "type": "google-cloud-private-key", "required": true },
         "transport": { "value": "MQTT", "required": false }
