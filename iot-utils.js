@@ -165,7 +165,7 @@ class IotUtils {
     }
 
     // Transmit a telemetry message to GCP IoT Core over MQTT.
-    transmitMQTT(payload, deviceId) {
+    transmitMQTT(payload, deviceId, topic) {
 
         let mqttClient = this.connectionPool.get(deviceId);
         let config = this.paramPool.get(deviceId);
@@ -173,12 +173,18 @@ class IotUtils {
         // https://github.com/mqttjs/MQTT.js#publish
 
         let finalUrl = `/devices/${deviceId}/events`;
+        
+        /*
         if (config.subfolder) {
             finalUrl = finalUrl + `/${config.subfolder}`;
         }
+        */
+        if (topic) {
+            finalUrl = finalUrl + '/'+topic;
+        }
 
         //mqttClient.publish(`/devices/${deviceId}/events`, payload, { "qos": 1 }, (err) => {
-        mqttClient.publish(finalUrl, payload, { "qos": 0 }, (err) => {
+        mqttClient.publish(finalUrl, payload, { "qos": 1 }, (err) => {
             if (err) {
                 console.log(`Publish error: ${err}`);
                 console.log("payload:" + payload);

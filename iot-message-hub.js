@@ -58,7 +58,7 @@ module.exports = function (RED) {
 
                 if (null!=deviceMqqttClient && deviceMqqttClient.connected) {
                     this.status(STATUS_CONNECTED);
-                    iotUtils.transmitMQTT(RED.util.ensureBuffer(msg.payload), config.deviceId);  // The body of the data is in msg.payload
+                    iotUtils.transmitMQTT(RED.util.ensureBuffer(msg.payload), config.deviceId, msg.topic);  // The body of the data is in msg.payload
                     msg.send_status = true;
                 }
                 else {
