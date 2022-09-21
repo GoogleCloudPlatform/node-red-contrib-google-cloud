@@ -53,7 +53,11 @@ class IotUtils {
             "protocol": 'mqtts',
             "protocolVersion": 4,
             "clean": true,
-            "rejectUnauthorized": false
+            "rejectUnauthorized": false,
+            "keepalive": 60,
+            "reconnectPeriod":1000,
+            "reschedulePings": true,
+            "connectTimeout": 30000
         };
 
         let mqttClient = mqtt.connect(connectionArgs);  // Connect to the MQTT bridge
