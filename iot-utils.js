@@ -31,7 +31,6 @@ class IotUtils {
         let registryId = config.registryId;
         let deviceId = config.deviceId;
        // let subfolder = config.subfolder;
-        let qosValue = config.qos;
         let nodePKey = RED.nodes.getNode(config.privateKey);
         let privateKey = null;
 
@@ -54,7 +53,7 @@ class IotUtils {
             "protocolVersion": 4,
             "clean": true,
             "rejectUnauthorized": false,
-            "keepalive": 60,
+            "keepalive": parseInt(config.keepalive),
             "reconnectPeriod":1000,
             "reschedulePings": true,
             "connectTimeout": 30000

@@ -60,6 +60,12 @@ limitations under the License.
             <option value="1">1 - delivers at least once</option>
         </select>
     </div>
+
+    <!--MQTT Keepalive-->
+	<div class="form-row">
+        <label for="node-input-keepalive"><i class="fa fa-gear"></i> Keepalive (s) </label>
+        <input type="number" id="node-input-keepalive" value="300">
+    </div>
     
     <!--Private Key-->
     <div class="form-row">
@@ -109,6 +115,11 @@ limitations under the License.
             <span class="property-type">int</span>
         </dt>
         <dd>The QoS 0 (delivers at most once) or 1 value (delivers at least once)</dd>
+
+        <dt>msg.gcp.keepalive
+            <span class="property-type">int</span>
+        </dt>
+        <dd>Keepalive time in seconds for MQTT</dd>
     </dl>
 
     <h3>Details</h3>
@@ -144,6 +155,7 @@ RED.nodes.registerType("google-cloud-iot message-hub", {
         "deviceId": { "required": true },
 //		"subfolder": { "required": false },
         "qos": { "required": true },
+        "keepalive": { "required": true },
         "name": { "value": "", "required": false },
         "privateKey": { "type": "google-cloud-private-key", "required": true },
         "transport": { "value": "MQTT", "required": false }
