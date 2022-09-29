@@ -103,7 +103,7 @@ class IotUtils {
             console.log("**************************");
             console.log(Math.round(new Date().getTime() / 1000) + " - error in node : " + config.name + " !");
             console.log(err);
-            //this.reconnect(deviceId, RED);
+            this.reconnect(deviceId, RED);
             console.log("**************************");
 
         });
