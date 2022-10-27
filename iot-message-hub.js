@@ -56,7 +56,7 @@ module.exports = function (RED) {
                 //node.debug(`Sending a telemetry message from device over MQTT`);
                 let deviceMqqttClient = iotUtils.connectionPool.get(config.deviceId);
 
-                if (null!=deviceMqqttClient && deviceMqqttClient.connected) {
+                if (null != deviceMqqttClient && deviceMqqttClient.connected) {
                     this.status(STATUS_CONNECTED);
                     iotUtils.transmitMQTT(RED.util.ensureBuffer(msg.payload), config.deviceId, msg.topic);  // The body of the data is in msg.payload
                     msg.send_status = true;
@@ -70,7 +70,7 @@ module.exports = function (RED) {
             else if (config.transport === "HTTP") {
                 node.debug(`Sending a telemetry message from device over HTTP`);
                 await iotUtils.transmitHTTP(RED.util.ensureBuffer(msg.payload), config.deviceId);  // The body of the data is in msg.payload
-                
+
             }
             node.send(msg);
         } // OnInput
@@ -93,8 +93,11 @@ module.exports = function (RED) {
             node.status(STATUS_DISCONNECTED);
 
             const connectionPromise = new Promise((resolve, reject) => {
-
-                resolve(iotUtils.mqttConnect(config, RED));
+                try {
+                    resolve(iotUtils.mqttConnect(config, RED));
+                } catch (error) {
+                    console.log("connection error : " + error);
+                }
 
             });
 
