@@ -191,6 +191,8 @@ transmitMQTT(payload, deviceId, topic) {
         finalUrl = finalUrl + '/' + topic;
     }
 
+    console.log("IoT URL:"+finalUrl);
+
     //mqttClient.publish(`/devices/${deviceId}/events`, payload, { "qos": 1 }, (err) => {
     mqttClient.publish(finalUrl, payload, { "qos": config.qos }, (err) => {
         if (err) {
