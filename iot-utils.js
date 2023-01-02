@@ -22,7 +22,7 @@ class IotUtils {
 
     mqttConnect(config, RED) {
 
-        console.log("New connect for " + config.deviceId);
+        //console.log("New connect for " + config.deviceId);
         this.mqttDisconnect(config.deviceId); // If we are already connected, disconnect.
 
         //******************* SET CONFIG PARAMETERS
@@ -77,7 +77,7 @@ class IotUtils {
             //delete existing Timeout fonction, if any
             let existing = this.jwtRefreshTimeoutPool.get(deviceId);
             if (null != existing) {
-                console.log("On connect - Deleting timeout function for " + deviceId);
+                //console.log("On connect - Deleting timeout function for " + deviceId);
                 clearTimeout(existing);
                 existing = null;
                 this.jwtRefreshTimeoutPool.delete(deviceId);
@@ -85,7 +85,7 @@ class IotUtils {
 
             //create new Timeout fonction for the new client
             let jwtRefreshTimeout = setTimeout(function () {
-                console.log(Math.round(new Date().getTime() / 1000) + " - Reconnect & refresh connection, after JWT expiration !")
+                //console.log(Math.round(new Date().getTime() / 1000) + " - Reconnect & refresh connection, after JWT expiration !")
                 self.reconnect(deviceId, RED);
             }, interval);
 
@@ -95,16 +95,16 @@ class IotUtils {
             this.jwtRefreshTimeoutPool.set(deviceId, jwtRefreshTimeout);
 
         }, (err) => {
-            console.log("Error on connect ");
-            console.log(err);
+            //console.log("Error on connect ");
+            //console.log(err);
         });
 
         mqttClient.on("error", (err) => {
-            console.log("**************************");
-            console.log(Math.round(new Date().getTime() / 1000) + " - error in node : " + config.name + " !");
-            console.log(err);
+            //console.log("**************************");
+            //console.log(Math.round(new Date().getTime() / 1000) + " - error in node : " + config.name + " !");
+            //console.log(err);
             this.reconnect(deviceId, RED);
-            console.log("**************************");
+            //console.log("**************************");
 
         });
 
@@ -119,7 +119,7 @@ mqttDisconnect(deviceId) {
     //delete existing Timeout function, if any for the client
     let existing = this.jwtRefreshTimeoutPool.get(deviceId);
     if (null != existing) {
-        console.log("Disconnect - Deleting timeout function for " + deviceId);
+        //console.log("Disconnect - Deleting timeout function for " + deviceId);
         clearTimeout(existing);
         existing = null;
         this.jwtRefreshTimeoutPool.delete(deviceId);
@@ -166,7 +166,7 @@ reconnect(deviceId, RED) {
     try {
         self.mqttConnect(config, RED);
      } catch(error) {
-        console.log("reconnection error : " + error);
+        //console.log("reconnection error : " + error);
     }
 
     });
@@ -191,13 +191,13 @@ transmitMQTT(payload, deviceId, topic) {
         finalUrl = finalUrl + '/' + topic;
     }
 
-    console.log("IoT URL:"+finalUrl);
+    //console.log("IoT URL:"+finalUrl);
 
     //mqttClient.publish(`/devices/${deviceId}/events`, payload, { "qos": 1 }, (err) => {
     mqttClient.publish(finalUrl, payload, { "qos": config.qos }, (err) => {
         if (err) {
-            console.log(`Publish error: ${err}`);
-            console.log("payload:" + payload);
+            //console.log(`Publish error: ${err}`);
+            //console.log("payload:" + payload);
         }
     });
 } // transmitMQTT
