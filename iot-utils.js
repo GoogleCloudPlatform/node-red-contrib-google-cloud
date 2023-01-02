@@ -210,7 +210,7 @@ transmitMQTT(payload, deviceId, topic) {
 
     // payload is a Buffer object.
     // We will use Axios to send an HTTP request
-    node.debug(">> transmitHTTP");
+    //node.debug(">> transmitHTTP");
     const url = `https://cloudiotdevice.googleapis.com/v1/projects/${config.projectId}/locations/${config.region}/registries/${config.registryId}/devices/${config.deviceId}:publishEvent`;
     //node.debug(`Url: ${url}`);
     try {
@@ -227,13 +227,13 @@ transmitMQTT(payload, deviceId, topic) {
             }
         });
         if (resp.status != 200) {
-            node.debug(JSON.stringify(resp));
+            //node.debug(JSON.stringify(resp));
         }
     } catch (exp) {
         node.debug(exp);
     }
 
-    node.debug("<< transmitHTTP");
+    //node.debug("<< transmitHTTP");
 } // transmitHTTP
 
 }

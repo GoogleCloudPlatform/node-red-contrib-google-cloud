@@ -68,7 +68,7 @@ module.exports = function (RED) {
 
             }
             else if (config.transport === "HTTP") {
-                node.debug(`Sending a telemetry message from device over HTTP`);
+                //node.debug(`Sending a telemetry message from device over HTTP`);
                 await iotUtils.transmitHTTP(RED.util.ensureBuffer(msg.payload), config.deviceId);  // The body of the data is in msg.payload
 
             }
