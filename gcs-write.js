@@ -115,7 +115,7 @@ module.exports = function(RED) {
             const writeStream = file.createWriteStream(writeStreamOptions); // Create a write stream to the file.
 
             writeStream.on('error', (err) => {
-                node.error(`writeStream error: ${err.message}`);
+                node.error(`writeStream error: ${err.message}`,msg);
             });
             writeStream.on('finish', () => { // When we receive the indication that the write has finished, signal the end.
                 node.send(msg);
