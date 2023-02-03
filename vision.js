@@ -101,7 +101,7 @@ module.exports = function(RED) {
                 features.push({type: "PRODUCT_SEARCH"});
             }
             if (isObjectLocalization) {
-                features.push({type: "OBJECT_LOCALIZAITION"});
+                features.push({type: "OBJECT_LOCALIZATION"});
             }
             return features;
         } // GetFeatures
