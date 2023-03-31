@@ -131,7 +131,7 @@ module.exports = function(RED) {
                     const querySnapshot = await query.get();
                     let results = [];
                     querySnapshot.forEach((queryDocumentSnapshot) => {
-                        results.push(queryDocumentSnapshot.data());
+                        results.push({id:queryDocumentSnapshot.id,data:queryDocumentSnapshot.data()});
                     });
                     msg.payload = results;
 
