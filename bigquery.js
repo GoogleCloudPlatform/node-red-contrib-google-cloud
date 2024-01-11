@@ -84,14 +84,14 @@ module.exports = function(RED) {
             // We do not have a static query
             try {
                 const results = await bigquery.query(query);
+                msg.payload = results[0];
+                node.send(msg);
             }
             catch(error) {
                 node.error('Error, unable to execute query.');
                 return;
             }
             
-            msg.payload = results[0];
-            node.send(msg);
         } // Input
 
         if (credentials) {
