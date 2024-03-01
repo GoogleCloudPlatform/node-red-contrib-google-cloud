@@ -39,6 +39,12 @@ limitations under the License.
         <input type="text" id="node-input-projectId">
     </div>
 
+    <!--Database ID-->
+    <div class="form-row">
+        <label for="node-input-databaseId"><i class="fa fa-cloud"></i> Database</label>
+        <input type="text" id="node-input-databaseId">
+    </div>
+
     <!--Operation-->
     <div class="form-row">
         <label for="node-input-mode"><i class="fa fa-gear"></i> Operation</label>
@@ -94,7 +100,7 @@ limitations under the License.
     </p>
 
     <p>
-    The configuration parameters of the node include the Project Id to be used for billing.
+    The configuration parameters of the node include the Project Id to be used for billing. If database is omitted, the default database will be used.
     </p>
 
     <p>
@@ -113,8 +119,9 @@ RED.nodes.registerType("google-cloud-firestore", {
     defaults: {
         account: { type: "google-cloud-credentials", required: false },
         keyFilename: { value: "", required: false },
-        name: { value: "", required: false },
         projectId: { value: "", required: true},
+        name: { value: "", required: false },
+        databaseId: { value: "", required: false},
         mode: { value: "set", required: false}
     },
     inputs: 1,
