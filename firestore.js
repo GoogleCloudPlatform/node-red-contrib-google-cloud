@@ -41,6 +41,7 @@ module.exports = function(RED) {
         const node = this;
         const staticQuery = config.query;
         const projectId = config.projectId;
+        const databaseId = config.databaseId;
 
         let credentials = null;
         if (config.account) {
@@ -156,16 +157,19 @@ module.exports = function(RED) {
         if (credentials) {
             firestore = new Firestore({
                 "projectId": projectId,
+                "databaseId": databaseId,
                 "credentials": credentials
             });
         } else if (keyFilename) {
             firestore = new Firestore({
                 "projectId": projectId,
+                "databaseId": databaseId,
                 "keyFilename": keyFilename
             });
         } else {
             firestore = new Firestore({
-                "projectId": projectId
+                "projectId": projectId,
+                "databaseId": databaseId
             });
         }
 
