@@ -54,6 +54,15 @@ limitations under the License.
         <input type="text" id="node-input-processorId">
     </div>
 
+    <!--Input Mode-->
+    <div class="form-row">
+        <label for="node-input-inputMode"><i class="fa fa-gear"></i> Input Mode</label>
+        <select type="text" id="node-input-inputMode">
+            <option value="fileContent">msg.payload as base64 content</option>
+            <option value="fullRequest">msg.payload as request payload object</option>
+        </select>
+    </div>
+
     <!--Mime Type-->
     <div class="form-row">
         <label for="node-input-mimeType"><i class="fa fa-gear"></i> Mime Type</label>
@@ -77,25 +86,41 @@ limitations under the License.
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>msg.payload
-            <span class="property-type">String</span>
+            <span class="property-type">String | Object</span>
         </dt>
-        <dd>The base64 encoding of the data of the document.</dd>
+        <dd>
+            The input data for the document processing, depending on the selected <strong>Input Mode</strong>:
+            <ul>
+                <li>If <strong>Base64 Content</strong> mode is selected, <code>msg.payload</code> must be the base64 encoding of the document's data.</li>
+                <li>If <strong>Full Request</strong> mode is selected, <code>msg.payload</code> must be an object representing the full API request. In this mode, the <code>Mime Type</code> field is ignored.</li>
+            </ul>
+        </dd>
     </dl>  
-
+    
     <h3>Details</h3>
-    <p>The GCP Document AI service allows us to process documents in PDF or image format and extract the content of the document in a structured format.  In this node, we pass in the base 64 encoded content
-        of the document as <code>msg.payload</code> with the type of the document specified in the node's configuration (PDF, TIFF or GIF) or in the <code>msg.mimeType</code> if present.
-        On return, the response is found in <code>msg.payload</code> as a JavaScript object corresponding to the Document object documented <a href="https://cloud.google.com/document-ai/docs/reference/rest/v1beta3/Document">here</a>.
-    </p>
-    <p>Before using the node, a processor instance must be configured within the GCP console.  This will result in a Processor ID being created that will be passed in the configuration.</p>
+    <p>The GCP Document AI service allows us to process documents in PDF or image format and extract the content of the document in a structured format. In this node, the behavior depends on the selected <strong>Input Mode</strong>:</p>
+    <ul>
+        <li><strong>Base64 Content:</strong> Pass the base64 encoded content of the document as <code>msg.payload</code>. The type of the document is specified in the node's configuration (PDF, TIFF, or GIF) or in the <code>msg.mimeType</code>, if present.</li>
+        <li><strong>Full Request:</strong> Pass the full API request object as <code>msg.payload</code>. The <code>Mime Type</code> field in the configuration is ignored in this mode.</li>
+    </ul>
+    <p>On return, the response is found in <code>msg.payload</code> as a JavaScript object corresponding to the Document object documented <a href="https://cloud.google.com/document-ai/docs/reference/rest/v1beta3/Document">here</a>.</p>
+    <p><strong>Note:</strong> The <code>name</code> property is always automatically set if not overridden by the payload as a convenience.</p>
+    <p>Before using the node, a processor instance must be configured within the GCP console. This will result in a Processor ID being created that will be passed in the configuration.</p>
     <p>The configuration of the node requires:</p>
     <ul>        
         <li><code>Project ID</code> - The project ID for which the processor has been defined.</li>
-        <li><code>Location</code> - The location where the service is to be executed.  One of "us" or "eu".</li>
+        <li><code>Location</code> - The location where the service is to be executed. One of "us" or "eu".</li>
         <li><code>Processor ID</code> - The identity of the processor defined in the GCP console.</li>
-        <li><code>Mime Type</code> - The Mime type of the data.</li>
-        <li><code>Extract Form Fields</code> - If true, extract the form fields into <code>msg.payload.formFields</code> which is an array of objects with fields of name and value.</li>
+        <li><code>Mime Type</code> - The Mime type of the data. (Ignored if <strong>Full Request</strong> mode is selected.)</li>
+        <li><code>Extract Form Fields</code> - If true, extract the form fields into <code>msg.payload.formFields</code>, which is an array of objects with fields of name and value.</li>
+        <li><code>Input Mode</code> - Determines how <code>msg.payload</code> is treated. Options are:
+            <ul>
+                <li><strong>Base64 Content:</strong> Treat <code>msg.payload</code> as base64-encoded document data.</li>
+                <li><strong>Full Request:</strong> Treat <code>msg.payload</code> as the full API request object.</li>
+            </ul>
+        </li>
     </ul>
+     
 </script>
 
 <script type="text/javascript">
@@ -109,6 +134,7 @@ RED.nodes.registerType("google-cloud-documentai", {
         processorId: { value: "", required: true },
         name: { value: "", required: false },
         mimeType: { value: "application/pdf", required: true },
+        inputMode: { value: "fileContent", required: true },
         extractFormFields: { value: false }
     },
     inputs: 1,

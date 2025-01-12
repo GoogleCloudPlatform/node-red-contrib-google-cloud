@@ -57,6 +57,7 @@ module.exports = function(RED) {
         const location    = config.location;
         const processorId = config.processorId;
         const mimeType    = config.mimeType;
+        const inputMode  = config.inputMode || 'fileContent'
         const extractFormFields = config.extractFormFields;
 
         let documentProcessorServiceClient; // Local
@@ -87,12 +88,12 @@ module.exports = function(RED) {
 
                 // Determine if there is a value at msg.mimeType.  If there is, use that instead of the one configured.
                 let localMimeType = mimeType;
-                if (msg.mimeType) {
+                if (inputMode !== 'fullRequest' && msg.mimeType) {
                     localMimeType = msg.mimeType
                 }
 
                 //node.debug(`name: ${name}`);
-                const request = {
+                const request = inputMode === 'fullRequest' ? { name, ...msg.payload } : {
                     name,
                     "document": {
                         "content": msg.payload,
